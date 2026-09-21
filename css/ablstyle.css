@@ -76,13 +76,13 @@ body {
     margin-bottom: 2rem;
 }
 
-/* Заголовки */
+
 h1, h2, h3 {
     color: #1e293b;
     margin-top: 0;
 }
 
-/* Списки */
+
 .features-list, 
 .booking-steps, 
 .features ul {
@@ -95,7 +95,6 @@ h1, h2, h3 {
     margin-bottom: 0.6rem;
 }
 
-/* Таблицы (для Services) */
 .pricing-table {
     width: 100%;
     border-collapse: collapse;
@@ -123,7 +122,6 @@ h1, h2, h3 {
     background-color: #f1f5f9;
 }
 
-/* Карточки команды и направлений */
 .destination-grid, 
 .team-grid {
     display: flex;
@@ -165,7 +163,6 @@ h1, h2, h3 {
     margin-bottom: 1rem;
 }
 
-/* Круглые аватарки команды */
 .profile-img {
     width: 110px;
     height: 110px;
@@ -192,7 +189,6 @@ h1, h2, h3 {
     margin: 0;
 }
 
-/* FAQ блоки */
 .faq-item {
     background: #f8fafc;
     padding: 1rem 1.5rem;
@@ -207,7 +203,6 @@ h1, h2, h3 {
     color: #1e293b;
 }
 
-/* Формы (Контакты и Бронирование) */
 .form-group {
     margin-bottom: 1.2rem;
 }
@@ -244,7 +239,6 @@ input[type="color"] {
     cursor: pointer;
 }
 
-/* Поиск на главной */
 .hero-search-form {
     display: flex;
     gap: 1rem;
@@ -260,7 +254,6 @@ input[type="color"] {
     border-radius: 4px;
 }
 
-/* Кнопки */
 .btn-primary, 
 .btn-submit, 
 .btn {
