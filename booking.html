@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookingApp - Book Your Stay</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-2" aria-label="Main navigation">
+            <div class="container">
+                <a class="navbar-brand fw-bold" href="index.html">BookingApp</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="search-results.html">Search</a></li>
+                        <li class="nav-item"><a class="nav-link" href="hotel-detail.html">Hotel Details</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="booking.html">Booking</a></li>
+                        <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+                        <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container py-4 px-sm-2 px-lg-3 mt-lg-4">
+        <section class="row justify-content-center">
+            <div class="col-12 col-lg-9">
+                <div class="bg-white rounded shadow-sm p-3 p-md-4 p-lg-5">
+                    <h1 class="fw-bold mb-2">Complete Your Booking</h1>
+                    <p class="text-secondary mb-4">Reserve your room at <strong>Grand Palace Hotel</strong>.</p>
+                    <form action="index.html" method="get" class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label for="fullname" class="form-label">Full name</label>
+                            <input type="text" class="form-control" id="fullname" name="fullname" placeholder="John Doe" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="email" class="form-label">Email address</label>
+                            <div class="input-group">
+                                <span class="input-group-text">@</span>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="checkin" class="form-label">Check-in date</label>
+                            <input type="date" class="form-control" id="checkin" name="checkin" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="checkout" class="form-label">Check-out date</label>
+                            <input type="date" class="form-control" id="checkout" name="checkout" required>
+                        </div>
+                        <fieldset class="col-12">
+                            <legend class="form-label">Room type</legend>
+                            <div class="btn-group w-100" role="group" aria-label="Room type selection">
+                                <input type="radio" class="btn-check" name="room" id="standard" value="standard" checked>
+                                <label class="btn btn-outline-primary btn-sm" for="standard">Standard</label>
+                                <input type="radio" class="btn-check" name="room" id="deluxe" value="deluxe">
+                                <label class="btn btn-outline-primary btn-sm" for="deluxe">Deluxe</label>
+                                <input type="radio" class="btn-check" name="room" id="suite" value="suite">
+                                <label class="btn btn-outline-primary btn-sm" for="suite">Suite</label>
+                            </div>
+                        </fieldset>
+                        <div class="col-12 col-md-6">
+                            <label for="guests" class="form-label">Number of guests</label>
+                            <select class="form-select" id="guests" name="guests" required>
+                                <option value="1">1 guest</option>
+                                <option value="2">2 guests</option>
+                                <option value="3">3 guests</option>
+                                <option value="4">4 guests</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="phone" class="form-label">Phone number</label>
+                            <div class="input-group">
+                                <span class="input-group-text">+7</span>
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="700 000 00 00" required>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="notes" class="form-label">Special requests</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="4" placeholder="Late check-in, quiet room, or other request"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="terms" required>
+                                <label class="form-check-label" for="terms">I agree to the booking terms.</label>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-column flex-sm-row gap-2 pt-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Confirm Booking</button>
+                            <button type="reset" class="btn btn-outline-secondary">Clear Form</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <p class="mb-0">&copy; 2026 BookingApp. Created by: Allazhar Aldongarov, Dias Serikov, Yerkenov Abylay</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

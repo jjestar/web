@@ -1,0 +1,75 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    color: #1e293b;
+}
+
+.carousel-image {
+    height: 420px;
+    object-fit: cover;
+}
+
+.destination-image {
+    height: 210px;
+    object-fit: cover;
+}
+
+.result-image {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+}
+
+@media (max-width: 575px) {
+    h1 {
+        font-size: 1.7rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    p {
+        font-size: 0.95rem;
+    }
+
+    .carousel-image {
+        height: 230px;
+    }
+
+    .carousel-caption {
+        display: none;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 991px) {
+    h1 {
+        font-size: 2.1rem;
+    }
+
+    h2 {
+        font-size: 1.7rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    .carousel-image {
+        height: 320px;
+    }
+}
+
+@media (min-width: 992px) {
+    h1 {
+        font-size: 2.6rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    p {
+        font-size: 1.05rem;
+    }
+}

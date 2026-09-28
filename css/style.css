@@ -1,0 +1,66 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    color: #1e293b;
+}
+
+.hotel-image {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+}
+
+.review-stars {
+    color: #b45309;
+    letter-spacing: 2px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+@media (max-width: 575px) {
+    h1 {
+        font-size: 1.7rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    p {
+        font-size: 0.95rem;
+    }
+
+    .hotel-image {
+        height: 220px;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 991px) {
+    h1 {
+        font-size: 2.1rem;
+    }
+
+    h2 {
+        font-size: 1.7rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 992px) {
+    h1 {
+        font-size: 2.6rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    p {
+        font-size: 1.05rem;
+    }
+}
