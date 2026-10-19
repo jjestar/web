@@ -19,6 +19,30 @@ textarea {
     resize: vertical;
 }
 
+/* Task 1: messages belong to the booking form only. */
+#booking-form .field-error {
+    color: #b42318;
+    font-size: 0.875rem;
+    margin: 0.35rem 0 0;
+}
+
+#booking-form .field-error:empty {
+    display: none;
+}
+
+#booking-form [aria-invalid="true"] {
+    border-color: #b42318;
+}
+
+#booking-form .form-status.error {
+    color: #b42318;
+}
+
+#booking-form .form-status.success {
+    color: #146c43;
+    font-weight: bold;
+}
+
 @media (max-width: 575px) {
     h1 {
         font-size: 1.7rem;

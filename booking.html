@@ -35,52 +35,70 @@
                 <div class="bg-white rounded shadow-sm p-3 p-md-4 p-lg-5">
                     <h1 class="fw-bold mb-2">Complete Your Booking</h1>
                     <p class="text-secondary mb-4">Reserve your room at <strong>Grand Palace Hotel</strong>.</p>
-                    <form action="index.html" method="get" class="row g-3">
+                    <form id="booking-form" class="row g-3" novalidate>
                         <div class="col-12 col-md-6">
                             <label for="fullname" class="form-label">Full name</label>
-                            <input type="text" class="form-control" id="fullname" name="fullname" placeholder="John Doe" required>
+                            <input type="text" class="form-control" id="fullname" name="fullname" placeholder="John Doe" autocomplete="name" aria-describedby="fullname-error" required>
+                            <p id="fullname-error" class="field-error"></p>
                         </div>
                         <div class="col-12 col-md-6">
                             <label for="email" class="form-label">Email address</label>
                             <div class="input-group">
                                 <span class="input-group-text">@</span>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" autocomplete="email" aria-describedby="email-error" required>
                             </div>
+                            <p id="email-error" class="field-error"></p>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" minlength="8" autocomplete="new-password" aria-describedby="password-help password-error" required>
+                            <small id="password-help" class="text-secondary">Use at least 8 characters for this demo.</small>
+                            <p id="password-error" class="field-error"></p>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="confirm-password" class="form-label">Confirm password</label>
+                            <input type="password" class="form-control" id="confirm-password" autocomplete="new-password" aria-describedby="confirm-password-error" required>
+                            <p id="confirm-password-error" class="field-error"></p>
                         </div>
                         <div class="col-12 col-md-6">
                             <label for="checkin" class="form-label">Check-in date</label>
-                            <input type="date" class="form-control" id="checkin" name="checkin" required>
+                            <input type="date" class="form-control" id="checkin" name="checkin" aria-describedby="checkin-error" required>
+                            <p id="checkin-error" class="field-error"></p>
                         </div>
                         <div class="col-12 col-md-6">
                             <label for="checkout" class="form-label">Check-out date</label>
-                            <input type="date" class="form-control" id="checkout" name="checkout" required>
+                            <input type="date" class="form-control" id="checkout" name="checkout" aria-describedby="checkout-error" required>
+                            <p id="checkout-error" class="field-error"></p>
                         </div>
                         <fieldset class="col-12">
                             <legend class="form-label">Room type</legend>
                             <div class="btn-group w-100" role="group" aria-label="Room type selection">
-                                <input type="radio" class="btn-check" name="room" id="standard" value="standard" checked>
+                                <input type="radio" class="btn-check" name="room" id="standard" value="standard" aria-describedby="standard-error" checked required>
                                 <label class="btn btn-outline-primary btn-sm" for="standard">Standard</label>
                                 <input type="radio" class="btn-check" name="room" id="deluxe" value="deluxe">
                                 <label class="btn btn-outline-primary btn-sm" for="deluxe">Deluxe</label>
                                 <input type="radio" class="btn-check" name="room" id="suite" value="suite">
                                 <label class="btn btn-outline-primary btn-sm" for="suite">Suite</label>
                             </div>
+                            <p id="standard-error" class="field-error"></p>
                         </fieldset>
                         <div class="col-12 col-md-6">
                             <label for="guests" class="form-label">Number of guests</label>
-                            <select class="form-select" id="guests" name="guests" required>
+                            <select class="form-select" id="guests" name="guests" aria-describedby="guests-error" required>
                                 <option value="1">1 guest</option>
                                 <option value="2">2 guests</option>
                                 <option value="3">3 guests</option>
                                 <option value="4">4 guests</option>
                             </select>
+                            <p id="guests-error" class="field-error"></p>
                         </div>
                         <div class="col-12 col-md-6">
                             <label for="phone" class="form-label">Phone number</label>
                             <div class="input-group">
                                 <span class="input-group-text">+7</span>
-                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="700 000 00 00" required>
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="700 000 00 00" autocomplete="tel-national" aria-describedby="phone-error" required>
                             </div>
+                            <p id="phone-error" class="field-error"></p>
                         </div>
                         <div class="col-12">
                             <label for="notes" class="form-label">Special requests</label>
@@ -88,9 +106,14 @@
                         </div>
                         <div class="col-12">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="terms" required>
+                                <input class="form-check-input" type="checkbox" id="terms" aria-describedby="terms-error" required>
                                 <label class="form-check-label" for="terms">I agree to the booking terms.</label>
                             </div>
+                            <p id="terms-error" class="field-error"></p>
+                        </div>
+                        <div class="col-12">
+                            <p class="text-secondary small mb-1">Practice form: no account or reservation is created.</p>
+                            <p id="booking-status" class="form-status mb-0" role="status" aria-live="polite" tabindex="-1"></p>
                         </div>
                         <div class="col-12 d-flex flex-column flex-sm-row gap-2 pt-2">
                             <button type="submit" class="btn btn-primary btn-lg">Confirm Booking</button>
@@ -106,5 +129,6 @@
         <p class="mb-0">&copy; 2026 BookingApp. Created by: Allazhar Aldongarov, Dias Serikov, Yerkenov Abylay</p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/booking.js" defer></script>
 </body>
 </html>

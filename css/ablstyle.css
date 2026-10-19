@@ -49,6 +49,73 @@ textarea {
     resize: vertical;
 }
 
+.live-clock {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.75rem;
+    padding: 1rem;
+    background-color: #e8f0fe;
+    border-left: 4px solid #1d4ed8;
+    border-radius: 6px;
+}
+
+.live-clock small {
+    color: #475569;
+}
+
+.service-faq-item {
+    border-bottom: 1px solid #dbe2ea;
+}
+
+.service-faq-item:last-child {
+    border-bottom: 0;
+}
+
+.service-faq-item h3 {
+    margin: 0;
+}
+
+.service-faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    padding: 1rem 0;
+    border: 0;
+    background-color: transparent;
+    color: #1e293b;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: left;
+    cursor: pointer;
+}
+
+.service-faq-question:hover,
+.service-faq-question[aria-expanded="true"] {
+    color: #1d4ed8;
+}
+
+.service-faq-question:focus-visible {
+    outline: 2px solid #1d4ed8;
+    outline-offset: 2px;
+}
+
+.faq-symbol {
+    font-size: 1.4rem;
+}
+
+.service-faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.service-faq-answer p {
+    margin: 0;
+    padding-bottom: 1rem;
+}
+
 @media (max-width: 575px) {
     h1 {
         font-size: 1.7rem;

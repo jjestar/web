@@ -35,6 +35,12 @@
             <p class="mb-0">Add transport, a rental car, or a local tour to make your trip easier.</p>
         </section>
 
+        <div class="live-clock mb-5">
+            <strong>Current date and time:</strong>
+            <time id="current-date-time">Loading...</time>
+            <small>Your local time</small>
+        </div>
+
         <section class="mb-5" aria-labelledby="services-heading">
             <h2 id="services-heading" class="fw-bold mb-3">What We Offer</h2>
             <div class="row g-4">
@@ -107,11 +113,49 @@
                 </table>
             </div>
         </section>
+
+        <section class="service-faq bg-white rounded shadow-sm p-3 p-md-4 mt-5" aria-labelledby="faq-heading">
+            <h2 id="faq-heading" class="fw-bold mb-3">Service Questions</h2>
+            <div class="service-faq-item">
+                <h3>
+                    <button class="service-faq-question" type="button" aria-expanded="false" aria-controls="transfer-answer">
+                        What does the airport transfer include?
+                        <span class="faq-symbol" aria-hidden="true">+</span>
+                    </button>
+                </h3>
+                <div id="transfer-answer" class="service-faq-answer" aria-hidden="true">
+                    <p>The standard transfer takes you from the airport to your hotel. Choose the round-trip option if you also need a return journey.</p>
+                </div>
+            </div>
+            <div class="service-faq-item">
+                <h3>
+                    <button class="service-faq-question" type="button" aria-expanded="false" aria-controls="rental-answer">
+                        How are car rental prices calculated?
+                        <span class="faq-symbol" aria-hidden="true">+</span>
+                    </button>
+                </h3>
+                <div id="rental-answer" class="service-faq-answer" aria-hidden="true">
+                    <p>Car rental prices are listed per day. Check the service price table to compare standard, premium, and VIP options.</p>
+                </div>
+            </div>
+            <div class="service-faq-item">
+                <h3>
+                    <button class="service-faq-question" type="button" aria-expanded="false" aria-controls="tour-answer">
+                        Can I choose a private city tour?
+                        <span class="faq-symbol" aria-hidden="true">+</span>
+                    </button>
+                </h3>
+                <div id="tour-answer" class="service-faq-answer" aria-hidden="true">
+                    <p>Yes. The premium guided tour includes a private guide. A group tour is available with the standard option.</p>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="bg-dark text-white text-center py-3 mt-5">
         <p class="mb-0">&copy; 2026 BookingApp. Created by: Allazhar Aldongarov, Dias Serikov, Yerkenov Abylay</p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/about-services.js"></script>
 </body>
 </html>

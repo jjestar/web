@@ -73,3 +73,21 @@ body {
         font-size: 1.05rem;
     }
 }
+
+
+/* Assignment 4 interactions for Home and Search only. */
+body { transition: background-color 0.35s ease; }
+.accordion-content { max-height: 0; transition: max-height 0.3s ease; }
+.accordion-header[aria-expanded="true"] { color: #0d6efd; }
+.popup-overlay {
+    position: fixed;
+    inset: 0;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1055;
+}
+.popup-overlay[hidden] { display: none; }
+.popup-content { width: 100%; max-width: 380px; max-height: 90vh; overflow-y: auto; }
