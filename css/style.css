@@ -19,6 +19,59 @@ textarea {
     resize: vertical;
 }
 
+/* Assignment 5: visible progress and animated step changes. */
+.booking-progress {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+}
+
+.booking-progress li {
+    padding: 0.5rem 0.8rem;
+    background: #e2e8f0;
+    border-radius: 0.4rem;
+}
+
+.booking-progress [aria-current="step"] {
+    background: #0d6efd;
+    color: white;
+    font-weight: bold;
+}
+
+.booking-step[hidden],
+#booking-form button[hidden] {
+    display: none !important;
+}
+
+.booking-step:not([hidden]) {
+    animation: booking-step-in 0.25s ease-out;
+}
+
+@keyframes booking-step-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.booking-summary {
+    display: grid;
+    grid-template-columns: minmax(7rem, 1fr) minmax(0, 2fr);
+    gap: 0.5rem 1rem;
+    background: #f4f6f8;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.booking-summary dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .booking-step:not([hidden]) { animation: none; }
+}
+
 /* Task 1: messages belong to the booking form only. */
 #booking-form .field-error {
     color: #b42318;

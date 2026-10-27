@@ -1,30 +1,48 @@
-BookingApp - Assignment 4
+BookingApp - Assignment 5
+Team: BookingApp | Group: SE-2513
+Members: Allazhar Aldongarov, Dias Serikov, Yerkenov Abylay
 
-Open index.html in a browser. Internet access is needed for the existing Bootstrap CDN links.
-No build command or package installation is required.
+RUN
+Open index.html or serve this folder with a static web server. No build needed.
+Internet is needed for Bootstrap 5.3.2 styles and its mobile menu from jsDelivr.
 
-Keep these page groups separate:
-1. index.html and search-results.html -> css/allstyle.css and js/script.js
-2. booking.html and hotel-detail.html -> css/style.css and js/booking.js
-3. about.html and services.html -> css/ablstyle.css and js/about-services.js
+DEPLOYMENT
+Repository: https://github.com/jjestar/web
+Assignment website: https://jjestar.github.io/web/
+Existing Vercel website: https://aishhko.vercel.app/
+GitHub Pages publishes main from the repository root. All asset paths are relative.
 
-Demonstration:
-- Task 1: open Booking. Submit empty or invalid values, then use matching passwords
-  of at least 8 characters, a valid email, checkout after checkin, a 10-digit local
-  phone number after +7, and accept the terms. This is a frontend demonstration.
-- Task 2: open Services and click the Service Questions buttons. Click again to close.
-- Task 3: open Home or Search and click Subscribe for Discounts. Close using X,
-  the shaded background, or Escape.
-- Task 4: click Change Background Theme on Home or Search.
-- Task 5: watch the clock on Home, Search, About, or Services.
+CODE MAP
+js/hotels.js: hotel array, objects, getPriceLabel() method.
+js/script.js: popup, validation, background color, clock, search and filters.
+js/common.js: arrow-key navigation, one Audio object, mute, button animation.
+js/details.js: selected hotel, thumbnail gallery, star rating.
+js/booking.js: three-step form, callbacks, validation, booking price methods.
+js/about-services.js: clock, service FAQ, local contact form validation.
+css/interactive.css: shared interaction and animation styles.
+css/allstyle.css, style.css, ablstyle.css: existing page layouts.
+image/: supplied photographs and click.mp3.
 
-The report is provided separately as Assignment4_Report.pdf.
-Chrome and Edge checks passed at desktop and mobile viewport sizes.
-The updated files have not yet been pushed or deployed.
-The team's confirmed website address is https://aishhko.vercel.app.
+DEMONSTRATE
+1. Search: 5 stars and Apply Filters shows one hotel. Add Breakfast: none.
+   Clear Filters restores all three. Search by Astana, Miami, or Almaty.
+2. Hotel Details: select another thumbnail and then the fourth rating star.
+3. Tab to a menu link, use Left/Right or Up/Down, then Enter.
+4. Booking: Guest details, Next, Stay details, Next, review total.
+   Back preserves values. Confirm requires terms. Clear Form resets all steps.
+   Test: Demo Student, student@example.com, DemoPass123 in both password fields,
+   2026-11-01 to 2026-11-03, phone 7000000000 after +7.
+5. Any page: click a button to hear click.mp3; Sound: Off mutes it.
+6. Apply Filters animates hotel cards. Gallery and booking steps also animate.
+7. Home/Search: Change Background Theme; Subscribe for Discounts; Escape closes.
+8. About: contact fields validate locally and show a status without reload.
 
-Before submission, each team member should implement and understand at least one
-JavaScript component and be able to explain the other components. Each member must
-submit the assignment. The practice lesson defense accounts for 40% of the grade.
-The assignment document specifies GitHub Pages or Netlify; confirm with the teacher
-whether the team's existing Vercel deployment is accepted.
+This frontend demo does not create server bookings, accounts, ratings,
+subscriptions or outgoing email. Passwords are not saved or sent.
+Date inputs check ordering; they do not check real hotel availability.
+
+SUBMISSION
+Insert code and webpage screenshots in Assignment5_Report.docx, then export
+it as Assignment5_Report.pdf. Submit the PDF and BookingApp_Assignment5.zip.
+The separate Russian screenshot guide explains every screenshot slot.
+Every member submits and prepares for the practice defense (40% of the grade).
