@@ -6,7 +6,6 @@
     <title>BookingApp - Services</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/ablstyle.css">
-    <link rel="stylesheet" href="css/interactive.css">
 </head>
 <body>
     <header>
@@ -28,13 +27,6 @@
                 </div>
             </div>
         </nav>
-        <div class="interaction-tools">
-            <div class="container d-flex flex-wrap align-items-center gap-2 py-2">
-                <p class="mb-0 me-auto">Keyboard: Tab to the menu, then use arrow keys. Enter opens a page.</p>
-                <button id="sound-toggle" class="btn btn-outline-secondary btn-sm" type="button" aria-pressed="true">Sound: On</button>
-                <span id="sound-status" class="small text-secondary" role="status" aria-live="polite">Click a button to hear a sound.</span>
-            </div>
-        </div>
     </header>
 
     <main class="container py-4 px-sm-2 px-lg-3 mt-lg-4">
@@ -113,12 +105,36 @@
                         </tr>
                         <tr>
                             <th scope="row">Guided tour</th>
-                            <td>$20 group tour</td>
+                            <td>$20 per person</td>
                             <td>$50 private guide</td>
                             <td>$100 special tour</td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </section>
+
+        <section class="bg-white rounded shadow-sm p-3 p-md-4 mt-5" aria-labelledby="estimate-heading">
+            <h2 id="estimate-heading" class="fw-bold mb-3">Estimate Your Service Cost</h2>
+            <p class="text-secondary">Compare standard services before planning your trip.</p>
+            <form id="service-estimate-form" class="row g-3">
+                <div class="col-12 col-md-6">
+                    <label for="service-choice" class="form-label">Service</label>
+                    <select id="service-choice" class="form-select" required></select>
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="service-quantity" id="quantity-label" class="form-label">Number of trips</label>
+                    <input id="service-quantity" class="form-control" type="number" min="1" max="30" step="1" value="1" required>
+                </div>
+                <div class="col-12 col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Calculate Cost</button>
+                </div>
+            </form>
+            <p id="service-rate" class="small text-secondary mt-3 mb-0"></p>
+            <div id="service-estimate-result" class="service-estimate-result mt-3" role="status" hidden>
+                <p id="estimate-description" class="mb-1"></p>
+                <p id="estimate-total" class="fs-4 fw-bold text-primary mb-1"></p>
+                <p class="small text-secondary mb-0">This is an estimate. No service has been booked.</p>
             </div>
         </section>
 
@@ -163,7 +179,6 @@
     <footer class="bg-dark text-white text-center py-3 mt-5">
         <p class="mb-0">&copy; 2026 BookingApp. Created by: Allazhar Aldongarov, Dias Serikov, Yerkenov Abylay</p>
     </footer>
-    <script src="js/common.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/about-services.js"></script>
 </body>

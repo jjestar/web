@@ -75,7 +75,6 @@ body {
 }
 
 
-/* Assignment 4 interactions for Home and Search only. */
 body { transition: background-color 0.35s ease; }
 .accordion-content { max-height: 0; transition: max-height 0.3s ease; }
 .accordion-header[aria-expanded="true"] { color: #0d6efd; }
@@ -91,3 +90,40 @@ body { transition: background-color 0.35s ease; }
 }
 .popup-overlay[hidden] { display: none; }
 .popup-content { width: 100%; max-width: 380px; max-height: 90vh; overflow-y: auto; }
+
+.hotel-card,
+.popup-content {
+    animation: appear 0.3s ease;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.nav-link:focus-visible,
+button:focus-visible,
+a.btn:focus-visible {
+    outline: 3px solid #f59e0b;
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+}

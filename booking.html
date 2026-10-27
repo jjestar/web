@@ -6,7 +6,6 @@
     <title>BookingApp - Book Your Stay</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/interactive.css">
 </head>
 <body>
     <header>
@@ -28,13 +27,6 @@
                 </div>
             </div>
         </nav>
-        <div class="interaction-tools">
-            <div class="container d-flex flex-wrap align-items-center gap-2 py-2">
-                <p class="mb-0 me-auto">Keyboard: Tab to the menu, then use arrow keys. Enter opens a page.</p>
-                <button id="sound-toggle" class="btn btn-outline-secondary btn-sm" type="button" aria-pressed="true">Sound: On</button>
-                <span id="sound-status" class="small text-secondary" role="status" aria-live="polite">Click a button to hear a sound.</span>
-            </div>
-        </div>
     </header>
 
     <main class="container py-4 px-sm-2 px-lg-3 mt-lg-4">
@@ -42,15 +34,15 @@
             <div class="col-12 col-lg-9">
                 <div class="bg-white rounded shadow-sm p-3 p-md-4 p-lg-5">
                     <h1 class="fw-bold mb-2">Complete Your Booking</h1>
-                    <p class="text-secondary mb-4">Reserve your room at <strong id="booking-hotel-name">Grand Palace Hotel</strong>.</p>
+                    <p class="text-secondary mb-4">Plan your stay at <strong id="booking-hotel-name">Grand Palace Hotel</strong>.</p>
                     <ol class="booking-progress mb-4" aria-label="Booking steps">
-                        <li aria-current="step">1. Guest details</li>
-                        <li>2. Stay details</li>
+                        <li class="active" aria-current="step">1. Guest details</li>
+                        <li>2. Your stay</li>
                         <li>3. Review</li>
                     </ol>
                     <form id="booking-form" novalidate>
-                        <section class="booking-step row g-3" aria-labelledby="guest-step-title">
-                                <h2 id="guest-step-title" class="h5" tabindex="-1">Guest details</h2>
+                        <fieldset class="booking-step row g-3">
+                            <legend class="h4 fw-bold" tabindex="-1">Guest details</legend>
                             <div class="col-12 col-md-6">
                                 <label for="fullname" class="form-label">Full name</label>
                                 <input type="text" class="form-control" id="fullname" name="fullname" placeholder="John Doe" autocomplete="name" aria-describedby="fullname-error" required>
@@ -75,9 +67,17 @@
                                 <input type="password" class="form-control" id="confirm-password" autocomplete="new-password" aria-describedby="confirm-password-error" required>
                                 <p id="confirm-password-error" class="field-error"></p>
                             </div>
-                        </section>
-                        <section class="booking-step row g-3" aria-labelledby="stay-step-title" hidden>
-                                <h2 id="stay-step-title" class="h5" tabindex="-1">Stay details</h2>
+                            <div class="col-12 col-md-6">
+                                <label for="phone" class="form-label">Phone number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">+7</span>
+                                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="700 000 00 00" autocomplete="tel-national" aria-describedby="phone-error" required>
+                                </div>
+                                <p id="phone-error" class="field-error"></p>
+                            </div>
+                        </fieldset>
+                        <fieldset class="booking-step row g-3" hidden>
+                            <legend class="h4 fw-bold" tabindex="-1">Your stay</legend>
                             <div class="col-12 col-md-6">
                                 <label for="checkin" class="form-label">Check-in date</label>
                                 <input type="date" class="form-control" id="checkin" name="checkin" aria-describedby="checkin-error" required>
@@ -89,14 +89,14 @@
                                 <p id="checkout-error" class="field-error"></p>
                             </div>
                             <fieldset class="col-12">
-                                <legend class="form-label">Room type</legend>
+                                <legend class="form-label">Room type and price per night</legend>
                                 <div class="btn-group w-100" role="group" aria-label="Room type selection">
                                     <input type="radio" class="btn-check" name="room" id="standard" value="standard" aria-describedby="standard-error" checked required>
-                                    <label class="btn btn-outline-primary btn-sm" for="standard">Standard</label>
+                                    <label class="btn btn-outline-primary btn-sm" for="standard">Standard · $120</label>
                                     <input type="radio" class="btn-check" name="room" id="deluxe" value="deluxe">
-                                    <label class="btn btn-outline-primary btn-sm" for="deluxe">Deluxe</label>
+                                    <label class="btn btn-outline-primary btn-sm" for="deluxe">Deluxe · $160</label>
                                     <input type="radio" class="btn-check" name="room" id="suite" value="suite">
-                                    <label class="btn btn-outline-primary btn-sm" for="suite">Suite</label>
+                                    <label class="btn btn-outline-primary btn-sm" for="suite">Suite · $220</label>
                                 </div>
                                 <p id="standard-error" class="field-error"></p>
                             </fieldset>
@@ -110,24 +110,17 @@
                                 </select>
                                 <p id="guests-error" class="field-error"></p>
                             </div>
-                            <div class="col-12 col-md-6">
-                                <label for="phone" class="form-label">Phone number</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">+7</span>
-                                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="700 000 00 00" autocomplete="tel-national" aria-describedby="phone-error" required>
-                                </div>
-                                <p id="phone-error" class="field-error"></p>
-                            </div>
                             <div class="col-12">
                                 <label for="notes" class="form-label">Special requests</label>
                                 <textarea class="form-control" id="notes" name="notes" rows="4" placeholder="Late check-in, quiet room, or other request"></textarea>
                             </div>
-                        </section>
-                        <section class="booking-step row g-3" aria-labelledby="review-step-title" hidden>
-                                <h2 id="review-step-title" class="h5" tabindex="-1">Review your booking</h2>
-                                <div class="col-12">
-                                    <dl id="booking-summary" class="booking-summary mb-0"></dl>
-                                </div>
+                        </fieldset>
+                        <fieldset class="booking-step row g-3" hidden>
+                            <legend class="h4 fw-bold" tabindex="-1">Review your stay</legend>
+                            <div class="col-12">
+                                <dl id="booking-summary" class="booking-summary"></dl>
+                                <p class="text-secondary small">The total is a sample room estimate. No payment will be taken.</p>
+                            </div>
                             <div class="col-12">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="terms" aria-describedby="terms-error" required>
@@ -135,15 +128,15 @@
                                 </div>
                                 <p id="terms-error" class="field-error"></p>
                             </div>
-                        </section>
+                        </fieldset>
                         <div class="mt-4">
                             <p class="text-secondary small mb-1">Practice form: no account or reservation is created.</p>
                             <p id="booking-status" class="form-status mb-0" role="status" aria-live="polite" tabindex="-1"></p>
                         </div>
-                        <div class="d-flex flex-column flex-sm-row gap-2 pt-3">
+                        <div class="d-flex flex-column flex-sm-row gap-2 mt-3">
                             <button id="booking-back" type="button" class="btn btn-outline-primary" hidden>Back</button>
-                            <button id="booking-next" type="submit" class="btn btn-primary">Next</button>
-                            <button id="booking-confirm" type="submit" class="btn btn-primary" hidden>Confirm Booking</button>
+                            <button id="booking-next" type="button" class="btn btn-primary">Next</button>
+                            <button id="booking-confirm" type="submit" class="btn btn-primary" hidden>Confirm Demo Booking</button>
                             <button type="reset" class="btn btn-outline-secondary">Clear Form</button>
                         </div>
                     </form>
@@ -155,7 +148,6 @@
     <footer class="bg-dark text-white text-center py-3 mt-5">
         <p class="mb-0">&copy; 2026 BookingApp. Created by: Allazhar Aldongarov, Dias Serikov, Yerkenov Abylay</p>
     </footer>
-    <script src="js/common.js"></script>
     <script src="js/hotels.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/booking.js" defer></script>

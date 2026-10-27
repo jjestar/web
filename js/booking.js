@@ -1,4 +1,50 @@
-// Assignment 5: a multi-step form with callbacks and preserved input values.
+const readMoreButton = document.getElementById('hotel-read-more');
+
+if (readMoreButton) {
+    const moreInformation = document.getElementById('hotel-more');
+
+    readMoreButton.addEventListener('click', function () {
+        const isOpen = readMoreButton.getAttribute('aria-expanded') === 'true';
+        moreInformation.style.display = isOpen ? 'none' : 'block';
+        moreInformation.setAttribute('aria-hidden', String(isOpen));
+        readMoreButton.setAttribute('aria-expanded', String(!isOpen));
+        readMoreButton.textContent = isOpen ? 'Read More' : 'Read Less';
+    });
+}
+
+// The identifier from Search chooses the same hotel on both pages.
+const selectedHotel = getSelectedHotel();
+document.querySelectorAll('a[href="booking.html"]').forEach(function (link) {
+    link.href = 'booking.html?hotel=' + selectedHotel.id;
+});
+document.querySelectorAll('a[href="hotel-detail.html"]').forEach(function (link) {
+    link.href = 'hotel-detail.html?hotel=' + selectedHotel.id;
+});
+
+const hotelName = document.getElementById('hotel-name');
+if (hotelName) {
+    document.title = 'BookingApp - ' + selectedHotel.name;
+    hotelName.textContent = selectedHotel.name;
+    document.getElementById('hotel-location').textContent = selectedHotel.location + ' | ' + selectedHotel.rating + ' stars';
+    document.getElementById('hotel-description').textContent = selectedHotel.description;
+    document.getElementById('hotel-price').textContent = 'Rooms from $' + selectedHotel.price + ' per night';
+    document.getElementById('hotel-breakfast').textContent = selectedHotel.breakfast
+        ? 'Breakfast is included.' : 'Check room options before booking.';
+
+    const amenitiesList = document.getElementById('hotel-amenities');
+    amenitiesList.replaceChildren();
+    selectedHotel.amenities.forEach(function (amenity) {
+        const item = document.createElement('li');
+        item.className = 'list-group-item';
+        item.textContent = amenity;
+        amenitiesList.appendChild(item);
+    });
+    document.querySelectorAll('.hotel-image').forEach(function (image, index) {
+        image.src = selectedHotel.photos[index].src;
+        image.alt = selectedHotel.photos[index].alt;
+    });
+}
+
 const bookingForm = document.getElementById('booking-form');
 
 if (bookingForm) {
@@ -9,13 +55,28 @@ if (bookingForm) {
     const confirmButton = document.getElementById('booking-confirm');
     const statusMessage = document.getElementById('booking-status');
     let currentStep = 0;
-    let isConfirmed = false;
-
-    const hotelId = new URLSearchParams(window.location.search).get('hotel');
-    const selectedHotel = typeof hotelsDatabase !== 'undefined'
-        ? hotelsDatabase.find(hotel => hotel.id === hotelId) || hotelsDatabase[0]
-        : { name: 'Grand Palace Hotel', price: 120 };
     document.getElementById('booking-hotel-name').textContent = selectedHotel.name;
+    document.title = 'BookingApp - Book ' + selectedHotel.name;
+
+    const bookingSummary = {
+        roomPrices: {
+            standard: selectedHotel.price,
+            deluxe: selectedHotel.price + 40,
+            suite: selectedHotel.price + 100
+        },
+        calculateNights(checkin, checkout) {
+            return (new Date(checkout) - new Date(checkin)) / 86400000;
+        },
+        calculateTotal(room, nights) {
+            return this.roomPrices[room] * nights;
+        }
+    };
+
+    // Labels and the summary use the same selected hotel's room prices.
+    Object.keys(bookingSummary.roomPrices).forEach(function (room) {
+        const label = bookingForm.querySelector('label[for="' + room + '"]');
+        label.textContent = room.charAt(0).toUpperCase() + room.slice(1) + ' · $' + bookingSummary.roomPrices[room];
+    });
 
     function showError(id, message) {
         document.getElementById(id + '-error').textContent = message;
@@ -23,10 +84,10 @@ if (bookingForm) {
     }
 
     function clearErrors() {
-        bookingForm.querySelectorAll('.field-error').forEach(error => {
+        bookingForm.querySelectorAll('.field-error').forEach(function (error) {
             error.textContent = '';
         });
-        bookingForm.querySelectorAll('[aria-invalid]').forEach(field => {
+        bookingForm.querySelectorAll('[aria-invalid]').forEach(function (field) {
             field.removeAttribute('aria-invalid');
         });
         statusMessage.textContent = '';
@@ -35,17 +96,23 @@ if (bookingForm) {
 
     function validateStep(stepIndex) {
         clearErrors();
-        const step = steps[stepIndex];
-        step.querySelectorAll('[required]').forEach(field => {
-            if (field.type !== 'radio' && field.type !== 'checkbox' && !field.value.trim()) {
-                showError(field.id, 'This field is required.');
+        const fields = steps[stepIndex].querySelectorAll('[required]');
+
+        for (let i = 0; i < fields.length; i++) {
+            const field = fields[i];
+            if (field.type === 'checkbox' && !field.checked) {
+                showError(field.id, 'Please agree to the booking terms.');
+            } else if (field.type !== 'checkbox' && field.value.trim() === '') {
+                showError(field.id, 'Please complete this field.');
             }
-        });
+        }
 
         if (stepIndex === 0) {
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const confirmation = document.getElementById('confirm-password').value;
+            const phone = document.getElementById('phone').value.trim();
+
             if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 showError('email', 'Enter a valid email, for example name@example.com.');
             }
@@ -55,132 +122,171 @@ if (bookingForm) {
             if (confirmation.trim() && password !== confirmation) {
                 showError('confirm-password', 'Passwords do not match.');
             }
+            if (phone && (!/^[0-9()\s-]+$/.test(phone) || phone.replace(/\D/g, '').length !== 10)) {
+                showError('phone', 'Enter 10 digits after +7. Spaces, brackets and hyphens are allowed.');
+            }
         }
 
         if (stepIndex === 1) {
             const checkin = document.getElementById('checkin').value;
             const checkout = document.getElementById('checkout').value;
-            const phone = document.getElementById('phone').value.trim();
-            // Date inputs use YYYY-MM-DD, so strings can be compared directly.
+
             if (checkin && checkout && checkout <= checkin) {
                 showError('checkout', 'Check-out must be after the check-in date.');
             }
             if (!bookingForm.querySelector('input[name="room"]:checked')) {
                 showError('standard', 'Choose a room type.');
             }
-            if (phone && (!/^[0-9()\s-]+$/.test(phone) || phone.replace(/\D/g, '').length !== 10)) {
-                showError('phone', 'Enter 10 digits after +7.');
-            }
         }
 
-        if (stepIndex === 2 && !document.getElementById('terms').checked) {
-            showError('terms', 'Please agree to the booking terms.');
-        }
-
-        const firstInvalid = step.querySelector('[aria-invalid="true"]');
+        const firstInvalid = steps[stepIndex].querySelector('[aria-invalid="true"]');
         if (firstInvalid) {
-            changeStep(stepIndex, showStep);
             statusMessage.textContent = 'Please correct the highlighted fields.';
             statusMessage.classList.add('error');
             firstInvalid.focus();
             return false;
         }
+
         return true;
     }
 
-    // A callback receives the new step. Hiding sections keeps all input values.
-    function changeStep(nextStep, onStepChanged) {
-        currentStep = nextStep;
-        onStepChanged(currentStep);
-    }
-
-    function showStep(stepIndex) {
-        steps.forEach((step, index) => {
-            step.hidden = index !== stepIndex;
-        });
-        progressItems.forEach((item, index) => {
-            if (index === stepIndex) item.setAttribute('aria-current', 'step');
-            else item.removeAttribute('aria-current');
-        });
-        backButton.hidden = stepIndex === 0;
-        nextButton.hidden = stepIndex === steps.length - 1;
-        confirmButton.hidden = stepIndex !== steps.length - 1;
-        if (stepIndex === 2) updateSummary();
-        steps[stepIndex].querySelector('h2').focus();
-    }
-
-    // Object methods calculate nights and a simple estimated room price.
-    const booking = {
-        getNights() {
-            const checkin = new Date(document.getElementById('checkin').value);
-            const checkout = new Date(document.getElementById('checkout').value);
-            return Math.round((checkout - checkin) / 86400000);
-        },
-        getNightlyPrice() {
-            const room = bookingForm.querySelector('input[name="room"]:checked').value;
-            const extra = { standard: 0, deluxe: 40, suite: 80 };
-            return selectedHotel.price + extra[room];
-        },
-        getTotal() {
-            return this.getNights() * this.getNightlyPrice();
-        }
-    };
-
     function updateSummary() {
-        const summary = document.getElementById('booking-summary');
-        const room = bookingForm.querySelector('input[name="room"]:checked');
-        const rows = [
+        const room = bookingForm.querySelector('input[name="room"]:checked').value;
+        const checkin = document.getElementById('checkin').value;
+        const checkout = document.getElementById('checkout').value;
+        const nights = bookingSummary.calculateNights(checkin, checkout);
+        const total = bookingSummary.calculateTotal(room, nights);
+        const details = [
             ['Hotel', selectedHotel.name],
             ['Guest', document.getElementById('fullname').value.trim()],
             ['Email', document.getElementById('email').value.trim()],
-            ['Dates', document.getElementById('checkin').value + ' to ' + document.getElementById('checkout').value],
-            ['Room', room.value + ' ($' + booking.getNightlyPrice() + ' / night)'],
-            ['Guests', document.getElementById('guests').value],
             ['Phone', '+7 ' + document.getElementById('phone').value.trim()],
-            ['Special requests', document.getElementById('notes').value.trim() || 'None'],
-            ['Estimated total', '$' + booking.getTotal() + ' for ' + booking.getNights() + ' night(s)']
+            ['Dates', checkin + ' to ' + checkout],
+            ['Room', room.charAt(0).toUpperCase() + room.slice(1)],
+            ['Guests', document.getElementById('guests').value],
+            ['Nights', String(nights)],
+            ['Price per night', '$' + bookingSummary.roomPrices[room]],
+            ['Estimated total', '$' + total],
+            ['Special requests', document.getElementById('notes').value.trim() || 'None']
         ];
-        summary.textContent = '';
-        rows.forEach(([label, value]) => {
-            const term = document.createElement('dt');
-            const description = document.createElement('dd');
-            term.textContent = label;
-            description.textContent = value;
-            summary.append(term, description);
-        });
+        const summary = document.getElementById('booking-summary');
+        summary.replaceChildren();
+
+        for (let i = 0; i < details.length; i++) {
+            const label = document.createElement('dt');
+            const value = document.createElement('dd');
+            label.textContent = details[i][0];
+            value.textContent = details[i][1];
+            summary.append(label, value);
+        }
     }
 
-    bookingForm.addEventListener('submit', event => {
+    function showStep(stepIndex) {
+        for (let i = 0; i < steps.length; i++) {
+            steps[i].hidden = i !== stepIndex;
+            progressItems[i].classList.toggle('active', i === stepIndex);
+            progressItems[i].removeAttribute('aria-current');
+        }
+
+        progressItems[stepIndex].setAttribute('aria-current', 'step');
+        backButton.hidden = stepIndex === 0;
+        nextButton.hidden = stepIndex === steps.length - 1;
+        confirmButton.hidden = stepIndex !== steps.length - 1;
+
+        if (stepIndex === steps.length - 1) {
+            updateSummary();
+        }
+
+        steps[stepIndex].querySelector('legend').focus();
+    }
+
+    function changeStep(direction, onStepChange) {
+        const nextStep = currentStep + direction;
+        if (nextStep < 0 || nextStep >= steps.length) return;
+        if (direction > 0 && !validateStep(currentStep)) return;
+        clearErrors();
+        currentStep = nextStep;
+        onStepChange(currentStep);
+    }
+
+    nextButton.addEventListener('click', function () {
+        changeStep(1, showStep);
+    });
+
+    backButton.addEventListener('click', function () {
+        changeStep(-1, showStep);
+    });
+
+    bookingForm.addEventListener('submit', function (event) {
         event.preventDefault();
-        if (isConfirmed) return;
-        if (currentStep < 2) {
-            if (validateStep(currentStep)) changeStep(currentStep + 1, showStep);
+
+        if (currentStep < steps.length - 1) {
+            changeStep(1, showStep);
             return;
         }
-        // Recheck earlier steps before confirming, including after using Back.
-        for (let index = 0; index < steps.length; index++) {
-            if (!validateStep(index)) return;
-        }
-        statusMessage.textContent = 'Validation passed! This is a demo: no account or booking was created.';
+        if (!validateStep(currentStep)) return;
+
+        statusMessage.textContent = 'Demo booking confirmed! No account, payment, or reservation was created.';
         statusMessage.classList.add('success');
         document.getElementById('password').value = '';
         document.getElementById('confirm-password').value = '';
         confirmButton.disabled = true;
-        isConfirmed = true;
-        backButton.hidden = true;
+        backButton.disabled = true;
         statusMessage.focus();
     });
 
-    backButton.addEventListener('click', () => {
+    bookingForm.addEventListener('reset', function () {
         clearErrors();
-        changeStep(currentStep - 1, showStep);
-    });
-
-    bookingForm.addEventListener('reset', () => {
-        clearErrors();
+        currentStep = 0;
         confirmButton.disabled = false;
-        isConfirmed = false;
-        document.getElementById('booking-summary').textContent = '';
-        changeStep(0, showStep);
+        backButton.disabled = false;
+        document.getElementById('booking-summary').replaceChildren();
+        showStep(currentStep);
     });
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const menuLinks = document.querySelectorAll('#mainNav .nav-link');
+
+    for (let index = 0; index < menuLinks.length; index++) {
+        menuLinks[index].addEventListener('keydown', function (event) {
+            let nextIndex = index;
+
+            switch (event.key) {
+                case 'ArrowRight':
+                case 'ArrowDown':
+                    nextIndex = (index + 1) % menuLinks.length;
+                    break;
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    nextIndex = (index - 1 + menuLinks.length) % menuLinks.length;
+                    break;
+                case 'Home':
+                    nextIndex = 0;
+                    break;
+                case 'End':
+                    nextIndex = menuLinks.length - 1;
+                    break;
+                default:
+                    return;
+            }
+
+            event.preventDefault();
+            menuLinks[nextIndex].focus();
+        });
+    }
+
+    const clickSound = new Audio('image/click.mp3');
+    clickSound.volume = 0.4;
+
+    document.addEventListener('click', function (event) {
+        const button = event.target.closest('button');
+        if (button && !button.disabled) {
+            clickSound.pause();
+            clickSound.currentTime = 0;
+            clickSound.play().catch(function () {
+                console.warn('The click sound could not be played.');
+            });
+        }
+    });
+});

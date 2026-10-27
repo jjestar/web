@@ -19,47 +19,45 @@ textarea {
     resize: vertical;
 }
 
-/* Assignment 5: visible progress and animated step changes. */
 .booking-progress {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    list-style: none;
     padding: 0;
+    list-style: none;
+    gap: 0.5rem;
 }
 
 .booking-progress li {
-    padding: 0.5rem 0.8rem;
-    background: #e2e8f0;
+    flex: 1;
+    padding: 0.75rem 0.5rem;
     border-radius: 0.4rem;
+    background: #e9eef5;
+    text-align: center;
+    font-size: 0.9rem;
+    transition: background-color 0.2s, color 0.2s;
 }
 
-.booking-progress [aria-current="step"] {
+.booking-progress li.active {
     background: #0d6efd;
-    color: white;
+    color: #fff;
     font-weight: bold;
 }
 
 .booking-step[hidden],
-#booking-form button[hidden] {
-    display: none !important;
+.hotel-more {
+    display: none;
 }
 
-.booking-step:not([hidden]) {
-    animation: booking-step-in 0.25s ease-out;
-}
-
-@keyframes booking-step-in {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
+.booking-step:not([hidden]),
+.hotel-more {
+    animation: reveal-content 0.25s ease-out;
 }
 
 .booking-summary {
     display: grid;
-    grid-template-columns: minmax(7rem, 1fr) minmax(0, 2fr);
-    gap: 0.5rem 1rem;
+    grid-template-columns: minmax(120px, 1fr) 2fr;
+    gap: 0.6rem 1rem;
+    padding: 1.25rem;
     background: #f4f6f8;
-    padding: 1rem;
     border-radius: 0.5rem;
 }
 
@@ -68,11 +66,24 @@ textarea {
     overflow-wrap: anywhere;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .booking-step:not([hidden]) { animation: none; }
+@keyframes reveal-content {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Task 1: messages belong to the booking form only. */
+@media (prefers-reduced-motion: reduce) {
+    .booking-step:not([hidden]),
+    .hotel-more {
+        animation: none;
+    }
+}
+
 #booking-form .field-error {
     color: #b42318;
     font-size: 0.875rem;
@@ -139,5 +150,26 @@ textarea {
 
     p {
         font-size: 1.05rem;
+    }
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.nav-link:focus-visible,
+button:focus-visible,
+a.btn:focus-visible {
+    outline: 3px solid #f59e0b;
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
     }
 }

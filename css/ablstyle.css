@@ -116,6 +116,43 @@ textarea {
     padding-bottom: 1rem;
 }
 
+.service-estimate-result {
+    padding: 1.25rem;
+    border: 1px solid #bfd3f5;
+    border-radius: 8px;
+    background-color: #edf4ff;
+}
+
+.estimate-reveal {
+    animation: estimate-reveal 0.35s ease;
+}
+
+.contact-status {
+    color: #166534;
+}
+
+@keyframes estimate-reveal {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .estimate-reveal {
+        animation: none;
+    }
+
+    .service-faq-answer {
+        transition: none;
+    }
+}
+
 @media (max-width: 575px) {
     h1 {
         font-size: 1.7rem;
@@ -163,5 +200,26 @@ textarea {
 
     p {
         font-size: 1.05rem;
+    }
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.nav-link:focus-visible,
+button:focus-visible,
+a.btn:focus-visible {
+    outline: 3px solid #f59e0b;
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
     }
 }

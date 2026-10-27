@@ -1,4 +1,4 @@
-// Assignment 5: an array of hotel objects with a reusable method.
+// Shared hotel data keeps Search, Hotel Details and Booking consistent.
 const hotelsDatabase = [
     {
         id: 'grand-palace',
@@ -8,8 +8,15 @@ const hotelsDatabase = [
         price: 120,
         rating: 5,
         image: 'image/1.jpg',
-        wifi: true, pool: true, breakfast: false,
-        getPriceLabel() { return '$' + this.price + ' / night'; }
+        wifi: true,
+        pool: true,
+        breakfast: false,
+        amenities: ['Free high-speed Wi-Fi', '24/7 room service', 'Spa, sauna, and indoor pool', 'Fitness center and free parking'],
+        photos: [
+            { src: 'image/1.jpg', alt: 'Grand Palace Hotel city view' },
+            { src: 'image/3.jpg', alt: 'Grand Palace Hotel bedroom' },
+            { src: 'image/2.jpg', alt: 'Grand Palace Hotel swimming pool' }
+        ]
     },
     {
         id: 'ocean-view',
@@ -19,8 +26,15 @@ const hotelsDatabase = [
         price: 220,
         rating: 4,
         image: 'image/destination-8.jpg',
-        wifi: true, pool: true, breakfast: true,
-        getPriceLabel() { return '$' + this.price + ' / night'; }
+        wifi: true,
+        pool: true,
+        breakfast: true,
+        amenities: ['Free Wi-Fi', 'Swimming pool', 'Breakfast included', 'Beach access'],
+        photos: [
+            { src: 'image/destination-8.jpg', alt: 'Ocean View Resort swimming pool' },
+            { src: 'image/destination-9.jpg', alt: 'Ocean View Resort hotel grounds' },
+            { src: 'image/destination-3.jpg', alt: 'Ocean View Resort example room' }
+        ]
     },
     {
         id: 'comfort-city',
@@ -30,7 +44,22 @@ const hotelsDatabase = [
         price: 85,
         rating: 4,
         image: 'image/destination-3.jpg',
-        wifi: true, pool: false, breakfast: false,
-        getPriceLabel() { return '$' + this.price + ' / night'; }
+        wifi: true,
+        pool: false,
+        breakfast: false,
+        amenities: ['Free Wi-Fi', 'City center location', 'Comfortable rooms'],
+        photos: [
+            { src: 'image/destination-3.jpg', alt: 'Comfort City Hotel example room' },
+            { src: 'image/3.jpg', alt: 'Comfort City Hotel example bedroom' },
+            { src: 'image/1.jpg', alt: 'Comfort City Hotel example city view' }
+        ]
     }
 ];
+
+// A missing or unknown identifier opens the default hotel.
+function getSelectedHotel() {
+    const hotelId = new URLSearchParams(window.location.search).get('hotel');
+    return hotelsDatabase.find(function (hotel) {
+        return hotel.id === hotelId;
+    }) || hotelsDatabase[0];
+}

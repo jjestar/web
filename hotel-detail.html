@@ -6,7 +6,6 @@
     <title>BookingApp - Grand Palace Hotel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/interactive.css">
 </head>
 <body>
     <header>
@@ -28,13 +27,6 @@
                 </div>
             </div>
         </nav>
-        <div class="interaction-tools">
-            <div class="container d-flex flex-wrap align-items-center gap-2 py-2">
-                <p class="mb-0 me-auto">Keyboard: Tab to the menu, then use arrow keys. Enter opens a page.</p>
-                <button id="sound-toggle" class="btn btn-outline-secondary btn-sm" type="button" aria-pressed="true">Sound: On</button>
-                <span id="sound-status" class="small text-secondary" role="status" aria-live="polite">Click a button to hear a sound.</span>
-            </div>
-        </div>
     </header>
 
     <main class="container py-4 px-sm-2 px-lg-3 mt-lg-4">
@@ -43,25 +35,15 @@
             <p id="hotel-location" class="text-secondary fs-5 mb-0">Astana, Kazakhstan | 5 stars</p>
         </section>
 
-        <section class="mb-5" aria-label="Hotel photo gallery">
-            <img id="gallery-main" src="image/1.jpg" class="gallery-main img-fluid rounded shadow-sm" alt="Grand Palace Hotel room with a city view">
-            <p class="small text-secondary mt-2">Select a photo to see it in the gallery.</p>
-            <div class="row g-3">
-                <div class="col-4">
-                    <button type="button" class="gallery-thumbnail selected btn p-1 w-100" data-image="image/1.jpg" data-alt="Grand Palace Hotel room with a city view" aria-label="Show hotel photo" aria-pressed="true">
-                        <img src="image/1.jpg" class="img-fluid rounded" alt="Hotel photo thumbnail">
-                    </button>
-                </div>
-                <div class="col-4">
-                    <button type="button" class="gallery-thumbnail btn p-1 w-100" data-image="image/3.jpg" data-alt="Example double bedroom" aria-label="Show bedroom photo" aria-pressed="false">
-                        <img src="image/3.jpg" class="img-fluid rounded" alt="Bedroom thumbnail">
-                    </button>
-                </div>
-                <div class="col-4">
-                    <button type="button" class="gallery-thumbnail btn p-1 w-100" data-image="image/2.jpg" data-alt="Example outdoor swimming pool" aria-label="Show pool photo" aria-pressed="false">
-                        <img src="image/2.jpg" class="img-fluid rounded" alt="Pool thumbnail">
-                    </button>
-                </div>
+        <section class="row g-3 mb-5" aria-label="Hotel photo gallery">
+            <div class="col-12 col-md-6 col-lg-4">
+                <img src="image/1.jpg" class="img-fluid rounded shadow-sm hotel-image" alt="Grand Palace Hotel exterior">
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <img src="image/3.jpg" class="img-fluid rounded shadow-sm hotel-image" alt="Grand Palace Hotel bedroom">
+            </div>
+            <div class="col-12 col-md-12 col-lg-4">
+                <img src="image/2.jpg" class="img-fluid rounded shadow-sm hotel-image" alt="Grand Palace Hotel swimming pool">
             </div>
         </section>
 
@@ -70,15 +52,22 @@
                 <article class="bg-white rounded shadow-sm p-3 p-md-4 h-100">
                     <h2 class="h4 fw-bold mb-3">About the Hotel</h2>
                     <p id="hotel-description">A five-star hotel with a spa, restaurant, and city views.</p>
-                    <p class="mb-0">Choose your dates and room type on the booking page.</p>
+                    <p>Choose a room and review the amenities below before booking.</p>
+                    <div id="hotel-more" class="hotel-more" aria-hidden="true">
+                        <p>Check-in starts at 3:00 PM and check-out is before 12:00 PM. The reception team is available all day to help with luggage storage and local travel advice.</p>
+                        <p>Choose a standard room, a deluxe room, or a suite. Add special requests when you complete the booking form.</p>
+                    </div>
+                    <button id="hotel-read-more" class="btn btn-outline-primary btn-sm" type="button" aria-expanded="false" aria-controls="hotel-more">Read More</button>
                 </article>
             </div>
             <div class="col-12 col-lg-6">
                 <article class="bg-white rounded shadow-sm p-3 p-md-4 h-100">
                     <h2 class="h4 fw-bold mb-3">Amenities</h2>
                     <ul id="hotel-amenities" class="list-group list-group-flush">
-                        <li class="list-group-item">Free Wi-Fi</li>
-                        <li class="list-group-item">Swimming pool</li>
+                        <li class="list-group-item">Free high-speed Wi-Fi</li>
+                        <li class="list-group-item">24/7 room service</li>
+                        <li class="list-group-item">Spa, sauna, and indoor pool</li>
+                        <li class="list-group-item">Fitness center and free parking</li>
                     </ul>
                 </article>
             </div>
@@ -87,31 +76,18 @@
         <section class="bg-primary text-white rounded shadow-sm p-3 p-md-4 mb-5">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
                 <div>
-                    <h2 id="hotel-price" class="h4 fw-bold mb-1">Rooms from $120 / night</h2>
-                    <p class="mb-0">Try our simple booking form.</p>
+                    <h2 id="hotel-price" class="h4 fw-bold mb-1">Rooms from $120 per night</h2>
+                    <p id="hotel-breakfast" class="mb-0">Check room options before booking.</p>
                 </div>
                 <div class="d-flex flex-column flex-sm-row gap-2">
-                    <a id="hotel-book-link" href="booking.html?hotel=grand-palace" class="btn btn-light btn-lg">Book This Hotel</a>
+                    <a href="booking.html" class="btn btn-light btn-lg">Book This Hotel</a>
                     <a href="search-results.html" class="btn btn-outline-light">Back to Results</a>
                 </div>
             </div>
         </section>
 
-        <section class="bg-white rounded shadow-sm p-3 p-md-4 mb-5" aria-labelledby="your-rating-heading">
-            <h2 id="your-rating-heading" class="h4 fw-bold">Rate this hotel</h2>
-            <p class="text-secondary mb-2">Choose a star from 1 to 5. Your demo rating stays on this page.</p>
-            <div class="d-flex gap-2" role="group" aria-label="Choose your rating">
-                <button type="button" class="rating-star btn fs-2 p-1" data-rating="1" aria-label="Rate 1 out of 5" aria-pressed="false">&#9733;</button>
-                <button type="button" class="rating-star btn fs-2 p-1" data-rating="2" aria-label="Rate 2 out of 5" aria-pressed="false">&#9733;</button>
-                <button type="button" class="rating-star btn fs-2 p-1" data-rating="3" aria-label="Rate 3 out of 5" aria-pressed="false">&#9733;</button>
-                <button type="button" class="rating-star btn fs-2 p-1" data-rating="4" aria-label="Rate 4 out of 5" aria-pressed="false">&#9733;</button>
-                <button type="button" class="rating-star btn fs-2 p-1" data-rating="5" aria-label="Rate 5 out of 5" aria-pressed="false">&#9733;</button>
-            </div>
-            <p id="rating-message" class="mb-0 mt-2" role="status">No rating selected yet.</p>
-        </section>
-
         <section aria-labelledby="reviews-heading">
-            <h2 id="reviews-heading" class="fw-bold mb-3">Guest Reviews</h2>
+            <h2 id="reviews-heading" class="fw-bold mb-3">Sample Guest Reviews</h2>
             <div class="row g-3">
                 <div class="col-sm-12 col-md-6 col-lg-4">
                     <article class="card h-100 shadow-sm">
@@ -126,7 +102,7 @@
                     <article class="card h-100 shadow-sm">
                         <div class="card-body p-3">
                             <p class="review-stars fs-4 mb-2" aria-label="4 out of 5 stars">★★★★☆</p>
-                            <p class="card-text">The spa was excellent and the hotel location was very convenient.</p>
+                            <p class="card-text">The room was comfortable and the hotel location was very convenient.</p>
                             <p class="fw-bold mb-0">Sophia K.</p>
                         </div>
                     </article>
@@ -135,7 +111,7 @@
                     <article class="card h-100 shadow-sm">
                         <div class="card-body p-3">
                             <p class="review-stars fs-4 mb-2" aria-label="5 out of 5 stars">★★★★★</p>
-                            <p class="card-text">Easy booking, good breakfast, and a beautiful view of the city.</p>
+                            <p class="card-text">Easy booking, friendly service, and a relaxing stay.</p>
                             <p class="fw-bold mb-0">Dana T.</p>
                         </div>
                     </article>
@@ -147,9 +123,8 @@
     <footer class="bg-dark text-white text-center py-3 mt-5">
         <p class="mb-0">&copy; 2026 BookingApp. Created by: Allazhar Aldongarov, Dias Serikov, Yerkenov Abylay</p>
     </footer>
-    <script src="js/common.js"></script>
     <script src="js/hotels.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/details.js" defer></script>
+    <script src="js/booking.js" defer></script>
 </body>
 </html>
