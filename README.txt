@@ -56,7 +56,8 @@ js/booking.js, css/style.css: hotel details, validation and booking summary.
 js/hotels.js: shared data for the three example hotels.
 js/common.js, css/common.css: notifications, clipboard and lazy loading.
 image/: local images, placeholder.svg and the click.mp3 sound.
-Assignment6_Report.pdf: report with code excerpts, screenshots and the site URL.
+Assignment6_Report.pdf: report with VS Code screenshots, website results and the site URL.
+Assignment6_Report.docx: editable Word version of the same report.
 EXPLANATION_RU.txt: a detailed Russian explanation and defense walkthrough.
 
 PROJECT LINKS
