@@ -6,6 +6,12 @@
     <title>BookingApp - Search Results</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/allstyle.css">
+    <link rel="stylesheet" href="css/common.css">
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js" defer></script>
+    <script src="js/hotels.js" defer></script>
+    <script src="js/common.js" defer></script>
+    <script src="js/script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
 </head>
 <body>
     <header>
@@ -69,6 +75,14 @@
 
             <section class="col-12 col-md-8 col-lg-9" aria-labelledby="available-hotels">
                 <h2 id="available-hotels" class="visually-hidden">Available hotels</h2>
+                <div class="bg-white rounded shadow-sm p-3 mb-3">
+                    <label for="hotel-search" class="form-label fw-bold">Find a hotel</label>
+                    <div class="hotel-search-box">
+                        <input type="search" id="hotel-search" class="form-control" placeholder="Type a hotel name, city, or keyword" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" aria-controls="search-suggestions" aria-describedby="search-help">
+                        <ul id="search-suggestions" class="search-suggestions" role="listbox" aria-label="Hotel and city suggestions" hidden></ul>
+                    </div>
+                    <p id="search-help" class="small text-secondary mt-2 mb-0">Results update as you type. Use the arrow keys and Enter to choose a suggestion.</p>
+                </div>
                 <p id="results-count" class="text-secondary mb-3" role="status"></p>
                 <div id="hotels-container"></div>
             </section>
@@ -103,8 +117,5 @@
     <footer class="bg-dark text-white text-center py-3 mt-5">
         <p class="mb-0">&copy; 2026 BookingApp. Created by: Allazhar Aldongarov, Dias Serikov, Yerkenov Abylay</p>
     </footer>
-    <script src="js/hotels.js"></script>
-    <script src="js/script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

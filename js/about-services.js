@@ -63,6 +63,8 @@ const serviceEstimator = {
 };
 
 const estimateForm = document.getElementById('service-estimate-form');
+let readEstimateValues;
+let showEstimate;
 
 if (estimateForm) {
     const serviceChoice = document.getElementById('service-choice');
@@ -81,6 +83,7 @@ if (estimateForm) {
     }
 
     function updateServiceDetails() {
+        serviceChoice.setCustomValidity('');
         const service = serviceEstimator.getService(serviceChoice.value);
         quantityLabel.textContent = service.quantityLabel;
         serviceRate.textContent = 'Standard price: $' + service.price + ' per ' + service.unit + '.';
@@ -89,51 +92,75 @@ if (estimateForm) {
 
     serviceChoice.addEventListener('change', updateServiceDetails);
     quantityInput.addEventListener('input', function () {
+        quantityInput.setCustomValidity('');
         estimateResult.hidden = true;
     });
 
-    estimateForm.addEventListener('submit', function (event) {
-        event.preventDefault();
+    readEstimateValues = function () {
         const quantity = Number(quantityInput.value);
         const service = serviceEstimator.getService(serviceChoice.value);
-        const total = serviceEstimator.calculateTotal(serviceChoice.value, quantity);
+        const validQuantity = Number.isInteger(quantity) && quantity >= 1 && quantity <= 30;
+        serviceChoice.setCustomValidity(service ? '' : 'Please choose a service.');
+        quantityInput.setCustomValidity(validQuantity ? '' : 'Please enter a whole number from 1 to 30.');
+        if (!estimateForm.reportValidity()) return null;
 
-        estimateDescription.textContent = service.name + ': ' + quantity + ' × $' + service.price;
-        estimateTotal.textContent = 'Estimated total: $' + total.toFixed(2);
+        return {
+            serviceName: service.name,
+            price: service.price,
+            quantity: quantity,
+            total: serviceEstimator.calculateTotal(service.id, quantity)
+        };
+    };
+
+    showEstimate = function (estimate) {
+        estimateDescription.textContent = estimate.serviceName + ': ' + estimate.quantity + ' × $' + estimate.price;
+        estimateTotal.textContent = 'Estimated total: $' + estimate.total.toFixed(2);
         estimateResult.hidden = false;
         estimateResult.classList.add('estimate-reveal');
-    });
+        showNotification('Your service estimate is ready.');
+    };
 
     estimateResult.addEventListener('animationend', function () {
         estimateResult.classList.remove('estimate-reveal');
+    });
+
+    estimateForm.addEventListener('reset', function () {
+        serviceChoice.setCustomValidity('');
+        quantityInput.setCustomValidity('');
+        estimateResult.hidden = true;
+        setTimeout(updateServiceDetails, 0);
     });
 
     updateServiceDetails();
 }
 
 const contactForm = document.getElementById('contact-form');
+let readContactValues;
+let showContactPreview;
 
 if (contactForm) {
     const contactStatus = document.getElementById('contact-status');
     const contactFields = contactForm.querySelectorAll('[required]');
 
-    contactForm.addEventListener('submit', function (event) {
-        event.preventDefault();
+    readContactValues = function () {
         contactStatus.textContent = '';
-
         contactFields.forEach(function (field) {
             const isEmpty = field.value.trim() === '';
             field.setCustomValidity(isEmpty ? 'Please complete this field.' : '');
         });
+        if (!contactForm.reportValidity()) return null;
+        return {
+            name: document.getElementById('contact-name').value.trim(),
+            email: document.getElementById('contact-email').value.trim(),
+            message: document.getElementById('contact-message').value.trim()
+        };
+    };
 
-        if (!contactForm.reportValidity()) {
-            return;
-        }
-
-        const name = document.getElementById('contact-name').value.trim();
-        contactStatus.textContent = 'Thank you, ' + name + '! Your message is ready. This is a demo; no message or email was sent.';
+    showContactPreview = function (contact) {
+        contactStatus.textContent = 'Thank you, ' + contact.name + '! Your message is ready. This is a demo; no message or email was sent.';
         contactStatus.focus();
-    });
+        showNotification('Your demo message is ready. No email was sent.');
+    };
 
     contactFields.forEach(function (field) {
         field.addEventListener('input', function () {
@@ -194,4 +221,78 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
+});
+
+function initializeScrollProgress() {
+    const $bar = $('<div class="scroll-progress-track" role="progressbar" aria-label="Page scroll progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="scroll-progress-fill"></div></div>').prependTo('body');
+    $(window).on('scroll resize', function () {
+        const max = $(document).height() - $(window).height();
+        const percent = max > 0 ? Math.min(100, Math.max(0, window.scrollY / max * 100)) : 0;
+        $bar.children().css('width', percent + '%');
+        $bar.attr('aria-valuenow', Math.round(percent));
+    }).trigger('scroll');
+}
+
+function initializeCounters() {
+    const section = document.querySelector('.booking-stats');
+    if (!section) return;
+    const observer = new IntersectionObserver(function (entries) {
+        if (!entries[0].isIntersecting) return;
+        const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1400;
+        $('.stat-number', section).each(function () {
+            const $number = $(this);
+            const target = Number(this.dataset.count);
+            $({ value: 0 }).animate({ value: target }, {
+                duration: duration,
+                step: value => $number.text(Math.floor(value)),
+                complete: () => $number.text(target)
+            });
+        });
+        observer.disconnect();
+    }, { threshold: 0.25 });
+    observer.observe(section);
+}
+
+function attachSubmitSpinner(form, readValues, complete) {
+    if (!form) return;
+    const button = form.querySelector('[type="submit"]');
+    const label = button.innerHTML;
+    let pendingTimeout = null;
+
+    function restoreButton() {
+        button.innerHTML = label;
+        button.disabled = false;
+        form.setAttribute('aria-busy', 'false');
+    }
+
+    $(form).on('submit', function (event) {
+        event.preventDefault();
+        if (button.disabled || pendingTimeout !== null) return;
+        const values = readValues();
+        if (!values) return;
+
+        button.innerHTML = '<span class="submit-spinner" aria-hidden="true"></span>Please wait…';
+        button.disabled = true;
+        form.setAttribute('aria-busy', 'true');
+
+        pendingTimeout = setTimeout(function () {
+            pendingTimeout = null;
+            restoreButton();
+            complete(values);
+        }, 1200);
+    });
+
+    $(form).on('reset', function () {
+        clearTimeout(pendingTimeout);
+        pendingTimeout = null;
+        restoreButton();
+    });
+}
+
+$(document).ready(function () {
+    console.log('jQuery is ready!');
+    initializeScrollProgress();
+    initializeCounters();
+    attachSubmitSpinner(estimateForm, readEstimateValues, showEstimate);
+    attachSubmitSpinner(contactForm, readContactValues, showContactPreview);
 });

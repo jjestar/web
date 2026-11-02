@@ -1,0 +1,76 @@
+.app-notification {
+    display: none;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 2000;
+    width: max-content;
+    max-width: min(420px, calc(100vw - 40px));
+    padding: 16px 20px;
+    border: 1px solid #86efac;
+    border-left: 5px solid #16a34a;
+    border-radius: 12px;
+    background: #f0fdf4;
+    color: #14532d;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+    font-weight: 600;
+}
+
+.notification-error {
+    border-color: #fca5a5;
+    border-left-color: #dc2626;
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+.copy-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.copy-icon {
+    width: 1em;
+    font-size: 1.15em;
+    line-height: 1;
+}
+
+.copy-success {
+    border-color: #15803d;
+    color: #15803d;
+}
+
+.copy-tooltip {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 10px);
+    z-index: 10;
+    width: max-content;
+    max-width: min(260px, calc(100vw - 50px));
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #0f172a;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 400;
+    text-align: left;
+    pointer-events: none;
+}
+
+.clipboard-input {
+    position: fixed;
+    left: -9999px;
+    top: 0;
+    width: 1px;
+    height: 1px;
+}
+
+.lazy-image {
+    background: #e2e8f0;
+}
+
+[hidden] {
+    display: none !important;
+}

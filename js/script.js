@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', function () {
+$(document).ready(function () {
+    console.log('jQuery is ready!');
     const modal = document.getElementById('popup-modal');
     const openButton = document.getElementById('open-popup-btn');
     const closeButton = document.getElementById('close-popup-btn');
@@ -64,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 subscribeStatus.textContent = 'Thank you! The demo subscription was validated. No email was sent.';
                 subscribeForm.reset();
+                showNotification('Demo subscription confirmed. No email was sent.');
             }
         });
     }
@@ -113,8 +115,35 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const hotelsContainer = document.getElementById('hotels-container');
     const resultsCount = document.getElementById('results-count');
+    const filterForm = document.getElementById('filter-form');
+    const $searchInput = $('#hotel-search');
+    const $suggestions = $('#search-suggestions');
+    let activeSuggestion = -1;
 
-    function renderHotels(hotels) {
+    function highlightMatches(element, query) {
+        const originalText = $(element).text();
+        const lowerText = originalText.toLowerCase();
+        const lowerQuery = query.toLowerCase();
+        let start = 0;
+        let match = lowerText.indexOf(lowerQuery);
+
+        if (!query || match === -1) {
+            return;
+        }
+
+        $(element).empty();
+
+        while (match !== -1) {
+            element.appendChild(document.createTextNode(originalText.slice(start, match)));
+            $('<mark>').text(originalText.slice(match, match + query.length)).appendTo(element);
+            start = match + query.length;
+            match = lowerText.indexOf(lowerQuery, start);
+        }
+
+        element.appendChild(document.createTextNode(originalText.slice(start)));
+    }
+
+    function renderHotels(hotels, query) {
         if (!hotelsContainer) {
             return;
         }
@@ -126,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
             card.innerHTML = `
                 <div class="row g-0">
                     <div class="col-12 col-lg-4">
-                        <img src="${hotel.image}" class="img-fluid result-image" alt="${hotel.name}">
+                        <img src="image/placeholder.svg" data-src="${hotel.image}" class="img-fluid result-image lazy-image" alt="${hotel.name}" width="640" height="400">
                     </div>
                     <div class="col-12 col-lg-8">
                         <div class="card-body p-3 p-lg-4">
@@ -134,53 +163,184 @@ document.addEventListener('DOMContentLoaded', function () {
                             <p class="text-secondary mb-2">${hotel.location} | Rating: ${hotel.rating} ⭐</p>
                             <p class="card-text">${hotel.description}</p>
                             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mt-3">
-                                <span class="fw-bold text-primary fs-5">$${hotel.price} / night</span>
-                                <a href="hotel-detail.html?hotel=${hotel.id}" class="btn btn-primary btn-sm">View Details</a>
+                                <span class="hotel-price fw-bold text-primary fs-5">$${hotel.price} / night</span>
+                                <a href="hotel-detail.html?hotel=${hotel.id}" class="hotel-details-link btn btn-primary btn-sm">View Details</a>
                             </div>
                         </div>
                     </div>
                 </div>
             `;
+            $(card).find('.card-title, .card-body p, .hotel-price, .hotel-details-link').each(function () {
+                highlightMatches(this, query);
+            });
             hotelsContainer.appendChild(card);
         });
         if (hotels.length === 0) {
             const message = document.createElement('p');
             message.className = 'alert alert-info';
-            message.textContent = 'No hotels match these filters. Try another rating or clear the filters.';
+            message.textContent = 'No hotels match your search and filters. Try another keyword or clear the filters.';
             hotelsContainer.appendChild(message);
+        }
+        loadVisibleImages();
+    }
+
+    function applyFilters() {
+        const query = $searchInput.val().trim();
+        const lowerQuery = query.toLowerCase();
+        const rating = filterForm.querySelector('input[name="rating"]:checked').value;
+        const needsWifi = $('#wifi').prop('checked');
+        const needsPool = $('#pool').prop('checked');
+        const needsBreakfast = $('#breakfast').prop('checked');
+
+        const filteredHotels = hotelsDatabase.filter(function (hotel) {
+            const searchableText = [hotel.name, hotel.location, hotel.description].join(' ').toLowerCase();
+            return searchableText.includes(lowerQuery) &&
+                (rating === 'all' || hotel.rating >= Number(rating)) &&
+                (!needsWifi || hotel.wifi) &&
+                (!needsPool || hotel.pool) &&
+                (!needsBreakfast || hotel.breakfast);
+        });
+
+        renderHotels(filteredHotels, query);
+    }
+
+    function closeSuggestions() {
+        $suggestions.prop('hidden', true);
+        $searchInput.attr('aria-expanded', 'false').removeAttr('aria-activedescendant');
+        activeSuggestion = -1;
+    }
+
+    function updateSuggestions() {
+        const query = $searchInput.val().trim().toLowerCase();
+        $suggestions.empty();
+        closeSuggestions();
+
+        if (!query) {
+            return;
+        }
+
+        const choices = [];
+        hotelsDatabase.forEach(function (hotel) {
+            choices.push(hotel.name, hotel.location);
+        });
+
+        const matches = [...new Set(choices)].filter(function (choice) {
+            return choice.toLowerCase().includes(query);
+        }).slice(0, 6);
+
+        matches.forEach(function (choice, index) {
+            $('<li>')
+                .attr('id', 'search-option-' + index)
+                .attr('role', 'option')
+                .attr('aria-selected', 'false')
+                .text(choice)
+                .appendTo($suggestions);
+        });
+
+        if (matches.length > 0) {
+            $suggestions.prop('hidden', false);
+            $searchInput.attr('aria-expanded', 'true');
         }
     }
 
-    if (hotelsContainer) renderHotels(hotelsDatabase);
+    function chooseSuggestion(option) {
+        $searchInput.val($(option).text());
+        closeSuggestions();
+        applyFilters();
+        $searchInput.trigger('focus');
+        closeSuggestions();
+    }
 
-    const filterForm = document.getElementById('filter-form');
-    if (filterForm) {
-        filterForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-            const rating = filterForm.querySelector('input[name="rating"]:checked').value;
-            const needsWifi = document.getElementById('wifi').checked;
-            const needsPool = document.getElementById('pool').checked;
-            const needsBreakfast = document.getElementById('breakfast').checked;
-            let filteredHotels;
-            switch (rating) {
-                case '4':
-                    filteredHotels = hotelsDatabase.filter(hotel => hotel.rating >= 4);
-                    break;
-                case '5':
-                    filteredHotels = hotelsDatabase.filter(hotel => hotel.rating === 5);
-                    break;
-                default:
-                    filteredHotels = hotelsDatabase;
-            }
-            filteredHotels = filteredHotels.filter(function (hotel) {
-                return (!needsWifi || hotel.wifi) &&
-                    (!needsPool || hotel.pool) &&
-                    (!needsBreakfast || hotel.breakfast);
-            });
-            renderHotels(filteredHotels);
+    if (hotelsContainer && filterForm) {
+        const destination = new URLSearchParams(window.location.search).get('destination');
+        $searchInput.val(destination || '');
+        applyFilters();
+
+        $searchInput.on('input', function () {
+            applyFilters();
+            updateSuggestions();
         });
-        filterForm.addEventListener('reset', function () {
-            renderHotels(hotelsDatabase);
+
+        $searchInput.on('focus', updateSuggestions);
+        $searchInput.on('blur', closeSuggestions);
+
+        $searchInput.on('keydown', function (event) {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                closeSuggestions();
+                return;
+            }
+
+            if (event.key === 'Tab') {
+                closeSuggestions();
+                return;
+            }
+
+            if (event.key === 'Enter') {
+                if (activeSuggestion >= 0) {
+                    event.preventDefault();
+                    chooseSuggestion($suggestions.children().get(activeSuggestion));
+                }
+                return;
+            }
+
+            if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') {
+                return;
+            }
+
+            event.preventDefault();
+
+            if ($suggestions.prop('hidden')) {
+                updateSuggestions();
+            }
+
+            const $options = $suggestions.children();
+            if ($options.length === 0) {
+                return;
+            }
+
+            if (event.key === 'ArrowDown') {
+                activeSuggestion = (activeSuggestion + 1) % $options.length;
+            } else if (activeSuggestion <= 0) {
+                activeSuggestion = $options.length - 1;
+            } else {
+                activeSuggestion--;
+            }
+
+            $options.attr('aria-selected', 'false');
+            const $active = $options.eq(activeSuggestion).attr('aria-selected', 'true');
+            $searchInput.attr('aria-activedescendant', $active.attr('id'));
+            $active.get(0).scrollIntoView({ block: 'nearest' });
+        });
+
+        $suggestions.on('mousedown', '[role="option"]', function (event) {
+            event.preventDefault();
+        });
+
+        $suggestions.on('click', '[role="option"]', function () {
+            chooseSuggestion(this);
+        });
+
+        $(document).on('click', function (event) {
+            if (!$(event.target).closest('.hotel-search-box').length) {
+                closeSuggestions();
+            }
+        });
+
+        $(filterForm).on('submit', function (event) {
+            event.preventDefault();
+            closeSuggestions();
+            applyFilters();
+        });
+
+        $(filterForm).on('change', applyFilters);
+
+        $(filterForm).on('reset', function () {
+            setTimeout(function () {
+                $searchInput.val('');
+                closeSuggestions();
+                applyFilters();
+            }, 0);
         });
     }
 

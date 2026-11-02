@@ -12,7 +12,6 @@ if (readMoreButton) {
     });
 }
 
-// The identifier from Search chooses the same hotel on both pages.
 const selectedHotel = getSelectedHotel();
 document.querySelectorAll('a[href="booking.html"]').forEach(function (link) {
     link.href = 'booking.html?hotel=' + selectedHotel.id;
@@ -72,7 +71,6 @@ if (bookingForm) {
         }
     };
 
-    // Labels and the summary use the same selected hotel's room prices.
     Object.keys(bookingSummary.roomPrices).forEach(function (room) {
         const label = bookingForm.querySelector('label[for="' + room + '"]');
         label.textContent = room.charAt(0).toUpperCase() + room.slice(1) + ' · $' + bookingSummary.roomPrices[room];
@@ -224,7 +222,7 @@ if (bookingForm) {
             changeStep(1, showStep);
             return;
         }
-        if (!validateStep(currentStep)) return;
+        if (confirmButton.disabled || !validateStep(currentStep)) return;
 
         statusMessage.textContent = 'Demo booking confirmed! No account, payment, or reservation was created.';
         statusMessage.classList.add('success');
@@ -233,6 +231,7 @@ if (bookingForm) {
         confirmButton.disabled = true;
         backButton.disabled = true;
         statusMessage.focus();
+        showNotification('Demo booking confirmed! No payment or reservation was created.');
     });
 
     bookingForm.addEventListener('reset', function () {

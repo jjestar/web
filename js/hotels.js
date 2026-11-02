@@ -1,4 +1,3 @@
-// Shared hotel data keeps Search, Hotel Details and Booking consistent.
 const hotelsDatabase = [
     {
         id: 'grand-palace',
@@ -56,7 +55,6 @@ const hotelsDatabase = [
     }
 ];
 
-// A missing or unknown identifier opens the default hotel.
 function getSelectedHotel() {
     const hotelId = new URLSearchParams(window.location.search).get('hotel');
     return hotelsDatabase.find(function (hotel) {

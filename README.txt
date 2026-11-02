@@ -1,41 +1,67 @@
-BookingApp - Assignment 5
+BookingApp - Assignment 6: jQuery
 Team: BookingApp
 Group: SE-2513
 Members: Allazhar Aldongarov, Dias Serikov, Yerkenov Abylay
 
-HOW TO OPEN
-1. Extract the entire ZIP into one folder.
-2. Open index.html in a browser.
-3. Keep the css, js and image folders beside the HTML files.
-4. Internet access is needed for Bootstrap from its existing CDN links.
+HOW TO RUN
+Extract the complete ZIP and open index.html in a modern browser.
+Keep the css, js and image folders beside the HTML files.
+Internet access is required for the jQuery 4.0.0 and Bootstrap CDN files.
+No npm install, build step, account or backend is required.
+Optional: run python -m http.server 8000 from this folder, then open
+http://localhost:8000 in a browser. Clipboard behavior is best tested on
+localhost or the published HTTPS website.
 
-No npm installation, build command, account or backend is needed.
+TASK DEMONSTRATION
+0. Setup: open Home or Search and check the browser console for
+   "jQuery is ready!". jQuery is loaded in the HTML head before our scripts.
+1. Live search: on Search, type a hotel name, city or description keyword.
+   Try "hotel", "Astana" or "pool". Combine the search with rating and
+   amenity filters. Clear Filters resets both the text and filter controls.
+   The destination entered on Home also initializes the Search page.
+2. Autocomplete: type "ast" or "oce" on Search. Click a suggestion or use
+   Arrow Up/Down and Enter. Escape closes the suggestion list.
+3. Highlighting: type "hotel" on Search. All matching text in the result
+   cards is highlighted. Clear the input to remove the highlights.
+4. Scroll progress: open About or Services and scroll from top to bottom.
+   The colored progress bar at the top follows your position.
+5. Number counters: open About and scroll to the statistics section.
+   The three counters animate once when the section enters the viewport.
+6. Submit spinner: submit valid Contact fields on About or calculate a
+   service estimate on Services. The button shows "Please wait...", is
+   disabled during the short simulated request, and then returns to normal.
+7. Notifications: submit a valid demo subscription, Contact form or service
+   estimate, or confirm a demo booking. A temporary notification fades out.
+8. Clipboard: open Hotel Details and click Copy hotel location. On the
+   booking Review step, Copy booking details copies the displayed summary.
+   Successful copying shows a checkmark and "Copied to clipboard!".
+9. Lazy loading: open Search in a fresh browser tab at a normal window
+   height. In DevTools Network, observe the image requests while scrolling
+   down. Result images below the viewport load when they come into view.
+   The lazy loader also handles new results after searching or filtering.
 
-FILES
-Home and Search: index.html, search-results.html, css/allstyle.css, js/script.js
-Booking and Hotel Details: booking.html, hotel-detail.html, css/style.css, js/booking.js
-About and Services: about.html, services.html, css/ablstyle.css, js/about-services.js
-Each page group includes its own menu navigation, click-sound behavior and styles in the files listed above.
-Shared hotel data: js/hotels.js, used by Search, Hotel Details and Booking.
-Click sound: image/click.mp3
+EXISTING FEATURES
+Hotel selection is preserved between Search, Hotel Details and Booking.
+The booking form validates guest details, dates and terms before confirming.
+FAQ accordions, the theme button, live clock, keyboard navigation, click
+sound and service calculator remain available.
 
-DEMONSTRATION
-1. Search: apply 5 stars to show Grand Palace Hotel. Apply 4 stars to show hotels with a rating of at least 4. Try the amenity filters and reset.
-2. Navigation: press Tab until a menu link is focused. Use the arrow keys to move between menu links, then Enter to open one.
-3. Choose View Details for any hotel. Its name, pictures and price carry through to Book This Hotel and the booking review. Use Read More to expand and collapse the extra description.
-4. Booking: complete the guest step, then the stay step. Go Back to see that values remain. Review the summary, confirm the terms and finish the demo booking.
-5. Services: choose a service and quantity, then calculate its estimated price.
-6. Home or Search: open the subscription popup, test an invalid email, change the background and watch the clock.
-7. Click a button to hear the supplied sound. The same audio instance is restarted, so clicks do not create overlapping sound instances.
+FILE MAP
+index.html, search-results.html: Home and Search pages.
+js/script.js, css/allstyle.css: search, suggestions, highlights and Home UI.
+about.html, services.html: team, Contact and travel service pages.
+js/about-services.js, css/ablstyle.css: progress, counters, spinner and forms.
+hotel-detail.html, booking.html: selected hotel and booking workflow.
+js/booking.js, css/style.css: hotel details, validation and booking summary.
+js/hotels.js: shared data for the three example hotels.
+js/common.js, css/common.css: notifications, clipboard and lazy loading.
+image/: local images, placeholder.svg and the click.mp3 sound.
 
-The old Assignment 4 interactions are retained. The teammate's hotel array, dynamic cards, rating filter and audio asset are integrated with the remaining requirements.
-
-The forms are frontend demonstrations. They do not create real bookings or accounts, send messages, or store payment information. Use invented values for testing.
-
-PUBLICATION
+PROJECT LINKS
 Shared repository: https://github.com/jjestar/web
-Deployed website (Vercel): https://aishhko.vercel.app/
-GitHub Pages: https://jjestar.github.io/web/
-The main branch is published automatically. No build step is needed.
+GitHub Pages: https://jjestar.github.io/web
 
-For a simple explanation of the code in Russian, read EXPLANATION_RU.txt.
+DEMO NOTICE
+This is a frontend coursework project. No account, payment, reservation,
+message or email is created or sent. Use invented data when testing forms.
+Copy buttons copy the selected visible text to your device clipboard.
