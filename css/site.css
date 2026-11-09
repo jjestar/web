@@ -378,17 +378,6 @@ summary:focus-visible {
     align-items: center;
     gap: 32px;
 }
-.brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 20px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    color: var(--ink);
-    text-decoration: none;
-    white-space: nowrap;
-}
 .main-nav {
     display: flex;
     align-items: center;
@@ -444,9 +433,7 @@ summary:focus-visible {
     grid-template-columns: 1.6fr 1fr 1fr;
     gap: 48px;
 }
-.footer-top .brand {
-    margin-bottom: 20px;
-}
+.footer-top
 .footer-top p {
     font-size: 14px;
     max-width: 340px;
@@ -1359,9 +1346,6 @@ mark {
     }
     .lead {
         font-size: 16px;
-    }
-    .brand {
-        font-size: 18px;
     }
     .header-inner {
         gap: 8px;
@@ -2653,9 +2637,7 @@ body[data-page='services'] #services-heading {
     background: var(--header-bg);
     color: var(--header-fg);
     border-color: #44453f;
-}
-.site-header .brand,
-.site-header .account-link {
+}.site-header .account-link {
     color: var(--header-fg);
 }
 .site-header .main-nav > a {
@@ -2684,7 +2666,6 @@ body[data-page='services'] #services-heading {
     background: #252622;
     border-color: #44453f;
 }
-.site-footer .brand,
 .site-footer .footer-links h3 {
     color: #f3f0e8;
 }
@@ -2852,3 +2833,7 @@ body[data-page='services'] #services-heading {
         grid-column: auto;
     }
 }
+
+/* The site name is presented in page content, not as a header or footer mark. */
+.main-nav { margin-left: 0; }
+.site-header .header-actions { margin-left: auto; }
