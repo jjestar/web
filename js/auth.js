@@ -67,7 +67,7 @@
 
     function requireCrypto() {
         if (!window.crypto || !window.crypto.subtle) {
-            throw new Error('Open BookingApp on its HTTPS website or localhost to use demo accounts.');
+            throw new Error('Open BookingApp on its HTTPS website or localhost to use accounts.');
         }
     }
 
@@ -80,7 +80,7 @@
 
     async function passwordHash(password, salt) {
         requireCrypto();
-        // This browser-only coursework demo stores a salted digest, never a plain-text password.
+        // This browser-only student project stores a salted digest, never a plain-text password.
         const digest = await window.crypto.subtle.digest(
             'SHA-256',
             new TextEncoder().encode(salt + ':' + password)
@@ -227,7 +227,7 @@
                 const favoritesMerged = mergeGuestFavorites(account.id);
                 form.reset();
                 announceAuthChange();
-                status(output, 'Your demo account is ready. Opening your profile…', false);
+                status(output, 'Your account is ready. Opening your profile…', false);
                 window.location.href = App.url('profile.html', {
                     welcome: 1,
                     saved: favoritesMerged ? '' : 'retry'
@@ -375,7 +375,7 @@
         if (!records.length) {
             container.className = 'empty-state';
             container.innerHTML =
-                '<h3>No demo bookings yet</h3><p class="muted">Choose a stay and save a demo booking to see its dates and price here.</p><a class="button button-secondary" href="search-results.html">Find a stay</a>';
+                '<h3>No bookings yet</h3><p class="muted">Choose a stay and save a booking to see its dates and price here.</p><a class="button button-secondary" href="search-results.html">Find a stay</a>';
             return;
         }
         container.className = 'stack';
@@ -395,7 +395,7 @@
                     id +
                     '">' +
                     '<div class="inline"><span class="pill">' +
-                    (cancelled ? 'Cancelled' : 'Confirmed · demo') +
+                    (cancelled ? 'Cancelled' : 'Confirmed') +
                     '</span><span class="muted">' +
                     App.escape(String(booking.id || 'Booking')) +
                     '</span></div>' +
@@ -425,13 +425,13 @@
                     App.escape(App.money(Number.isFinite(total) ? total : 0)) +
                     ' <span class="muted">total</span></p>' +
                     (cancelled
-                        ? '<p class="muted">This demo booking has been cancelled. No payment was taken.</p>'
+                        ? '<p class="muted">This booking has been cancelled. No payment was taken.</p>'
                         : '<button class="button button-ghost button-small" type="button" data-cancel-booking="' +
                           id +
-                          '">Cancel demo booking</button>' +
+                          '">Cancel booking</button>' +
                           '<div class="cancel-confirmation stack" data-confirmation="' +
                           id +
-                          '" hidden><p>Cancel this demo booking? It will stay in your history as cancelled.</p><div class="inline">' +
+                          '" hidden><p>Cancel this booking? It will stay in your history as cancelled.</p><div class="inline">' +
                           '<button class="button button-secondary button-small" type="button" data-confirm-cancel="' +
                           id +
                           '">Cancel booking</button>' +
@@ -463,7 +463,7 @@
         form.elements.namedItem('name').value = String(user.name || '');
         form.elements.namedItem('phone').value = String(user.phone || '');
         if (new URLSearchParams(window.location.search).get('welcome') === '1')
-            status(output, 'Demo account created. You can now save stays and bookings.', false);
+            status(output, 'Account created. You can now save stays and bookings.', false);
         if (new URLSearchParams(window.location.search).get('saved') === 'retry') {
             status(
                 output,
@@ -569,7 +569,7 @@
                     );
                     renderBookings();
                     const message = document.getElementById('bookings-status');
-                    status(message, 'Your demo booking has been cancelled. No payment was taken.', false);
+                    status(message, 'Your booking has been cancelled. No payment was taken.', false);
                     message.focus();
                 } catch (error) {
                     status(

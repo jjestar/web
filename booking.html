@@ -9,7 +9,6 @@
         />
         <meta name="theme-color" content="#214fc6" />
         <title>Plan your stay | BookingApp</title>
-        <link rel="icon" href="image/favicon.svg" type="image/svg+xml" />
         <script src="js/theme-init.js"></script>
         <link rel="stylesheet" href="css/site.css" />
         <link rel="stylesheet" href="css/assignment.css" />
@@ -29,12 +28,6 @@
         <header class="site-header">
             <div class="container header-inner">
                 <a href="index.html" class="brand" aria-label="BookingApp home"
-                    ><svg class="brand-mark" viewBox="0 0 32 32" width="36" height="36" aria-hidden="true">
-                        <path
-                            fill="currentColor"
-                            fill-rule="evenodd"
-                            d="M16 2C9.37 2 4 7.15 4 13.5c0 7.5 10.58 15.72 11.03 16.06a1.6 1.6 0 0 0 1.94 0C17.42 29.22 28 21 28 13.5 28 7.15 22.63 2 16 2Zm-4 9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10h-8Z"
-                        /></svg
                     >BookingApp</a
                 >
                 <nav id="main-nav" class="main-nav" aria-label="Main navigation">
@@ -75,7 +68,7 @@
                     >&larr; Back to your stay</a
                 >
                 <div class="page-heading">
-                    <p class="eyebrow">Demo booking</p>
+                    <p class="eyebrow">Booking</p>
                     <h1>Plan your stay</h1>
                     <p class="lead muted">
                         Choose dates, a room, and guest details. Confirm as a guest or save your plan to your
@@ -234,7 +227,7 @@
                                 <div class="field checkbox-field">
                                     <label for="terms"
                                         ><input id="terms" name="terms" type="checkbox" /> I understand this
-                                        confirms a demo plan only. No hotel reservation or payment is
+                                        saves this booking record in this browser only. No hotel reservation or payment is
                                         made.</label
                                     >
                                     <p id="terms-error" class="field-error"></p>
@@ -263,7 +256,7 @@
                                     class="button button-primary"
                                     hidden
                                 >
-                                    Save demo booking
+                                    Save booking
                                 </button>
                                 <button id="booking-reset" type="reset" class="button button-ghost">
                                     Clear Form
@@ -272,11 +265,11 @@
                         </form>
                         <div id="booking-success" class="empty-state stack" hidden tabindex="-1">
                             <span class="success-mark" aria-hidden="true">✓</span>
-                            <p class="eyebrow">Demo booking</p>
-                            <h2 id="booking-success-title">Demo booking saved</h2>
+                            <p class="eyebrow">Booking</p>
+                            <h2 id="booking-success-title">Booking saved</h2>
                             <p id="booking-success-details"></p>
                             <p id="booking-success-message" class="muted">
-                                You’ll find the details in your profile. This is a demo, so no actual
+                                You’ll find the details in your profile. This is a student project, so no actual
                                 reservation or payment was made.
                             </p>
                             <dl id="booking-success-summary" class="booking-summary booking-receipt"></dl>
@@ -307,7 +300,7 @@
                                 <h2 id="booking-hotel-name"></h2>
                                 <dl class="booking-summary" id="booking-cost"></dl>
                                 <p class="small muted">
-                                    Transparent demo pricing in USD. No added fees and no payment details.
+                                    Transparent pricing in USD. No added fees and no payment details.
                                 </p>
                             </div>
                         </div>
@@ -321,18 +314,6 @@
                 <div class="footer-top">
                     <div>
                         <a href="index.html" class="brand"
-                            ><svg
-                                class="brand-mark"
-                                viewBox="0 0 32 32"
-                                width="36"
-                                height="36"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    fill="currentColor"
-                                    fill-rule="evenodd"
-                                    d="M16 2C9.37 2 4 7.15 4 13.5c0 7.5 10.58 15.72 11.03 16.06a1.6 1.6 0 0 0 1.94 0C17.42 29.22 28 21 28 13.5 28 7.15 22.63 2 16 2Zm-4 9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10h-8Z"
-                                /></svg
                             >BookingApp</a
                         >
                         <p>Compare stays, check the weather,<br />and keep your travel plans together.</p>
@@ -352,13 +333,13 @@
                 </div>
                 <div class="footer-bottom">
                     <p>© 2026 BookingApp · SE-2513</p>
-                    <p>Student project. Illustrative stays. No real reservations or payments.</p>
+                    <p>Serikov Dias · Yerkenov Abylai · Allazhar Aldongarov</p>
                 </div>
             </div>
         </footer>
         <div id="notification" class="notification" role="status" aria-live="polite" hidden></div>
         <noscript
-            ><p class="container">Enable JavaScript for search, accounts, and demo bookings.</p></noscript
+            ><p class="container">Enable JavaScript for search, accounts, and bookings.</p></noscript
         >
     </body>
 </html>

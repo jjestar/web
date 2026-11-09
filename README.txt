@@ -1,13 +1,13 @@
 BookingApp — Final Project
 Group: SE-2513
-Team: Allazhar Aldongarov, Dias Serikov, Yerkenov Abylay
+Team: Serikov Dias, Yerkenov Abylai, Allazhar Aldongarov
 
 LIVE WEBSITE: https://jjestar.github.io/web/
 REPOSITORY: https://github.com/jjestar/web
 
 PURPOSE
 A responsive travel website for comparing illustrative hotel stays and planning
-a demo trip. This project is entirely static HTML, CSS and JavaScript.
+a trip. This project is entirely static HTML, CSS and JavaScript.
 There is no backend, database server, real reservation, payment or email delivery.
 
 RUN LOCALLY
@@ -28,11 +28,11 @@ hotel-detail.html   Gallery, amenities, weather, Read More and sample reviews
 booking.html        Three steps: stay, guest details, review and confirmation
 services.html       Travel services and a dynamic price estimator
 about.html          Project purpose, original team and local contact draft form
-signup.html         Local demo registration with JavaScript validation
+signup.html         Local account registration with JavaScript validation
 login.html          Local credential check and redirect to profile
 profile.html        Account details, saved stays, bookings and cancellation
 
-HOW TO DEMONSTRATE
+PRESENTATION FLOW
 1. On Home, choose Miami and any future check-in/check-out dates, then 2 guests.
 2. Search results update instantly with text, category and amenity filters.
    Try 'pool', 'Astana', 'Paris' or an unmatched word; Clear filters resets them.
@@ -42,11 +42,11 @@ HOW TO DEMONSTRATE
 4. Choose Deluxe and Standard Car rental. For 3 nights:
    ($220+$40)*3 + $35*3 = $885; the car rental portion is $105.
 5. Invalid/empty inputs show errors below fields. Continue to Review.
-6. Create a demo account using invented details. A password such as Travel2026!
+6. Create an account using invented details. A password such as Travel2026!
    demonstrates uppercase, lowercase, digit and symbol checks. Do not reuse a
    real password. Registration/login opens Profile. Continue booking returns
    to the chosen trip with the entered information preserved.
-7. Confirm the demo acknowledgement and save. Logged-in bookings appear in the
+7. Confirm the booking acknowledgement and save. Logged-in bookings appear in the
    profile and can be cancelled with inline confirmation. Without an account,
    confirm as a guest to create a receipt for this browser tab instead.
    Copy booking details works before and after confirmation. Clear Form resets
@@ -124,7 +124,7 @@ js/booking.js            Hotel details, trip continuity, booking and pricing
 js/weather.js            Open-Meteo request and loading/error/success states
 js/about-services.js     Contact drafts and service estimator
 js/services-data.js      Shared Standard/Premium/VIP rates and quote helper
-image/                   Local photos, SVG logo variants and matching favicon
+image/                   Local photos, travel photography and illustrations
 archive/                 Previous assignment reports and explanation (historical)
 
 DESIGN AND ACCESSIBILITY
@@ -133,8 +133,6 @@ search form. Photo captions identify the destination, listing and nightly rate.
 Search results use comparison rows; services and destination photos use open
 layouts. Interface headings use the system sans-serif; destination names use
 Georgia. Photos are illustrative, with descriptions matched to their subjects.
-The custom logo combines a destination pin and a doorway. The BookingApp
-wordmark has no trailing punctuation; the mark adapts to both color themes.
 CSS Grid and Flexbox; responsive layouts; persistent light/dark semantic colors;
 visible focus; labelled form controls; skip link; mobile navigation with Escape;
 aria-live feedback; native keyboard-friendly FAQ; reduced-motion support.
@@ -163,9 +161,9 @@ work under /web/. Push completed changes to main to update the hosted website.
 
 TEAM
 The original project records these roles:
+Serikov Dias — UI Designer
+Yerkenov Abylai — Content and Testing
 Allazhar Aldongarov — Frontend Developer
-Dias Serikov — UI Designer
-Yerkenov Abylay — Content and Testing
 The report describes final features as shared project work, without assigning
 unverified individual authorship of later changes.
 

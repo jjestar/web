@@ -9,7 +9,7 @@
     if (!hotel) {
         document.title = 'Stay not found · BookingApp';
         (detail || booking).innerHTML =
-            '<section class="empty-state section"><p class="eyebrow">Stay details</p><h1>Stay not found</h1><p class="muted">This link does not match a demo stay. Explore the collection to choose another.</p><a href="search-results.html" class="button button-primary">Explore stays</a></section>';
+            '<section class="empty-state section"><p class="eyebrow">Stay details</p><h1>Stay not found</h1><p class="muted">This link does not match a stay. Explore the collection to choose another.</p><a href="search-results.html" class="button button-primary">Explore stays</a></section>';
         return;
     }
 
@@ -33,12 +33,12 @@
         document.title = hotel.name + ' · BookingApp';
         document.getElementById('hotel-name').textContent = hotel.name;
         document.getElementById('hotel-location').textContent =
-            hotel.location + ' · ' + hotel.rating + '-star demo stay';
+            hotel.location + ' · ' + hotel.rating + '-star stay';
         document.getElementById('hotel-tag').textContent = hotel.tag;
         document.getElementById('hotel-description').textContent = hotel.description;
         document.getElementById('hotel-price').textContent = App.money(hotel.price);
         document.getElementById('hotel-breakfast').textContent = hotel.breakfast
-            ? 'Breakfast is included in this demo rate.'
+            ? 'Breakfast is included in this listed rate.'
             : 'Room-only rate. Breakfast is not included.';
         document.getElementById('hotel-book-link').href = App.url('booking.html', tripParams);
         const gallery = document.getElementById('hotel-gallery');
@@ -292,7 +292,7 @@
                 '<p class="small muted">Saving this trip to <strong>' +
                 App.escape(activeUser.name) +
                 '’s</strong> profile.</p>';
-            confirm.textContent = 'Save demo booking';
+            confirm.textContent = 'Save booking';
         } else {
             const nextUrl = bookingUrl();
             account.innerHTML =
@@ -301,7 +301,7 @@
                 '" class="button button-secondary">Log in</a><a data-booking-auth href="' +
                 App.escape(App.url('signup.html', { next: nextUrl })) +
                 '" class="button button-ghost">Create account</a></div>';
-            confirm.textContent = 'Confirm demo booking as guest';
+            confirm.textContent = 'Confirm booking as guest';
         }
     }
 
@@ -377,7 +377,7 @@
             if (fields.notes.value.trim().length > 1000)
                 errors.notes = 'Keep your request under 1,000 characters.';
         } else if (!fields.terms.checked) {
-            errors.terms = 'Confirm that you understand this is a demo booking.';
+            errors.terms = 'Confirm that you understand this is a booking.';
         }
         return errors;
     }
@@ -505,7 +505,7 @@
         }
         const activeUser = App.getUser();
         confirm.disabled = true;
-        confirm.textContent = activeUser ? 'Saving demo booking…' : 'Confirming demo booking…';
+        confirm.textContent = activeUser ? 'Saving booking…' : 'Confirming booking…';
         try {
             const plan = selection();
             const id =
@@ -556,8 +556,8 @@
             form.hidden = true;
             document.querySelector('.step-list').hidden = true;
             document.getElementById('booking-success-title').textContent = activeUser
-                ? 'Demo booking saved'
-                : 'Guest demo booking confirmed';
+                ? 'Booking saved'
+                : 'Guest booking confirmed';
             document.getElementById('booking-success-message').textContent = activeUser
                 ? 'You’ll find the details in your profile. No actual reservation or payment was made.'
                 : 'Your guest receipt is stored for this browser tab. It is not linked to an account, and no reservation or payment was made.';
@@ -591,8 +591,8 @@
             success.focus();
             App.notify(
                 activeUser
-                    ? 'Your demo booking is saved in your profile.'
-                    : 'Your guest demo booking is confirmed.'
+                    ? 'Your booking is saved in your profile.'
+                    : 'Your guest booking is confirmed.'
             );
         } catch (error) {
             status.textContent = error.message || 'Unable to save the booking. Try again.';

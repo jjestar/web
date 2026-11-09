@@ -95,7 +95,7 @@ jQuery(function ($) {
     modal.setAttribute('aria-describedby', 'popup-description');
     modal.innerHTML = `<button id="close-popup-btn" class="icon-button newsletter-close" type="button" aria-label="Close newsletter dialog">${App.icon('close')}</button>
         <h2 id="popup-title">Subscribe for discounts</h2>
-        <p id="popup-description" class="muted">Save your newsletter preference on this device. This student demo does not send emails.</p>
+        <p id="popup-description" class="muted">Save your newsletter preference on this device. This student project stores preferences on this device and does not send emails.</p>
         <form id="popup-subscribe-form" class="stack" novalidate>
             <div class="field"><label for="popup-email">Email address</label><input id="popup-email" name="email" type="text" inputmode="email" autocomplete="email" placeholder="you@example.com" aria-describedby="popup-email-error" /><p id="popup-email-error" class="field-error" hidden></p></div>
             <button class="button button-primary" type="submit">Save preference</button>

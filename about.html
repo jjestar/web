@@ -9,7 +9,6 @@
         />
         <meta name="theme-color" content="#214fc6" />
         <title>About | BookingApp</title>
-        <link rel="icon" href="image/favicon.svg" type="image/svg+xml" />
         <script src="js/theme-init.js"></script>
         <link rel="stylesheet" href="css/site.css" />
         <link rel="stylesheet" href="css/assignment-services.css" />
@@ -28,12 +27,6 @@
         <header class="site-header">
             <div class="container header-inner">
                 <a href="index.html" class="brand" aria-label="BookingApp home"
-                    ><svg class="brand-mark" viewBox="0 0 32 32" width="36" height="36" aria-hidden="true">
-                        <path
-                            fill="currentColor"
-                            fill-rule="evenodd"
-                            d="M16 2C9.37 2 4 7.15 4 13.5c0 7.5 10.58 15.72 11.03 16.06a1.6 1.6 0 0 0 1.94 0C17.42 29.22 28 21 28 13.5 28 7.15 22.63 2 16 2Zm-4 9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10h-8Z"
-                        /></svg
                     >BookingApp</a
                 >
                 <nav id="main-nav" class="main-nav" aria-label="Main navigation">
@@ -118,6 +111,36 @@
                     <article class="card team-card">
                         <img
                             src="image/placeholder.svg"
+                            data-src="image/dias.jpg"
+                            alt="Serikov Dias"
+                            width="480"
+                            height="480"
+                            loading="lazy"
+                        />
+                        <div class="stack team-content">
+                            <p class="eyebrow">UI Designer</p>
+                            <h3>Serikov Dias</h3>
+                            <p class="muted">Creates clear styles and responsive page designs.</p>
+                        </div>
+                    </article>
+                    <article class="card team-card">
+                        <img
+                            src="image/placeholder.svg"
+                            data-src="image/abylay.jpg"
+                            alt="Yerkenov Abylai"
+                            width="480"
+                            height="480"
+                            loading="lazy"
+                        />
+                        <div class="stack team-content">
+                            <p class="eyebrow">Content and Testing</p>
+                            <h3>Yerkenov Abylai</h3>
+                            <p class="muted">Checks page content, links, forms, and accessibility.</p>
+                        </div>
+                    </article>
+                    <article class="card team-card">
+                        <img
+                            src="image/placeholder.svg"
                             data-src="image/allazhar.jpg"
                             alt="Allazhar Aldongarov"
                             width="480"
@@ -130,37 +153,7 @@
                             <p class="muted">Builds page layouts and reusable navigation components.</p>
                         </div>
                     </article>
-                    <article class="card team-card">
-                        <img
-                            src="image/placeholder.svg"
-                            data-src="image/dias.jpg"
-                            alt="Dias Serikov"
-                            width="480"
-                            height="480"
-                            loading="lazy"
-                        />
-                        <div class="stack team-content">
-                            <p class="eyebrow">UI Designer</p>
-                            <h3>Dias Serikov</h3>
-                            <p class="muted">Creates clear styles and responsive page designs.</p>
-                        </div>
-                    </article>
-                    <article class="card team-card">
-                        <img
-                            src="image/placeholder.svg"
-                            data-src="image/abylay.jpg"
-                            alt="Yerkenov Abylay"
-                            width="480"
-                            height="480"
-                            loading="lazy"
-                        />
-                        <div class="stack team-content">
-                            <p class="eyebrow">Content and Testing</p>
-                            <h3>Yerkenov Abylay</h3>
-                            <p class="muted">Checks page content, links, forms, and accessibility.</p>
-                        </div>
-                    </article>
-                </div>
+</div>
             </section>
 
             <section class="container section booking-stats" aria-labelledby="stats-heading">
@@ -191,8 +184,8 @@
                     <p class="eyebrow">Try the contact form</p>
                     <h2 id="contact-heading">Save a feedback draft</h2>
                     <p class="muted">
-                        Save a message on this browser or download a copy. This demo does not send messages,
-                        emails, or phone requests.
+                        Save a message in this browser or download a copy. The form does not send email or phone
+                        requests.
                     </p>
                     <form id="contact-form" class="stack" novalidate>
                         <div class="field-grid">
@@ -276,12 +269,12 @@
                                 aria-describedby="contact-message-help contact-message-error"
                             ></textarea>
                             <small id="contact-message-help" class="muted"
-                                >Write 10–2,000 characters. Use sample details for this demo.</small
+                                >Write 10–2,000 characters. Use sample details for this project.</small
                             >
                             <p id="contact-message-error" class="field-error"></p>
                         </div>
                         <div class="inline">
-                            <button class="button button-primary" type="submit">Save demo message</button>
+                            <button class="button button-primary" type="submit">Save message</button>
                             <button id="contact-clear" class="button button-ghost" type="button">
                                 Clear draft
                             </button>
@@ -310,7 +303,7 @@
                         <ul>
                             <li>Search by destination and narrow your options with amenity filters.</li>
                             <li>Save stays to compare them later.</li>
-                            <li>Log in to manage demo bookings in your profile.</li>
+                            <li>Log in to manage bookings in your profile.</li>
                         </ul>
                         <a class="button button-secondary" href="services.html">Explore travel services</a>
                     </div>
@@ -326,18 +319,6 @@
                 <div class="footer-top">
                     <div>
                         <a href="index.html" class="brand"
-                            ><svg
-                                class="brand-mark"
-                                viewBox="0 0 32 32"
-                                width="36"
-                                height="36"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    fill="currentColor"
-                                    fill-rule="evenodd"
-                                    d="M16 2C9.37 2 4 7.15 4 13.5c0 7.5 10.58 15.72 11.03 16.06a1.6 1.6 0 0 0 1.94 0C17.42 29.22 28 21 28 13.5 28 7.15 22.63 2 16 2Zm-4 9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10h-8Z"
-                                /></svg
                             >BookingApp</a
                         >
                         <p>Compare stays, check the weather,<br />and keep your travel plans together.</p>
@@ -357,13 +338,13 @@
                 </div>
                 <div class="footer-bottom">
                     <p>© 2026 BookingApp · SE-2513</p>
-                    <p>Student project. Illustrative stays. No real reservations or payments.</p>
+                    <p>Serikov Dias · Yerkenov Abylai · Allazhar Aldongarov</p>
                 </div>
             </div>
         </footer>
         <div id="notification" class="notification" role="status" aria-live="polite" hidden></div>
         <noscript
-            ><p class="container">Enable JavaScript for search, accounts, and demo bookings.</p></noscript
+            ><p class="container">Enable JavaScript for search, accounts, and bookings.</p></noscript
         >
     </body>
 </html>

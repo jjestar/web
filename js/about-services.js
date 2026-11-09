@@ -1,4 +1,4 @@
-/* About and Services page behavior. All data belongs to this browser-only demo. */
+/* About and Services page behavior. All data belongs to this browser-only student project. */
 (() => {
     'use strict';
 
@@ -229,7 +229,7 @@
                     return null;
                 }
                 download.hidden = true;
-                setStatus('Saving your demo message in this browser…');
+                setStatus('Saving your message in this browser…');
                 return {
                     ...values,
                     phone: values.reply === 'phone' ? values.phone : ''
@@ -242,7 +242,7 @@
                     savedDraft = draft;
                     download.hidden = false;
                     setStatus(
-                        'Your demo message is saved in this browser. No message, email, or phone request was sent.'
+                        'Your message is saved in this browser. No message, email, or phone request was sent.'
                     );
                     status.focus();
                 } catch (error) {
@@ -279,7 +279,7 @@
         download.addEventListener('click', () => {
             if (!savedDraft) return;
             const text = [
-                'BookingApp — saved demo message',
+                'BookingApp — saved message',
                 'This message was saved locally. It was not sent.',
                 '',
                 `Name: ${savedDraft.name}`,
@@ -293,7 +293,7 @@
             const url = URL.createObjectURL(new Blob([text], { type: 'text/plain;charset=utf-8' }));
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'BookingApp-demo-message.txt';
+            link.download = 'BookingApp-contact-message.txt';
             document.body.appendChild(link);
             link.click();
             link.remove();
