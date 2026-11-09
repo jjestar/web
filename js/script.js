@@ -1,390 +1,210 @@
-$(document).ready(function () {
-    console.log('jQuery is ready!');
-    const modal = document.getElementById('popup-modal');
-    const openButton = document.getElementById('open-popup-btn');
-    const closeButton = document.getElementById('close-popup-btn');
-    const emailInput = document.getElementById('popup-email');
-
-    function closePopup() {
-        modal.hidden = true;
-        document.body.style.overflow = '';
-        openButton.focus();
+/* Home search, saved filters and dynamic hotel results. */
+document.addEventListener('DOMContentLoaded', () => {
+    const home = document.getElementById('home-search');
+    const readObject = (key) => {
+        const value = App.read(key, {});
+        return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+    };
+    function persist(key, value) {
+        try {
+            App.write(key, value);
+        } catch (error) {
+            App.notify(error.message, 'error');
+        }
     }
-
-    if (modal && openButton && closeButton) {
-        openButton.addEventListener('click', function () {
-            modal.hidden = false;
-            document.body.style.overflow = 'hidden';
-            emailInput.focus();
+    if (home) {
+        const saved = readObject('search');
+        ['destination', 'checkin', 'checkout', 'guests'].forEach((id) => {
+            if (saved[id]) home.elements[id].value = saved[id];
         });
-        closeButton.addEventListener('click', closePopup);
-        modal.addEventListener('click', function (event) {
-            if (event.target === modal) {
-                closePopup();
-            }
-        });
-        document.addEventListener('keydown', function (event) {
-            if (modal.hidden) {
+        home.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const data = Object.fromEntries(new FormData(home));
+            data.destination = data.destination.trim();
+            const errors = App.dateErrors(data.checkin, data.checkout);
+            if (!data.destination) errors.destination = 'Choose a city, country or hotel to explore.';
+            if (!/^[1-6]$/.test(data.guests)) errors.guests = 'Choose between 1 and 6 guests.';
+            const status = document.getElementById('home-search-status');
+            if (App.errors(home, errors)) {
+                status.textContent = 'Check the highlighted fields before searching.';
+                status.classList.add('error');
                 return;
             }
-            if (event.key === 'Escape') {
-                closePopup();
+            persist('search', data);
+            persist('filters', {});
+            location.href = App.url('search-results.html', data);
+        });
+    }
+    const subscribe = document.getElementById('subscribe-form');
+    if (subscribe) {
+        const previous = App.read('newsletter', null);
+        if (previous?.email) subscribe.querySelector('input').value = previous.email;
+        subscribe.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const email = document.getElementById('subscribe-email').value.trim();
+            const status = document.getElementById('subscribe-status');
+            status.classList.remove('error', 'success');
+            if (App.errors(subscribe, { 'subscribe-email': App.emailError(email) })) {
+                status.textContent = 'Check your email address.';
+                status.classList.add('error');
+                return;
             }
-            if (event.key === 'Tab') {
-                const lastButton = modal.querySelector('button[type="submit"]');
-                if (event.shiftKey && document.activeElement === closeButton) {
-                    event.preventDefault();
-                    lastButton.focus();
-                } else if (!event.shiftKey && document.activeElement === lastButton) {
-                    event.preventDefault();
-                    closeButton.focus();
+            try {
+                App.write('newsletter', { email, createdAt: new Date().toISOString() });
+                status.textContent = 'Preference saved on this device. No email was sent.';
+                status.classList.add('success');
+                App.notify('Newsletter preference saved.');
+            } catch (error) {
+                status.textContent = error.message;
+                status.classList.add('error');
+            }
+        });
+    }
+    const container = document.getElementById('hotels-container');
+    if (!container) return;
+    const form = document.getElementById('filter-form'),
+        search = document.getElementById('hotel-search'),
+        sort = document.getElementById('sort-hotels');
+    const query = new URLSearchParams(location.search),
+        saved = readObject('filters'),
+        trip = readObject('search');
+    ['destination', 'checkin', 'checkout', 'guests'].forEach((key) => {
+        if (query.has(key)) trip[key] = query.get(key);
+    });
+    if (query.has('destination')) {
+        search.value = query.get('destination');
+    } else {
+        search.value = saved.query || '';
+    }
+    if (!query.has('destination')) {
+        const radio = form.querySelector(
+            `input[name="rating"][value="${['4', '5'].includes(saved.rating) ? saved.rating : 'all'}"]`
+        );
+        radio.checked = true;
+        ['wifi', 'pool', 'breakfast', 'saved-only'].forEach(
+            (id) => (document.getElementById(id).checked = Boolean(saved[id]))
+        );
+        if (['recommended', 'price-asc', 'price-desc', 'rating'].includes(saved.sort))
+            sort.value = saved.sort;
+    }
+    if (trip.checkin && trip.checkout && !Object.keys(App.dateErrors(trip.checkin, trip.checkout)).length) {
+        const guests = /^[1-6]$/.test(String(trip.guests)) ? trip.guests : 2;
+        document.getElementById('search-trip-context').textContent =
+            `Your dates: ${trip.checkin} — ${trip.checkout} · ${guests} ${Number(guests) === 1 ? 'guest' : 'guests'}. Dates carry through to your booking.`;
+    }
+    function highlight(text, keyword) {
+        const escaped = App.escape(text);
+        if (!keyword) return escaped;
+        const start = String(text).toLowerCase().indexOf(keyword.toLowerCase());
+        if (start < 0) return escaped;
+        return (
+            App.escape(String(text).slice(0, start)) +
+            '<mark>' +
+            App.escape(String(text).slice(start, start + keyword.length)) +
+            '</mark>' +
+            App.escape(String(text).slice(start + keyword.length))
+        );
+    }
+    function render() {
+        const state = {
+            query: search.value.trim(),
+            rating: form.querySelector('[name=rating]:checked').value,
+            sort: sort.value
+        };
+        ['wifi', 'pool', 'breakfast', 'saved-only'].forEach(
+            (id) => (state[id] = document.getElementById(id).checked)
+        );
+        persist('filters', state);
+        const favorites = App.favoriteIds();
+        let hotels = hotelsDatabase.filter(
+            (hotel) =>
+                [hotel.name, hotel.location, hotel.description]
+                    .join(' ')
+                    .toLowerCase()
+                    .includes(state.query.toLowerCase()) &&
+                (state.rating === 'all' || hotel.rating >= Number(state.rating)) &&
+                (!state.wifi || hotel.wifi) &&
+                (!state.pool || hotel.pool) &&
+                (!state.breakfast || hotel.breakfast) &&
+                (!state['saved-only'] || favorites.includes(hotel.id))
+        );
+        if (state.sort === 'price-asc') hotels.sort((a, b) => a.price - b.price);
+        if (state.sort === 'price-desc') hotels.sort((a, b) => b.price - a.price);
+        if (state.sort === 'rating') hotels.sort((a, b) => b.rating - a.rating);
+        document.getElementById('results-count').textContent =
+            `${hotels.length} ${hotels.length === 1 ? 'stay' : 'stays'} found`;
+        container.innerHTML = hotels.length
+            ? hotels
+                  .map((hotel) => {
+                      const href = App.url('hotel-detail.html', {
+                          hotel: hotel.id,
+                          checkin: trip.checkin,
+                          checkout: trip.checkout,
+                          guests: trip.guests
+                      });
+                      const saved = favorites.includes(hotel.id);
+                      return `<article class="stay-card">
+    <div class="stay-image"><a href="${App.escape(href)}" tabindex="-1" aria-hidden="true"><img src="${App.escape(hotel.image)}" alt="${App.escape(hotel.photos[0].alt)}" width="480" height="280" loading="lazy"></a></div>
+    <div class="stay-body">
+        <div class="stay-copy">
+            <p class="stay-location">${highlight(hotel.location, state.query)}</p>
+            <div class="stay-title"><h3><a href="${App.escape(href)}">${highlight(hotel.name, state.query)}</a></h3><button type="button" class="icon-button favorite-button" data-save="${hotel.id}" aria-label="${saved ? 'Unsave' : 'Save'} ${App.escape(hotel.name)}" aria-pressed="${saved}">${App.icon('heart')}</button></div>
+            <p class="description">${highlight(hotel.description, state.query)}</p>
+            <div class="stay-amenities"><span>${hotel.rating}-star category</span>${hotel.wifi ? '<span>Wi-Fi</span>' : ''}${hotel.pool ? '<span>Pool</span>' : ''}${hotel.breakfast ? '<span>Breakfast</span>' : ''}</div>
+        </div>
+        <div class="stay-bottom"><div class="price">${App.money(hotel.price)} <small>/ night</small></div><a class="button button-secondary button-small" href="${App.escape(href)}">View stay ${App.icon('arrow')}</a></div>
+    </div>
+</article>`;
+                  })
+                  .join('')
+            : '<div class="empty-state" style="grid-column:1/-1"><h3>No matching stays</h3><p>Try another destination or clear the filters.</p><button class="button button-primary" type="button" id="clear-empty">Clear filters</button></div>';
+        document.getElementById('clear-empty')?.addEventListener('click', () => form.reset());
+        container.querySelectorAll('[data-save]').forEach((button) =>
+            button.addEventListener('click', () => {
+                try {
+                    const active = App.toggleFavorite(button.dataset.save);
+                    App.notify(
+                        active ? 'Stay saved. Find it in My trips.' : 'Stay removed from saved stays.'
+                    );
+                    if (state['saved-only']) {
+                        render();
+                        document.getElementById('results-count').setAttribute('tabindex', '-1');
+                        document.getElementById('results-count').focus();
+                    } else {
+                        button.setAttribute('aria-pressed', String(active));
+                        const hotel = hotelsDatabase.find((h) => h.id === button.dataset.save);
+                        button.setAttribute('aria-label', `${active ? 'Unsave' : 'Save'} ${hotel.name}`);
+                    }
+                } catch (error) {
+                    App.notify(error.message, 'error');
                 }
-            }
-        });
+            })
+        );
     }
-
-    const subscribeForm = document.getElementById('subscribe-form');
-    if (subscribeForm) {
-        const emailError = document.getElementById('email-error');
-        const subscribeStatus = document.getElementById('subscribe-status');
-        subscribeForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-            const email = emailInput.value.trim();
-            let message = '';
-            if (email === '') {
-                message = 'Email is required.';
-            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                message = 'Please enter a valid email address.';
-            }
-            emailError.textContent = message;
-            emailError.hidden = message === '';
-            emailInput.setAttribute('aria-invalid', String(message !== ''));
-            subscribeStatus.textContent = '';
-            if (message) {
-                emailInput.focus();
-            } else {
-                subscribeStatus.textContent = 'Thank you! The demo subscription was validated. No email was sent.';
-                subscribeForm.reset();
-                showNotification('Demo subscription confirmed. No email was sent.');
-            }
-        });
-    }
-
-    const faqButtons = document.querySelectorAll('.accordion-header');
-    faqButtons.forEach(function (button, index) {
-        const answer = button.nextElementSibling;
-        answer.id = 'faq-answer-' + index;
-        button.setAttribute('aria-controls', answer.id);
-        button.addEventListener('click', function () {
-            const isOpen = button.getAttribute('aria-expanded') === 'true';
-            button.setAttribute('aria-expanded', String(!isOpen));
-            answer.setAttribute('aria-hidden', String(isOpen));
-            answer.style.maxHeight = isOpen ? '0px' : answer.scrollHeight + 'px';
-        });
+    search.addEventListener('input', render);
+    form.addEventListener('change', (event) => {
+        if (event.target !== search) render();
     });
-    window.addEventListener('resize', function () {
-        faqButtons.forEach(function (button) {
-            if (button.getAttribute('aria-expanded') === 'true') {
-                const answer = button.nextElementSibling;
-                answer.style.maxHeight = answer.scrollHeight + 'px';
-            }
-        });
+    sort.addEventListener('change', render);
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        render();
     });
-
-    const themeButton = document.getElementById('change-bg-btn');
-    if (themeButton) {
-        const colors = ['#f4f6f8', '#e2e8f0', '#fef3c7', '#e0f2fe', '#f3e8ff'];
-        let colorIndex = 0;
-        themeButton.addEventListener('click', function () {
-            colorIndex = (colorIndex + 1) % colors.length;
-            document.body.style.backgroundColor = colors[colorIndex];
-        });
-    }
-
-    const dateTime = document.getElementById('current-date-time');
-    if (dateTime) {
-        function updateDateTime() {
-            dateTime.textContent = new Date().toLocaleString('en-US', {
-                year: 'numeric', month: 'long', day: 'numeric',
-                hour: '2-digit', minute: '2-digit', second: '2-digit'
-            });
-        }
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-    }
-
-    const hotelsContainer = document.getElementById('hotels-container');
-    const resultsCount = document.getElementById('results-count');
-    const filterForm = document.getElementById('filter-form');
-    const $searchInput = $('#hotel-search');
-    const $suggestions = $('#search-suggestions');
-    let activeSuggestion = -1;
-
-    function highlightMatches(element, query) {
-        const originalText = $(element).text();
-        const lowerText = originalText.toLowerCase();
-        const lowerQuery = query.toLowerCase();
-        let start = 0;
-        let match = lowerText.indexOf(lowerQuery);
-
-        if (!query || match === -1) {
-            return;
-        }
-
-        $(element).empty();
-
-        while (match !== -1) {
-            element.appendChild(document.createTextNode(originalText.slice(start, match)));
-            $('<mark>').text(originalText.slice(match, match + query.length)).appendTo(element);
-            start = match + query.length;
-            match = lowerText.indexOf(lowerQuery, start);
-        }
-
-        element.appendChild(document.createTextNode(originalText.slice(start)));
-    }
-
-    function renderHotels(hotels, query) {
-        if (!hotelsContainer) {
-            return;
-        }
-        hotelsContainer.innerHTML = '';
-        resultsCount.textContent = hotels.length + (hotels.length === 1 ? ' hotel found' : ' hotels found');
-        hotels.forEach(function (hotel) {
-            const card = document.createElement('article');
-            card.className = 'card hotel-card shadow-sm mb-3 overflow-hidden';
-            card.innerHTML = `
-                <div class="row g-0">
-                    <div class="col-12 col-lg-4">
-                        <img src="image/placeholder.svg" data-src="${hotel.image}" class="img-fluid result-image lazy-image" alt="${hotel.name}" width="640" height="400">
-                    </div>
-                    <div class="col-12 col-lg-8">
-                        <div class="card-body p-3 p-lg-4">
-                            <h3 class="card-title h5 fw-bold">${hotel.name}</h3>
-                            <p class="text-secondary mb-2">${hotel.location} | Rating: ${hotel.rating} ⭐</p>
-                            <p class="card-text">${hotel.description}</p>
-                            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2 mt-3">
-                                <span class="hotel-price fw-bold text-primary fs-5">$${hotel.price} / night</span>
-                                <a href="hotel-detail.html?hotel=${hotel.id}" class="hotel-details-link btn btn-primary btn-sm">View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            $(card).find('.card-title, .card-body p, .hotel-price, .hotel-details-link').each(function () {
-                highlightMatches(this, query);
-            });
-            hotelsContainer.appendChild(card);
-        });
-        if (hotels.length === 0) {
-            const message = document.createElement('p');
-            message.className = 'alert alert-info';
-            message.textContent = 'No hotels match your search and filters. Try another keyword or clear the filters.';
-            hotelsContainer.appendChild(message);
-        }
-        loadVisibleImages();
-    }
-
-    function applyFilters() {
-        const query = $searchInput.val().trim();
-        const lowerQuery = query.toLowerCase();
-        const rating = filterForm.querySelector('input[name="rating"]:checked').value;
-        const needsWifi = $('#wifi').prop('checked');
-        const needsPool = $('#pool').prop('checked');
-        const needsBreakfast = $('#breakfast').prop('checked');
-
-        const filteredHotels = hotelsDatabase.filter(function (hotel) {
-            const searchableText = [hotel.name, hotel.location, hotel.description].join(' ').toLowerCase();
-            return searchableText.includes(lowerQuery) &&
-                (rating === 'all' || hotel.rating >= Number(rating)) &&
-                (!needsWifi || hotel.wifi) &&
-                (!needsPool || hotel.pool) &&
-                (!needsBreakfast || hotel.breakfast);
-        });
-
-        renderHotels(filteredHotels, query);
-    }
-
-    function closeSuggestions() {
-        $suggestions.prop('hidden', true);
-        $searchInput.attr('aria-expanded', 'false').removeAttr('aria-activedescendant');
-        activeSuggestion = -1;
-    }
-
-    function updateSuggestions() {
-        const query = $searchInput.val().trim().toLowerCase();
-        $suggestions.empty();
-        closeSuggestions();
-
-        if (!query) {
-            return;
-        }
-
-        const choices = [];
-        hotelsDatabase.forEach(function (hotel) {
-            choices.push(hotel.name, hotel.location);
-        });
-
-        const matches = [...new Set(choices)].filter(function (choice) {
-            return choice.toLowerCase().includes(query);
-        }).slice(0, 6);
-
-        matches.forEach(function (choice, index) {
-            $('<li>')
-                .attr('id', 'search-option-' + index)
-                .attr('role', 'option')
-                .attr('aria-selected', 'false')
-                .text(choice)
-                .appendTo($suggestions);
-        });
-
-        if (matches.length > 0) {
-            $suggestions.prop('hidden', false);
-            $searchInput.attr('aria-expanded', 'true');
-        }
-    }
-
-    function chooseSuggestion(option) {
-        $searchInput.val($(option).text());
-        closeSuggestions();
-        applyFilters();
-        $searchInput.trigger('focus');
-        closeSuggestions();
-    }
-
-    if (hotelsContainer && filterForm) {
-        const destination = new URLSearchParams(window.location.search).get('destination');
-        $searchInput.val(destination || '');
-        applyFilters();
-
-        $searchInput.on('input', function () {
-            applyFilters();
-            updateSuggestions();
-        });
-
-        $searchInput.on('focus', updateSuggestions);
-        $searchInput.on('blur', closeSuggestions);
-
-        $searchInput.on('keydown', function (event) {
-            if (event.key === 'Escape') {
-                event.preventDefault();
-                closeSuggestions();
-                return;
-            }
-
-            if (event.key === 'Tab') {
-                closeSuggestions();
-                return;
-            }
-
-            if (event.key === 'Enter') {
-                if (activeSuggestion >= 0) {
-                    event.preventDefault();
-                    chooseSuggestion($suggestions.children().get(activeSuggestion));
-                }
-                return;
-            }
-
-            if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') {
-                return;
-            }
-
-            event.preventDefault();
-
-            if ($suggestions.prop('hidden')) {
-                updateSuggestions();
-            }
-
-            const $options = $suggestions.children();
-            if ($options.length === 0) {
-                return;
-            }
-
-            if (event.key === 'ArrowDown') {
-                activeSuggestion = (activeSuggestion + 1) % $options.length;
-            } else if (activeSuggestion <= 0) {
-                activeSuggestion = $options.length - 1;
-            } else {
-                activeSuggestion--;
-            }
-
-            $options.attr('aria-selected', 'false');
-            const $active = $options.eq(activeSuggestion).attr('aria-selected', 'true');
-            $searchInput.attr('aria-activedescendant', $active.attr('id'));
-            $active.get(0).scrollIntoView({ block: 'nearest' });
-        });
-
-        $suggestions.on('mousedown', '[role="option"]', function (event) {
-            event.preventDefault();
-        });
-
-        $suggestions.on('click', '[role="option"]', function () {
-            chooseSuggestion(this);
-        });
-
-        $(document).on('click', function (event) {
-            if (!$(event.target).closest('.hotel-search-box').length) {
-                closeSuggestions();
-            }
-        });
-
-        $(filterForm).on('submit', function (event) {
-            event.preventDefault();
-            closeSuggestions();
-            applyFilters();
-        });
-
-        $(filterForm).on('change', applyFilters);
-
-        $(filterForm).on('reset', function () {
-            setTimeout(function () {
-                $searchInput.val('');
-                closeSuggestions();
-                applyFilters();
-            }, 0);
-        });
-    }
-
-    const menuLinks = document.querySelectorAll('#mainNav .nav-link');
-
-    for (let index = 0; index < menuLinks.length; index++) {
-        menuLinks[index].addEventListener('keydown', function (event) {
-            let nextIndex = index;
-
-            switch (event.key) {
-                case 'ArrowRight':
-                case 'ArrowDown':
-                    nextIndex = (index + 1) % menuLinks.length;
-                    break;
-                case 'ArrowLeft':
-                case 'ArrowUp':
-                    nextIndex = (index - 1 + menuLinks.length) % menuLinks.length;
-                    break;
-                case 'Home':
-                    nextIndex = 0;
-                    break;
-                case 'End':
-                    nextIndex = menuLinks.length - 1;
-                    break;
-                default:
-                    return;
-            }
-
-            event.preventDefault();
-            menuLinks[nextIndex].focus();
-        });
-    }
-
-    const clickSound = new Audio('image/click.mp3');
-    clickSound.volume = 0.4;
-
-    document.addEventListener('click', function (event) {
-        const button = event.target.closest('button');
-        if (button && !button.disabled) {
-            clickSound.pause();
-            clickSound.currentTime = 0;
-            clickSound.play().catch(function () {
-                console.warn('The click sound could not be played.');
-            });
-        }
+    form.addEventListener('reset', () => {
+        setTimeout(() => {
+            search.value = '';
+            sort.value = 'recommended';
+            history.replaceState(
+                null,
+                '',
+                App.url('search-results.html', {
+                    checkin: trip.checkin,
+                    checkout: trip.checkout,
+                    guests: trip.guests
+                })
+            );
+            render();
+        }, 0);
     });
+    render();
 });

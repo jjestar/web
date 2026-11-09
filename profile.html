@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+            name="description"
+            content="BookingApp: explore illustrative stays, compare amenities and plan your next trip. A responsive student travel project."
+        />
+        <meta name="theme-color" content="#214fc6" />
+        <title>My trips | BookingApp</title>
+        <link rel="icon" href="image/favicon.svg" type="image/svg+xml" />
+        <script src="js/theme-init.js"></script>
+        <link rel="stylesheet" href="css/site.css" />
+        <script src="js/common.js" defer></script>
+        <script src="js/hotels.js" defer></script>
+        <script src="js/auth.js" defer></script>
+    </head>
+    <body data-page="profile">
+        <a class="skip-link" href="#main-content">Skip to content</a>
+        <header class="site-header">
+            <div class="container header-inner">
+                <a href="index.html" class="brand" aria-label="BookingApp home"
+                    ><svg class="brand-mark" viewBox="0 0 32 32" width="36" height="36" aria-hidden="true">
+                        <path
+                            fill="currentColor"
+                            fill-rule="evenodd"
+                            d="M16 2C9.37 2 4 7.15 4 13.5c0 7.5 10.58 15.72 11.03 16.06a1.6 1.6 0 0 0 1.94 0C17.42 29.22 28 21 28 13.5 28 7.15 22.63 2 16 2Zm-4 9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10h-8Z"
+                        /></svg
+                    >BookingApp</a
+                >
+                <nav id="main-nav" class="main-nav" aria-label="Main navigation">
+                    <a href="search-results.html">Explore stays</a><a href="services.html">Travel services</a
+                    ><a href="about.html">About</a>
+                </nav>
+                <div class="header-actions">
+                    <button
+                        id="theme-toggle"
+                        class="icon-button"
+                        type="button"
+                        aria-label="Switch to dark mode"
+                        aria-pressed="false"
+                    >
+                        <span data-icon="moon"></span></button
+                    ><a class="account-link" href="login.html" data-account-link
+                        ><span data-icon="user"></span><span>Log in</span></a
+                    ><button
+                        id="menu-toggle"
+                        class="icon-button menu-toggle"
+                        type="button"
+                        aria-label="Toggle navigation"
+                        aria-controls="main-nav"
+                        aria-expanded="false"
+                    >
+                        <span data-icon="menu"></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <main id="main-content" class="container section">
+            <section id="profile-guest" class="panel empty-state" aria-labelledby="profile-guest-heading">
+                <p class="eyebrow">Your account</p>
+                <h1 id="profile-guest-heading" class="page-heading">Log in to view your trips</h1>
+                <p class="lead">View saved stays, manage your details, and review or cancel demo bookings.</p>
+                <div class="inline">
+                    <a class="button button-primary" href="login.html">Log in</a
+                    ><a class="button button-secondary" href="signup.html">Create an account</a>
+                </div>
+            </section>
+            <div id="profile-content" class="stack" hidden>
+                <header class="section profile-heading">
+                    <p class="eyebrow">Your account</p>
+                    <h1 id="profile-name-heading" class="page-heading">Trips and saved stays</h1>
+                    <p class="lead">Review saved stays, manage bookings, and update your details.</p>
+                    <button class="button button-ghost button-small" type="button" data-auth-logout>
+                        Log out
+                    </button>
+                </header>
+                <section
+                    id="pending-booking"
+                    class="panel stack"
+                    aria-labelledby="pending-booking-heading"
+                    hidden
+                >
+                    <h2 id="pending-booking-heading">Continue your booking</h2>
+                    <p>Your trip details are ready. Continue to review and confirm your demo booking.</p>
+                    <div>
+                        <a id="continue-booking" class="button button-primary" href="booking.html"
+                            >Continue booking</a
+                        >
+                    </div>
+                </section>
+                <div class="split-layout">
+                    <aside class="sidebar">
+                        <section class="panel stack" aria-labelledby="profile-details-heading">
+                            <h2 id="profile-details-heading">Your details</h2>
+                            <div>
+                                <p class="muted">Account email</p>
+                                <p id="profile-email"></p>
+                            </div>
+                            <form id="profile-form" class="stack" novalidate>
+                                <div class="field">
+                                    <label for="profile-name">Full name</label>
+                                    <input
+                                        id="profile-name"
+                                        name="name"
+                                        type="text"
+                                        autocomplete="name"
+                                        aria-describedby="profile-name-error"
+                                    />
+                                    <p id="profile-name-error" class="field-error"></p>
+                                </div>
+                                <div class="field">
+                                    <label for="profile-phone">Phone number</label>
+                                    <input
+                                        id="profile-phone"
+                                        name="phone"
+                                        type="tel"
+                                        autocomplete="tel"
+                                        aria-describedby="profile-phone-error"
+                                    />
+                                    <p id="profile-phone-error" class="field-error"></p>
+                                </div>
+                                <button class="button button-secondary" type="submit">Save details</button>
+                                <p
+                                    id="profile-status"
+                                    class="form-status"
+                                    role="status"
+                                    aria-live="polite"
+                                ></p>
+                            </form>
+                            <p class="muted">
+                                Your demo account and bookings are stored in this browser. No real
+                                reservations or payments are made.
+                            </p>
+                        </section>
+                    </aside>
+                    <div class="stack">
+                        <section class="section" aria-labelledby="saved-heading">
+                            <div class="inline">
+                                <h2 id="saved-heading">Saved stays</h2>
+                                <span class="badge" id="saved-count" aria-label="Saved stay count">0</span>
+                            </div>
+                            <p class="muted">Compare the stays you have saved.</p>
+                            <div id="profile-favorites" class="empty-state"></div>
+                            <p id="saved-status" class="form-status" role="status" aria-live="polite"></p>
+                        </section>
+                        <section class="section" aria-labelledby="bookings-heading">
+                            <div class="inline">
+                                <h2 id="bookings-heading">Your bookings</h2>
+                                <span class="badge" id="booking-count" aria-label="Booking count">0</span>
+                            </div>
+                            <p class="muted">Review or cancel the demo stays you have planned.</p>
+                            <p
+                                id="bookings-status"
+                                class="form-status"
+                                role="status"
+                                aria-live="polite"
+                                tabindex="-1"
+                            ></p>
+                            <div id="profile-bookings" class="empty-state"></div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="site-footer">
+            <div class="container">
+                <div class="footer-top">
+                    <div>
+                        <a href="index.html" class="brand"
+                            ><svg
+                                class="brand-mark"
+                                viewBox="0 0 32 32"
+                                width="36"
+                                height="36"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    fill="currentColor"
+                                    fill-rule="evenodd"
+                                    d="M16 2C9.37 2 4 7.15 4 13.5c0 7.5 10.58 15.72 11.03 16.06a1.6 1.6 0 0 0 1.94 0C17.42 29.22 28 21 28 13.5 28 7.15 22.63 2 16 2Zm-4 9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10h-8Z"
+                                /></svg
+                            >BookingApp</a
+                        >
+                        <p>Compare stays, check the weather,<br />and keep your travel plans together.</p>
+                    </div>
+                    <div class="footer-links">
+                        <h3>Explore</h3>
+                        <a href="search-results.html">All stays</a
+                        ><a href="hotel-detail.html?hotel=grand-palace">Featured stay</a
+                        ><a href="services.html">Travel services</a><a href="booking.html">Plan a trip</a>
+                    </div>
+                    <div class="footer-links">
+                        <h3>Account and help</h3>
+                        <a href="about.html">Our team</a><a href="about.html#contact">Contact us</a
+                        ><a href="signup.html">Create an account</a
+                        ><a href="profile.html">My trips &amp; saved stays</a>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>© 2026 BookingApp · SE-2513</p>
+                    <p>Student project. Illustrative stays. No real reservations or payments.</p>
+                </div>
+            </div>
+        </footer>
+        <div id="notification" class="notification" role="status" aria-live="polite" hidden></div>
+        <noscript
+            ><p class="container">Enable JavaScript for search, accounts, and demo bookings.</p></noscript
+        >
+    </body>
+</html>

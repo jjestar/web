@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-labelledby="title">
+  <title id="title">BookingApp doorway and destination mark</title>
+  <style>path { fill: #214fc6; } @media (prefers-color-scheme: dark) { path { fill: #a1bbff; } }</style>
+  <path fill="#214fc6" fill-rule="evenodd" d="M16 2C9.37 2 4 7.15 4 13.5c0 7.5 10.58 15.72 11.03 16.06a1.6 1.6 0 0 0 1.94 0C17.42 29.22 28 21 28 13.5 28 7.15 22.63 2 16 2Zm-4 9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10h-8Z" />
+</svg>

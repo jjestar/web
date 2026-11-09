@@ -1,298 +1,278 @@
+/* About and Services page behavior. All data belongs to this browser-only demo. */
+(() => {
+    'use strict';
 
-const clock = document.getElementById('current-date-time');
+    const services = {
+        transfer: { name: 'Airport transfer', price: 35, unit: 'arrival transfer' },
+        car: { name: 'Car rental', price: 55, unit: 'day' },
+        tour: { name: 'Guided city tour', price: 45, unit: 'person' }
+    };
 
-function updateDateTime() {
-    const now = new Date();
-    clock.textContent = now.toLocaleString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true
-    });
-    clock.dateTime = now.toISOString();
-}
+    function initializeContact() {
+        const form = document.getElementById('contact-form');
+        if (!form) return;
 
-if (clock) {
-    updateDateTime();
-    setInterval(updateDateTime, 1000);
-}
-
-const faqButtons = document.querySelectorAll('.service-faq-question');
-
-faqButtons.forEach(function (button) {
-    button.addEventListener('click', function () {
-        const answer = document.getElementById(button.getAttribute('aria-controls'));
-        const isOpen = button.getAttribute('aria-expanded') === 'true';
-
-        button.setAttribute('aria-expanded', String(!isOpen));
-        answer.setAttribute('aria-hidden', String(isOpen));
-        answer.style.maxHeight = isOpen ? '0px' : answer.scrollHeight + 'px';
-        button.querySelector('.faq-symbol').textContent = isOpen ? '+' : '\u2212';
-    });
-});
-
-window.addEventListener('resize', function () {
-    faqButtons.forEach(function (button) {
-        if (button.getAttribute('aria-expanded') === 'true') {
-            const answer = document.getElementById(button.getAttribute('aria-controls'));
-            answer.style.maxHeight = answer.scrollHeight + 'px';
-        }
-    });
-});
-
-const services = [
-    { id: 'transfer', name: 'Airport transfer', price: 25, unit: 'trip', quantityLabel: 'Number of trips' },
-    { id: 'rental', name: 'Car rental', price: 35, unit: 'day', quantityLabel: 'Number of days' },
-    { id: 'tour', name: 'Guided group tour', price: 20, unit: 'person', quantityLabel: 'Number of people' }
-];
-
-const serviceEstimator = {
-    getService(serviceId) {
-        return services.find(function (service) {
-            return service.id === serviceId;
-        });
-    },
-
-    calculateTotal(serviceId, quantity) {
-        const service = this.getService(serviceId);
-        return service.price * quantity;
-    }
-};
-
-const estimateForm = document.getElementById('service-estimate-form');
-let readEstimateValues;
-let showEstimate;
-
-if (estimateForm) {
-    const serviceChoice = document.getElementById('service-choice');
-    const quantityInput = document.getElementById('service-quantity');
-    const quantityLabel = document.getElementById('quantity-label');
-    const serviceRate = document.getElementById('service-rate');
-    const estimateResult = document.getElementById('service-estimate-result');
-    const estimateDescription = document.getElementById('estimate-description');
-    const estimateTotal = document.getElementById('estimate-total');
-
-    for (let i = 0; i < services.length; i++) {
-        const option = document.createElement('option');
-        option.value = services[i].id;
-        option.textContent = services[i].name;
-        serviceChoice.appendChild(option);
-    }
-
-    function updateServiceDetails() {
-        serviceChoice.setCustomValidity('');
-        const service = serviceEstimator.getService(serviceChoice.value);
-        quantityLabel.textContent = service.quantityLabel;
-        serviceRate.textContent = 'Standard price: $' + service.price + ' per ' + service.unit + '.';
-        estimateResult.hidden = true;
-    }
-
-    serviceChoice.addEventListener('change', updateServiceDetails);
-    quantityInput.addEventListener('input', function () {
-        quantityInput.setCustomValidity('');
-        estimateResult.hidden = true;
-    });
-
-    readEstimateValues = function () {
-        const quantity = Number(quantityInput.value);
-        const service = serviceEstimator.getService(serviceChoice.value);
-        const validQuantity = Number.isInteger(quantity) && quantity >= 1 && quantity <= 30;
-        serviceChoice.setCustomValidity(service ? '' : 'Please choose a service.');
-        quantityInput.setCustomValidity(validQuantity ? '' : 'Please enter a whole number from 1 to 30.');
-        if (!estimateForm.reportValidity()) return null;
-
-        return {
-            serviceName: service.name,
-            price: service.price,
-            quantity: quantity,
-            total: serviceEstimator.calculateTotal(service.id, quantity)
+        const fields = {
+            name: document.getElementById('contact-name'),
+            email: document.getElementById('contact-email'),
+            subject: document.getElementById('contact-subject'),
+            reply: document.getElementById('contact-reply'),
+            phone: document.getElementById('contact-phone'),
+            message: document.getElementById('contact-message')
         };
-    };
+        const phoneField = document.getElementById('contact-phone-field');
+        const status = document.getElementById('contact-status');
+        const download = document.getElementById('contact-download');
+        let savedDraft = null;
 
-    showEstimate = function (estimate) {
-        estimateDescription.textContent = estimate.serviceName + ': ' + estimate.quantity + ' × $' + estimate.price;
-        estimateTotal.textContent = 'Estimated total: $' + estimate.total.toFixed(2);
-        estimateResult.hidden = false;
-        estimateResult.classList.add('estimate-reveal');
-        showNotification('Your service estimate is ready.');
-    };
-
-    estimateResult.addEventListener('animationend', function () {
-        estimateResult.classList.remove('estimate-reveal');
-    });
-
-    estimateForm.addEventListener('reset', function () {
-        serviceChoice.setCustomValidity('');
-        quantityInput.setCustomValidity('');
-        estimateResult.hidden = true;
-        setTimeout(updateServiceDetails, 0);
-    });
-
-    updateServiceDetails();
-}
-
-const contactForm = document.getElementById('contact-form');
-let readContactValues;
-let showContactPreview;
-
-if (contactForm) {
-    const contactStatus = document.getElementById('contact-status');
-    const contactFields = contactForm.querySelectorAll('[required]');
-
-    readContactValues = function () {
-        contactStatus.textContent = '';
-        contactFields.forEach(function (field) {
-            const isEmpty = field.value.trim() === '';
-            field.setCustomValidity(isEmpty ? 'Please complete this field.' : '');
-        });
-        if (!contactForm.reportValidity()) return null;
-        return {
-            name: document.getElementById('contact-name').value.trim(),
-            email: document.getElementById('contact-email').value.trim(),
-            message: document.getElementById('contact-message').value.trim()
-        };
-    };
-
-    showContactPreview = function (contact) {
-        contactStatus.textContent = 'Thank you, ' + contact.name + '! Your message is ready. This is a demo; no message or email was sent.';
-        contactStatus.focus();
-        showNotification('Your demo message is ready. No email was sent.');
-    };
-
-    contactFields.forEach(function (field) {
-        field.addEventListener('input', function () {
-            field.setCustomValidity('');
-            contactStatus.textContent = '';
-        });
-    });
-
-    contactForm.addEventListener('reset', function () {
-        contactStatus.textContent = '';
-        contactFields.forEach(function (field) {
-            field.setCustomValidity('');
-        });
-    });
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    const menuLinks = document.querySelectorAll('#mainNav .nav-link');
-
-    for (let index = 0; index < menuLinks.length; index++) {
-        menuLinks[index].addEventListener('keydown', function (event) {
-            let nextIndex = index;
-
-            switch (event.key) {
-                case 'ArrowRight':
-                case 'ArrowDown':
-                    nextIndex = (index + 1) % menuLinks.length;
-                    break;
-                case 'ArrowLeft':
-                case 'ArrowUp':
-                    nextIndex = (index - 1 + menuLinks.length) % menuLinks.length;
-                    break;
-                case 'Home':
-                    nextIndex = 0;
-                    break;
-                case 'End':
-                    nextIndex = menuLinks.length - 1;
-                    break;
-                default:
-                    return;
+        function updatePhoneField() {
+            phoneField.hidden = fields.reply.value !== 'phone';
+            fields.phone.disabled = phoneField.hidden;
+            if (phoneField.hidden) {
+                document.getElementById('contact-phone-error').textContent = '';
+                fields.phone.removeAttribute('aria-invalid');
             }
-
-            event.preventDefault();
-            menuLinks[nextIndex].focus();
-        });
-    }
-
-    const clickSound = new Audio('image/click.mp3');
-    clickSound.volume = 0.4;
-
-    document.addEventListener('click', function (event) {
-        const button = event.target.closest('button');
-        if (button && !button.disabled) {
-            clickSound.pause();
-            clickSound.currentTime = 0;
-            clickSound.play().catch(function () {
-                console.warn('The click sound could not be played.');
-            });
         }
-    });
-});
 
-function initializeScrollProgress() {
-    const $bar = $('<div class="scroll-progress-track" role="progressbar" aria-label="Page scroll progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="scroll-progress-fill"></div></div>').prependTo('body');
-    $(window).on('scroll resize', function () {
-        const max = $(document).height() - $(window).height();
-        const percent = max > 0 ? Math.min(100, Math.max(0, window.scrollY / max * 100)) : 0;
-        $bar.children().css('width', percent + '%');
-        $bar.attr('aria-valuenow', Math.round(percent));
-    }).trigger('scroll');
-}
+        function readValues() {
+            return Object.fromEntries(
+                Object.entries(fields).map(([key, field]) => [key, field.value.trim()])
+            );
+        }
 
-function initializeCounters() {
-    const section = document.querySelector('.booking-stats');
-    if (!section) return;
-    const observer = new IntersectionObserver(function (entries) {
-        if (!entries[0].isIntersecting) return;
-        const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1400;
-        $('.stat-number', section).each(function () {
-            const $number = $(this);
-            const target = Number(this.dataset.count);
-            $({ value: 0 }).animate({ value: target }, {
-                duration: duration,
-                step: value => $number.text(Math.floor(value)),
-                complete: () => $number.text(target)
-            });
+        function validate(values) {
+            const errors = {};
+            if (values.name.length < 2 || values.name.length > 80) {
+                errors['contact-name'] = 'Enter your name using 2–80 characters.';
+            }
+            const emailError = App.emailError(values.email);
+            if (emailError) errors['contact-email'] = emailError;
+            if (!['general', 'booking', 'feedback'].includes(values.subject)) {
+                errors['contact-subject'] = 'Choose a topic for your message.';
+            }
+            if (!['email', 'phone'].includes(values.reply)) {
+                errors['contact-reply'] = 'Choose email or phone for your draft.';
+            }
+            if (values.reply === 'phone') {
+                const phoneError = App.phoneError(values.phone);
+                if (phoneError) errors['contact-phone'] = phoneError;
+            }
+            if (values.message.length < 10 || values.message.length > 2000) {
+                errors['contact-message'] = 'Write a message between 10 and 2,000 characters.';
+            }
+            return App.errors(form, errors);
+        }
+
+        function setStatus(message, isError = false) {
+            status.textContent = message;
+            status.classList.toggle('is-error', isError);
+        }
+
+        const previous = App.read('contactDraft', null);
+        if (previous && typeof previous === 'object' && typeof previous.message === 'string') {
+            for (const [key, field] of Object.entries(fields)) {
+                if (typeof previous[key] === 'string') field.value = previous[key];
+            }
+            savedDraft = previous;
+            download.hidden = false;
+            setStatus('Saved draft restored. No message was sent.');
+        }
+        updatePhoneField();
+
+        fields.reply.addEventListener('change', updatePhoneField);
+        form.addEventListener('input', () => {
+            setStatus('');
+            download.hidden = true;
         });
-        observer.disconnect();
-    }, { threshold: 0.25 });
-    observer.observe(section);
-}
+        form.addEventListener('change', () => {
+            setStatus('');
+            download.hidden = true;
+        });
 
-function attachSubmitSpinner(form, readValues, complete) {
-    if (!form) return;
-    const button = form.querySelector('[type="submit"]');
-    const label = button.innerHTML;
-    let pendingTimeout = null;
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const values = readValues();
+            if (validate(values)) {
+                setStatus('Check the highlighted fields, then save your message again.', true);
+                return;
+            }
+            const draft = {
+                ...values,
+                phone: values.reply === 'phone' ? values.phone : '',
+                savedAt: new Date().toISOString()
+            };
+            try {
+                App.write('contactDraft', draft);
+                savedDraft = draft;
+                download.hidden = false;
+                setStatus(
+                    'Your demo message is saved in this browser. No message, email, or phone request was sent.'
+                );
+                status.focus();
+            } catch (error) {
+                setStatus(
+                    error.message ||
+                        'Your draft could not be saved. Check browser storage and try again.',
+                    true
+                );
+            }
+        });
 
-    function restoreButton() {
-        button.innerHTML = label;
-        button.disabled = false;
-        form.setAttribute('aria-busy', 'false');
+        document.getElementById('contact-clear').addEventListener('click', () => {
+            try {
+                App.remove('contactDraft');
+                form.reset();
+                App.errors(form, {});
+                savedDraft = null;
+                download.hidden = true;
+                updatePhoneField();
+                setStatus('Your draft has been cleared from this browser.');
+                fields.name.focus();
+            } catch (error) {
+                setStatus(error.message || 'Unable to clear the saved draft. Try again.', true);
+            }
+        });
+
+        download.addEventListener('click', () => {
+            if (!savedDraft) return;
+            const text = [
+                'BookingApp — saved demo message',
+                'This message was saved locally. It was not sent.',
+                '',
+                `Name: ${savedDraft.name}`,
+                `Email: ${savedDraft.email}`,
+                `Topic: ${savedDraft.subject}`,
+                `Preferred reply method: ${savedDraft.reply}`,
+                ...(savedDraft.reply === 'phone' ? [`Phone: ${savedDraft.phone}`] : []),
+                '',
+                savedDraft.message
+            ].join('\r\n');
+            const url = URL.createObjectURL(new Blob([text], { type: 'text/plain;charset=utf-8' }));
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'BookingApp-demo-message.txt';
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+            setStatus('Your saved copy is ready to download. No message has been sent.');
+        });
     }
 
-    $(form).on('submit', function (event) {
-        event.preventDefault();
-        if (button.disabled || pendingTimeout !== null) return;
-        const values = readValues();
-        if (!values) return;
+    function initializeServices() {
+        const form = document.getElementById('service-estimate-form');
+        if (!form) return;
 
-        button.innerHTML = '<span class="submit-spinner" aria-hidden="true"></span>Please wait…';
-        button.disabled = true;
-        form.setAttribute('aria-busy', 'true');
+        const choice = document.getElementById('service-choice');
+        const quantity = document.getElementById('service-quantity');
+        const quantityField = document.getElementById('service-quantity-field');
+        const status = document.getElementById('service-estimate-status');
+        const result = document.getElementById('service-estimate-result');
+        const empty = document.getElementById('estimate-empty');
+        const query = new URLSearchParams(window.location.search);
+        const selectedHotel = window.hotelsDatabase?.find(
+            (hotel) => String(hotel.id) === query.get('hotel')
+        );
 
-        pendingTimeout = setTimeout(function () {
-            pendingTimeout = null;
-            restoreButton();
-            complete(values);
-        }, 1200);
-    });
+        function bookingUrl(service) {
+            return App.url('booking.html', { hotel: selectedHotel?.id || '', service });
+        }
 
-    $(form).on('reset', function () {
-        clearTimeout(pendingTimeout);
-        pendingTimeout = null;
-        restoreButton();
-    });
-}
+        document.querySelectorAll('[data-service-booking]').forEach((link) => {
+            link.href = bookingUrl(link.dataset.serviceBooking);
+        });
 
-$(document).ready(function () {
-    console.log('jQuery is ready!');
-    initializeScrollProgress();
-    initializeCounters();
-    attachSubmitSpinner(estimateForm, readEstimateValues, showEstimate);
-    attachSubmitSpinner(contactForm, readContactValues, showContactPreview);
-});
+        function hideEstimate() {
+            result.hidden = true;
+            empty.hidden = false;
+            status.textContent = '';
+            status.classList.remove('is-error');
+        }
+
+        function updateServiceDetails() {
+            const service = services[choice.value];
+            quantityField.hidden = choice.value === 'transfer';
+            quantity.disabled = quantityField.hidden;
+            document.getElementById('quantity-label').textContent =
+                choice.value === 'tour' ? 'Number of people' : 'Number of days';
+            document.getElementById('service-rate').textContent = service
+                ? choice.value === 'transfer'
+                    ? `${App.money(service.price)} for one arrival transfer. This is a flat fee.`
+                    : `${App.money(service.price)} per ${service.unit}. Hotel accommodation is priced separately.`
+                : 'Choose a service to see its price.';
+            App.errors(form, {});
+            hideEstimate();
+        }
+
+        function calculate() {
+            const errors = {};
+            const service = services[choice.value];
+            const count = choice.value === 'transfer' ? 1 : Number(quantity.value.trim());
+            if (!service) errors['service-choice'] = 'Choose one of the available travel services.';
+            if (
+                choice.value !== 'transfer' &&
+                (!/^\d+$/.test(quantity.value.trim()) ||
+                    !Number.isInteger(count) ||
+                    count < 1 ||
+                    count > 30)
+            ) {
+                errors['service-quantity'] = 'Enter a whole number from 1 to 30.';
+            }
+            if (App.errors(form, errors)) {
+                hideEstimate();
+                status.textContent = 'Check the highlighted field to calculate your estimate.';
+                status.classList.add('is-error');
+                return;
+            }
+            const total = service.price * count;
+            document.getElementById('estimate-description').textContent =
+                choice.value === 'transfer'
+                    ? `${service.name} · one-time fee`
+                    : `${service.name} · ${count} ${choice.value === 'tour' ? (count === 1 ? 'person' : 'people') : count === 1 ? 'day' : 'days'} × ${App.money(service.price)}`;
+            document.getElementById('estimate-total').textContent = App.money(total);
+            document.getElementById('estimate-continue').href = bookingUrl(choice.value);
+            empty.hidden = true;
+            result.hidden = false;
+            status.classList.remove('is-error');
+            status.textContent = 'Estimate calculated. No service has been booked.';
+            try {
+                App.write('serviceEstimate', { service: choice.value, quantity: count, total });
+            } catch (error) {
+                status.textContent =
+                    'Estimate calculated. Browser storage is unavailable, so this estimate will not be remembered.';
+            }
+        }
+
+        const previous = App.read('serviceEstimate', null);
+        if (previous && services[previous.service]) {
+            choice.value = previous.service;
+            if (
+                Number.isInteger(previous.quantity) &&
+                previous.quantity >= 1 &&
+                previous.quantity <= 30
+            ) {
+                quantity.value = String(previous.quantity);
+            }
+        }
+        if (services[query.get('service')]) choice.value = query.get('service');
+        updateServiceDetails();
+
+        choice.addEventListener('change', updateServiceDetails);
+        quantity.addEventListener('input', hideEstimate);
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            calculate();
+        });
+    }
+
+    function initialize() {
+        initializeContact();
+        initializeServices();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initialize);
+    } else {
+        initialize();
+    }
+})();

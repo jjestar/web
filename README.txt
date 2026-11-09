@@ -1,70 +1,140 @@
-BookingApp - Assignment 6: jQuery
-Team: BookingApp
+BookingApp — Final Project
 Group: SE-2513
-Members: Allazhar Aldongarov, Dias Serikov, Yerkenov Abylay
+Team: Allazhar Aldongarov, Dias Serikov, Yerkenov Abylay
 
-HOW TO RUN
-Extract the complete ZIP and open index.html in a modern browser.
-Keep the css, js and image folders beside the HTML files.
-Internet access is required for the jQuery 4.0.0 and Bootstrap CDN files.
-No npm install, build step, account or backend is required.
-Optional: run python -m http.server 8000 from this folder, then open
-http://localhost:8000 in a browser. Clipboard behavior is best tested on
-localhost or the published HTTPS website.
+LIVE WEBSITE: https://jjestar.github.io/web/
+REPOSITORY: https://github.com/jjestar/web
 
-TASK DEMONSTRATION
-0. Setup: open Home or Search and check the browser console for
-   "jQuery is ready!". jQuery is loaded in the HTML head before our scripts.
-1. Live search: on Search, type a hotel name, city or description keyword.
-   Try "hotel", "Astana" or "pool". Combine the search with rating and
-   amenity filters. Clear Filters resets both the text and filter controls.
-   The destination entered on Home also initializes the Search page.
-2. Autocomplete: type "ast" or "oce" on Search. Click a suggestion or use
-   Arrow Up/Down and Enter. Escape closes the suggestion list.
-3. Highlighting: type "hotel" on Search. All matching text in the result
-   cards is highlighted. Clear the input to remove the highlights.
-4. Scroll progress: open About or Services and scroll from top to bottom.
-   The colored progress bar at the top follows your position.
-5. Number counters: open About and scroll to the statistics section.
-   The three counters animate once when the section enters the viewport.
-6. Submit spinner: submit valid Contact fields on About or calculate a
-   service estimate on Services. The button shows "Please wait...", is
-   disabled during the short simulated request, and then returns to normal.
-7. Notifications: submit a valid demo subscription, Contact form or service
-   estimate, or confirm a demo booking. A temporary notification fades out.
-8. Clipboard: open Hotel Details and click Copy hotel location. On the
-   booking Review step, Copy booking details copies the displayed summary.
-   Successful copying shows a checkmark and "Copied to clipboard!".
-9. Lazy loading: open Search in a fresh browser tab at a normal window
-   height. In DevTools Network, observe the image requests while scrolling
-   down. Result images below the viewport load when they come into view.
-   The lazy loader also handles new results after searching or filtering.
+PURPOSE
+A responsive travel website for comparing illustrative hotel stays and planning
+a demo trip. This project is entirely static HTML, CSS and JavaScript.
+There is no backend, database server, real reservation, payment or email delivery.
 
-EXISTING FEATURES
-Hotel selection is preserved between Search, Hotel Details and Booking.
-The booking form validates guest details, dates and terms before confirming.
-FAQ accordions, the theme button, live clock, keyboard navigation, click
-sound and service calculator remain available.
+RUN LOCALLY
+Use a static server from this folder, for example:
+  python -m http.server 8124 --bind 127.0.0.1
+Then open http://127.0.0.1:8124/
+No npm installation, build command or API key is required.
+HTTPS or localhost is recommended for the browser's password hashing API.
+Internet is needed only for Open-Meteo weather. All photos, icons, styles and
+application scripts are local; the rest of the site works if the weather fails.
 
-FILE MAP
-index.html, search-results.html: Home and Search pages.
-js/script.js, css/allstyle.css: search, suggestions, highlights and Home UI.
-about.html, services.html: team, Contact and travel service pages.
-js/about-services.js, css/ablstyle.css: progress, counters, spinner and forms.
-hotel-detail.html, booking.html: selected hotel and booking workflow.
-js/booking.js, css/style.css: hotel details, validation and booking summary.
-js/hotels.js: shared data for the three example hotels.
-js/common.js, css/common.css: notifications, clipboard and lazy loading.
-image/: local images, placeholder.svg and the click.mp3 sound.
-Assignment6_Report.pdf: report with VS Code screenshots, website results and the site URL.
-Assignment6_Report.docx: editable Word version of the same report.
-EXPLANATION_RU.txt: a detailed Russian explanation and defense walkthrough.
+NINE CONNECTED PAGES
+index.html          Home, destination search, FAQ, saved newsletter preference
+search-results.html Live search, amenity/category filters, sorting and favourites
+hotel-detail.html   Selected hotel, gallery, amenities, weather and booking link
+booking.html        Three steps: stay, guest details, review and confirmation
+services.html       Travel services and a dynamic price estimator
+about.html          Project purpose, original team and local contact draft form
+signup.html         Local demo registration with JavaScript validation
+login.html          Local credential check and redirect to profile
+profile.html        Account details, saved stays, bookings and cancellation
 
-PROJECT LINKS
-Shared repository: https://github.com/jjestar/web
-GitHub Pages: https://jjestar.github.io/web
+HOW TO DEMONSTRATE
+1. On Home, choose Miami and any future check-in/check-out dates, then 2 guests.
+2. Search results update instantly with text, category and amenity filters.
+   Try 'pool', 'Astana', 'Paris' or an unmatched word; Clear filters resets them.
+   Sorting and filters persist. The heart buttons save favourites.
+3. Open Ocean View Resort. The selected stay and dates reach the booking page.
+   Open-Meteo shows current weather plus three days, with loading/error/retry.
+4. Choose Deluxe and Car rental. For 3 nights: ($220+$40)*3 + $55*3 = $945.
+5. Invalid/empty inputs show errors below fields. Continue to Review.
+6. Create a demo account using invented details. A password such as Travel2026!
+   demonstrates uppercase, lowercase, digit and symbol checks. Do not reuse a
+   real password. Registration/login opens Profile. Continue booking returns
+   to the chosen trip with the entered information preserved.
+7. Confirm the demo acknowledgement and save. The profile shows the booking.
+   Cancel requires an explicit inline confirmation; keeping it is also possible.
+8. Toggle the sun/moon button, change page and reload. The appearance persists.
+9. In Services, compare transfer ($35 once), car ($55/day), tour ($45/person).
+   Continue to booking keeps the selected service. Final cost uses trip dates
+   and guests, as explained beside the estimator.
+10. Contact saves a local draft, validates the selected reply method and can
+    download a TXT copy. Newsletter also saves locally; neither sends email.
 
-DEMO NOTICE
-This is a frontend coursework project. No account, payment, reservation,
-message or email is created or sent. Use invented data when testing forms.
-Copy buttons copy the selected visible text to your device clipboard.
+STORAGE AND AUTHENTICATION
+All state uses localStorage with the bookingapp. prefix. Users are separate
+records; the current session stores only userId. Passwords are stored as salted
+SHA-256 digests rather than readable passwords. Authentication is a coursework
+simulation, not a secure production identity system. Browser storage can be
+inspected or changed by its owner and is not synchronized to other devices.
+Keys include users, session, theme, search, filters, favorites.<userId>, bookings,
+bookingDraft, pendingBookingUrl, contactDraft and newsletter.
+Clearing this site's browser storage removes all locally saved information.
+
+JAVASCRIPT VALIDATION
+All forms use novalidate. Application code checks required values, email syntax,
+password length/complexity, matching confirmation, international phone format,
+future dates, date order, integer guest counts and service quantities.
+No required, pattern, minlength, maxlength, min, max or type=email attributes
+are used as the validation mechanism. Errors appear beside fields; focus moves
+to the first invalid field. Authentication and storage errors remain visible.
+
+API
+Open-Meteo Forecast API: https://open-meteo.com/en/docs
+GET https://api.open-meteo.com/v1/forecast
+Uses each hotel's coordinates with current temperature/weather code and three
+calendar days of weather code/min/max temperature. Requests use fetch and
+async/await, a 12-second AbortController timeout, HTTP/response checks, a loading
+state and retry UI. Attribution links to Open-Meteo. The forecast is current,
+not the weather on the selected booking dates. No API key is shipped.
+
+FILE ORGANIZATION
+css/site.css             Shared tokens, page components, responsive/dark modes
+js/theme-init.js         Appearance applied before first paint
+js/common.js             Shared helpers, storage, validation, nav, notifications
+js/hotels.js             Six illustrative listings and selected-hotel lookup
+js/script.js             Home and dynamic search/filter behaviour
+js/auth.js               Registration, login, profile, saved stays, cancellation
+js/booking.js            Hotel details, trip continuity, booking and pricing
+js/weather.js            Open-Meteo request and loading/error/success states
+js/about-services.js     Contact drafts and service estimator
+image/                   Local photos, SVG logo variants and matching favicon
+archive/                 Previous assignment reports and explanation (historical)
+
+DESIGN AND ACCESSIBILITY
+The home page pairs a Paris destination feature with an immediately usable
+search form. Photo captions identify the destination, listing and nightly rate.
+Search results use comparison rows; services and destination photos use open
+layouts. Interface headings use the system sans-serif; destination names use
+Georgia. Photos are illustrative, with descriptions matched to their subjects.
+The custom logo combines a destination pin and a doorway. The BookingApp
+wordmark has no trailing punctuation; the mark adapts to both color themes.
+CSS Grid and Flexbox; responsive layouts; persistent light/dark semantic colors;
+visible focus; labelled form controls; skip link; mobile navigation with Escape;
+aria-live feedback; native keyboard-friendly FAQ; reduced-motion support.
+Shared spacing follows a 4px rhythm with small 2px control adjustments. Prices
+use tabular figures. Hover feedback changes color without moving hotel cards;
+button press feedback respects reduced motion. Form boundaries have a separate
+contrast token. Error notices stay visible until dismissed, and mobile menu
+focus enters its first link. Theme changes suppress intermediate transitions.
+No third-party UI framework, external font, tracking script or backend required.
+
+VERIFICATION
+Browser tests covered all 9 pages at 360, 390, 768 and 1440 CSS pixels in light
+and dark modes; no horizontal overflow, missing local images or JS errors were
+found. Tested the full signup/login/profile/booking/cancel journey, invalid
+forms, filters, persistence, service estimates, contact draft/download and
+Open-Meteo success plus simulated failure/retry. Test data is not bundled.
+116 additional layout/interaction checks passed at 320 and 640px in both themes,
+including expanded forms, booking review, long account names and notifications.
+Measured field-border
+contrast: 3.67:1 light and 4.46:1 dark; primary-button text: 7.00:1 and 8.42:1.
+
+HOSTING
+GitHub Pages serves the main branch from the repository root. .nojekyll keeps
+static files served directly. Open index.html as the entry point. Relative links
+work under /web/. Push completed changes to main to update the hosted website.
+
+TEAM
+The original project records these roles:
+Allazhar Aldongarov — Frontend Developer
+Dias Serikov — UI Designer
+Yerkenov Abylay — Content and Testing
+The report describes final features as shared project work, without assigning
+unverified individual authorship of later changes.
+
+SUBMISSION
+Each student submits the complete project ZIP, the final PDF report and the TXT
+with both links in Moodle FINAL EXAM FOLDER. Presentation: up to 5 minutes;
+every team member participates. Deadline: 18 November 2026, 23:59.

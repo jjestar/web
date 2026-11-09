@@ -1,209 +1,360 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BookingApp - Find Your Next Stay</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/allstyle.css">
-    <link rel="stylesheet" href="css/common.css">
-    <script src="https://code.jquery.com/jquery-4.0.0.min.js" defer></script>
-    <script src="js/common.js" defer></script>
-    <script src="js/script.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-2" aria-label="Main navigation">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+            name="description"
+            content="BookingApp: explore illustrative stays, compare amenities and plan your next trip. A responsive student travel project."
+        />
+        <meta name="theme-color" content="#214fc6" />
+        <title>Compare stays and plan a trip | BookingApp</title>
+        <link rel="icon" href="image/favicon.svg" type="image/svg+xml" />
+        <script src="js/theme-init.js"></script>
+        <link rel="stylesheet" href="css/site.css" />
+        <script src="js/common.js" defer></script>
+        <script src="js/hotels.js" defer></script>
+        <script src="js/auth.js" defer></script>
+        <script src="js/script.js" defer></script>
+    </head>
+    <body data-page="index">
+        <a class="skip-link" href="#main-content">Skip to content</a>
+        <header class="site-header">
+            <div class="container header-inner">
+                <a href="index.html" class="brand" aria-label="BookingApp home"
+                    ><svg class="brand-mark" viewBox="0 0 32 32" width="36" height="36" aria-hidden="true">
+                        <path
+                            fill="currentColor"
+                            fill-rule="evenodd"
+                            d="M16 2C9.37 2 4 7.15 4 13.5c0 7.5 10.58 15.72 11.03 16.06a1.6 1.6 0 0 0 1.94 0C17.42 29.22 28 21 28 13.5 28 7.15 22.63 2 16 2Zm-4 9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10h-8Z"
+                        /></svg
+                    >BookingApp</a
+                >
+                <nav id="main-nav" class="main-nav" aria-label="Main navigation">
+                    <a href="search-results.html">Explore stays</a><a href="services.html">Travel services</a
+                    ><a href="about.html">About</a>
+                </nav>
+                <div class="header-actions">
+                    <button
+                        id="theme-toggle"
+                        class="icon-button"
+                        type="button"
+                        aria-label="Switch to dark mode"
+                        aria-pressed="false"
+                    >
+                        <span data-icon="moon"></span></button
+                    ><a class="account-link" href="login.html" data-account-link
+                        ><span data-icon="user"></span><span>Log in</span></a
+                    ><button
+                        id="menu-toggle"
+                        class="icon-button menu-toggle"
+                        type="button"
+                        aria-label="Toggle navigation"
+                        aria-controls="main-nav"
+                        aria-expanded="false"
+                    >
+                        <span data-icon="menu"></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <main id="main-content">
+            <section class="container home-intro" aria-labelledby="find-heading">
+                <div class="search-panel">
+                    <div class="search-heading">
+                        <p class="collection-label">The BookingApp collection</p>
+                        <h1 id="find-heading"><span>Find your</span> <span>next stay</span></h1>
+                        <p class="muted">
+                            Choose a destination and dates. Compare rooms and prices before saving your trip.
+                        </p>
+                    </div>
+                    <form id="home-search" novalidate>
+                        <div class="search-grid">
+                            <div class="field">
+                                <label for="destination">Destination</label
+                                ><input
+                                    id="destination"
+                                    name="destination"
+                                    type="text"
+                                    list="destination-options"
+                                    placeholder="Paris, Dubai or Astana"
+                                    autocomplete="off"
+                                /><datalist id="destination-options">
+                                    <option value="Astana"></option>
+                                    <option value="Almaty"></option>
+                                    <option value="Miami"></option>
+                                    <option value="Paris"></option>
+                                    <option value="Dubai"></option>
+                                    <option value="Maldives"></option>
+                                </datalist>
+                            </div>
+                            <div class="field">
+                                <label for="checkin">Check-in</label
+                                ><input id="checkin" name="checkin" type="date" />
+                            </div>
+                            <div class="field">
+                                <label for="checkout">Check-out</label
+                                ><input id="checkout" name="checkout" type="date" />
+                            </div>
+                            <div class="field">
+                                <label for="guests">Guests</label
+                                ><select id="guests" name="guests">
+                                    <option value="1">1 guest</option>
+                                    <option value="2" selected>2 guests</option>
+                                    <option value="3">3 guests</option>
+                                    <option value="4">4 guests</option>
+                                    <option value="5">5 guests</option>
+                                    <option value="6">6 guests</option>
+                                </select>
+                            </div>
+                            <button class="button button-primary" type="submit">
+                                <span data-icon="search"></span>Find a stay
+                            </button>
+                        </div>
+                        <p class="form-status" id="home-search-status" role="status"></p>
+                    </form>
+                    <p class="search-footnote">Six destinations · All prices in USD</p>
+                </div>
+                <figure class="featured-stay">
+                    <a
+                        class="featured-photo"
+                        href="hotel-detail.html?hotel=paris-atelier"
+                        aria-label="Explore Atelier Paris Stay in Paris"
+                    >
+                        <img
+                            src="image/destination-4.jpg"
+                            alt="Lamps along an ornate Paris bridge at dusk"
+                            width="1200"
+                            height="849"
+                            fetchpriority="high"
+                        />
+                    </a>
+                    <figcaption class="featured-caption">
+                        <div>
+                            <p class="collection-label">France</p>
+                            <h2>Paris</h2>
+                        </div>
+                        <div class="featured-rate">
+                            <p>Atelier Paris Stay</p>
+                            <span>From <strong>$175</strong> / night</span>
+                        </div>
+                        <a
+                            class="feature-link"
+                            href="hotel-detail.html?hotel=paris-atelier"
+                            aria-label="View Atelier Paris Stay"
+                            ><span data-icon="arrow"></span
+                        ></a>
+                    </figcaption>
+                </figure>
+            </section>
+            <section class="container destinations" aria-labelledby="destinations-heading">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="destinations-heading">City streets or sea air</h2>
+                        <p class="muted">
+                            Three places to start. Explore the full collection to compare all six stays.
+                        </p>
+                    </div>
+                    <a class="button button-ghost" href="search-results.html"
+                        >Explore all stays <span data-icon="arrow"></span
+                    ></a>
+                </div>
+                <div class="grid-3">
+                    <a class="destination-card" href="search-results.html?destination=Paris"
+                        ><img
+                            src="image/destination-4.jpg"
+                            alt="An ornate Paris bridge illuminated at dusk"
+                            width="400"
+                            height="305"
+                            loading="lazy" />
+                        <div class="destination-caption">
+                            <div>
+                                <h3>Paris</h3>
+                                <p>Atelier Paris Stay · From $175 / night</p>
+                            </div>
+                            <span data-icon="arrow"></span></div
+                    ></a>
+                    <a class="destination-card" href="search-results.html?destination=Dubai"
+                        ><img
+                            src="image/destination-5.jpg"
+                            alt="Dubai skyline in warm evening light"
+                            width="400"
+                            height="305"
+                            loading="lazy" />
+                        <div class="destination-caption">
+                            <div>
+                                <h3>Dubai</h3>
+                                <p>Harbour House Dubai · From $195 / night</p>
+                            </div>
+                            <span data-icon="arrow"></span></div
+                    ></a>
+                    <a class="destination-card" href="search-results.html?destination=Maldives"
+                        ><img
+                            src="image/destination-1.jpg"
+                            alt="Sunlight over a tropical beach"
+                            width="400"
+                            height="305"
+                            loading="lazy" />
+                        <div class="destination-caption">
+                            <div>
+                                <h3>Maldives</h3>
+                                <p>Island Retreat · From $285 / night</p>
+                            </div>
+                            <span data-icon="arrow"></span></div
+                    ></a>
+                </div>
+                <div class="benefits">
+                    <div class="benefit">
+                        <div class="benefit-icon" data-icon="search"></div>
+                        <div>
+                            <h3>Compare stays</h3>
+                            <p>Filter by amenities and sort by nightly price.</p>
+                        </div>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon" data-icon="heart"></div>
+                        <div>
+                            <h3>Save stays</h3>
+                            <p>Build a shortlist and return to it in My trips.</p>
+                        </div>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon" data-icon="sun"></div>
+                        <div>
+                            <h3>Check the forecast</h3>
+                            <p>See current weather and a three-day forecast.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="container story-banner" aria-labelledby="story-heading">
+                <img
+                    src="image/destination-6.jpg"
+                    alt="A camera, map and travel notebook"
+                    width="600"
+                    height="350"
+                    loading="lazy"
+                />
+                <div>
+                    <h2 id="story-heading">Add transport or a tour</h2>
+                    <p class="lead">
+                        Estimate an airport transfer, rental car, or guided city tour, then add one to your
+                        demo booking.
+                    </p>
+                    <a class="button button-primary" href="services.html"
+                        >Explore travel services <span data-icon="arrow"></span
+                    ></a>
+                </div>
+            </section>
+            <section class="container" aria-labelledby="faq-heading">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="faq-heading">Booking questions</h2>
+                    </div>
+                    <a class="button button-ghost" href="about.html#contact"
+                        >Open the contact form <span data-icon="arrow"></span
+                    ></a>
+                </div>
+                <div class="faq-list">
+                    <details>
+                        <summary>Is this a real booking service?</summary>
+                        <p>
+                            BookingApp is a student travel project. The stays and prices are illustrative. You
+                            can explore, create a local demo account and save a demo trip, but no real
+                            reservation or payment is made.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>Where are my saved stays and trips?</summary>
+                        <p>
+                            Log in and open My trips to see your saved stays and demo bookings. Your data
+                            stays in this browser. Clearing browser storage removes it; it does not sync
+                            between devices.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>Can I cancel a demo booking?</summary>
+                        <p>
+                            Yes. Open your profile, find the trip and choose Cancel booking. You will be asked
+                            to confirm before its status changes.
+                        </p>
+                    </details>
+                </div>
+            </section>
+            <section class="container">
+                <div class="newsletter">
+                    <div>
+                        <h2>Save an email preference</h2>
+                        <p>
+                            Save a newsletter preference on this device. This student demo does not send
+                            emails.
+                        </p>
+                    </div>
+                    <form id="subscribe-form" novalidate>
+                        <div class="inline">
+                            <div class="field">
+                                <label for="subscribe-email">Email address</label
+                                ><input
+                                    id="subscribe-email"
+                                    type="text"
+                                    inputmode="email"
+                                    autocomplete="email"
+                                    placeholder="you@example.com"
+                                />
+                            </div>
+                            <button type="submit" class="button button-primary">
+                                Save preference <span data-icon="arrow"></span>
+                            </button>
+                        </div>
+                        <p id="subscribe-status" class="form-status" role="status"></p>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
             <div class="container">
-                <a class="navbar-brand fw-bold" href="index.html">BookingApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="mainNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="search-results.html">Search</a></li>
-                        <li class="nav-item"><a class="nav-link" href="hotel-detail.html">Hotel Details</a></li>
-                        <li class="nav-item"><a class="nav-link" href="booking.html">Booking</a></li>
-                        <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
-                        <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <main class="container py-4 px-sm-2 px-lg-3 mt-lg-4">
-        <section class="mb-5" aria-labelledby="destinations-heading">
-            <h1 id="destinations-heading" class="text-center fw-bold mb-4">Explore Popular Destinations</h1>
-            <div id="destinationCarousel" class="carousel slide shadow rounded overflow-hidden" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#destinationCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Destinations 1 to 3"></button>
-                    <button type="button" data-bs-target="#destinationCarousel" data-bs-slide-to="1" aria-label="Destinations 4 to 6"></button>
-                    <button type="button" data-bs-target="#destinationCarousel" data-bs-slide-to="2" aria-label="Destinations 7 to 9"></button>
-                </div>
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="row g-0">
-                            <div class="col-4"><img src="image/destination-1.jpg" class="d-block w-100 carousel-image" alt="Tropical beach destination"></div>
-                            <div class="col-4"><img src="image/destination-2.jpg" class="d-block w-100 carousel-image" alt="Mountain travel destination"></div>
-                            <div class="col-4"><img src="image/destination-3.jpg" class="d-block w-100 carousel-image" alt="Modern hotel room"></div>
-                        </div>
-                        <div class="carousel-caption bg-dark bg-opacity-75 rounded p-2">
-                            <h2 class="h5 mb-0">Beach, Mountains, and Comfort</h2>
-                        </div>
+                <div class="footer-top">
+                    <div>
+                        <a href="index.html" class="brand"
+                            ><svg
+                                class="brand-mark"
+                                viewBox="0 0 32 32"
+                                width="36"
+                                height="36"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    fill="currentColor"
+                                    fill-rule="evenodd"
+                                    d="M16 2C9.37 2 4 7.15 4 13.5c0 7.5 10.58 15.72 11.03 16.06a1.6 1.6 0 0 0 1.94 0C17.42 29.22 28 21 28 13.5 28 7.15 22.63 2 16 2Zm-4 9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10h-8Z"
+                                /></svg
+                            >BookingApp</a
+                        >
+                        <p>Compare stays, check the weather,<br />and keep your travel plans together.</p>
                     </div>
-                    <div class="carousel-item">
-                        <div class="row g-0">
-                            <div class="col-4"><img src="image/destination-4.jpg" class="d-block w-100 carousel-image" alt="Paris city destination"></div>
-                            <div class="col-4"><img src="image/destination-5.jpg" class="d-block w-100 carousel-image" alt="Dubai skyline destination"></div>
-                            <div class="col-4"><img src="image/destination-6.jpg" class="d-block w-100 carousel-image" alt="Traveler looking at a map"></div>
-                        </div>
-                        <div class="carousel-caption bg-dark bg-opacity-75 rounded p-2">
-                            <h2 class="h5 mb-0">City Breaks and New Adventures</h2>
-                        </div>
+                    <div class="footer-links">
+                        <h3>Explore</h3>
+                        <a href="search-results.html">All stays</a
+                        ><a href="hotel-detail.html?hotel=grand-palace">Featured stay</a
+                        ><a href="services.html">Travel services</a><a href="booking.html">Plan a trip</a>
                     </div>
-                    <div class="carousel-item">
-                        <div class="row g-0">
-                            <div class="col-4"><img src="image/destination-7.jpg" class="d-block w-100 carousel-image" alt="Luxury hotel exterior"></div>
-                            <div class="col-4"><img src="image/destination-8.jpg" class="d-block w-100 carousel-image" alt="Resort swimming pool"></div>
-                            <div class="col-4"><img src="image/destination-9.jpg" class="d-block w-100 carousel-image" alt="Hotel beside a swimming pool"></div>
-                        </div>
-                        <div class="carousel-caption bg-dark bg-opacity-75 rounded p-2">
-                            <h2 class="h5 mb-0">Hotels and Relaxing Resorts</h2>
-                        </div>
+                    <div class="footer-links">
+                        <h3>Account and help</h3>
+                        <a href="about.html">Our team</a><a href="about.html#contact">Contact us</a
+                        ><a href="signup.html">Create an account</a
+                        ><a href="profile.html">My trips &amp; saved stays</a>
                     </div>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#destinationCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#destinationCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
-        </section>
-
-        <section class="bg-white rounded shadow-sm p-3 p-md-4 mb-5" aria-labelledby="search-heading">
-            <h2 id="search-heading" class="fw-bold mb-2">Find your next stay</h2>
-            <p class="text-secondary mb-4">Search hotels, homes, and resorts for your next trip.</p>
-            <form action="search-results.html" method="get" class="row g-3">
-                <div class="col-12 col-md-6 col-lg-5">
-                    <label class="form-label" for="destination">Destination</label>
-                    <input type="text" class="form-control" id="destination" name="destination" placeholder="Try Astana, Miami, or Almaty" required>
-                </div>
-                <div class="col-12 col-md-6 col-lg-2">
-                    <label class="form-label" for="checkin">Check-in</label>
-                    <input type="date" class="form-control" id="checkin" name="checkin" required>
-                </div>
-                <div class="col-12 col-md-6 col-lg-2">
-                    <label class="form-label" for="checkout">Check-out</label>
-                    <input type="date" class="form-control" id="checkout" name="checkout" required>
-                </div>
-                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary btn-lg w-100">Search Hotels</button>
-                </div>
-            </form>
-        </section>
-
-        <section class="mb-5" aria-labelledby="trending-heading">
-            <h2 id="trending-heading" class="fw-bold mb-3">Trending Destinations</h2>
-            <div class="card-group gap-3">
-                <article class="card shadow-sm rounded overflow-hidden">
-                    <img src="image/destination-4.jpg" class="card-img-top destination-image" alt="Paris city view">
-                    <div class="card-body">
-                        <h3 class="card-title h5">Paris</h3>
-                        <p class="card-text text-secondary">Enjoy famous landmarks, cafes, and beautiful streets.</p>
-                        <a href="search-results.html" class="btn btn-outline-primary btn-sm">View Hotels</a>
-                    </div>
-                </article>
-                <article class="card shadow-sm rounded overflow-hidden">
-                    <img src="image/destination-5.jpg" class="card-img-top destination-image" alt="Dubai city view">
-                    <div class="card-body">
-                        <h3 class="card-title h5">Dubai</h3>
-                        <p class="card-text text-secondary">Discover modern architecture, beaches, and shopping.</p>
-                        <a href="search-results.html" class="btn btn-outline-primary btn-sm">View Hotels</a>
-                    </div>
-                </article>
-                <article class="card shadow-sm rounded overflow-hidden">
-                    <img src="image/destination-1.jpg" class="card-img-top destination-image" alt="Tropical island beach">
-                    <div class="card-body">
-                        <h3 class="card-title h5">Maldives</h3>
-                        <p class="card-text text-secondary">Relax near clear water in a peaceful island resort.</p>
-                        <a href="search-results.html" class="btn btn-outline-primary btn-sm">View Hotels</a>
-                    </div>
-                </article>
-            </div>
-        </section>
-
-        <section class="row g-4" aria-label="BookingApp benefits">
-            <div class="col-12 col-lg-6">
-                <div class="bg-white rounded shadow-sm p-4 h-100">
-                    <h2 class="h4 fw-bold mb-3">Why Choose BookingApp?</h2>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Free cancellation on most rooms</li>
-                        <li class="list-group-item">Hotels and resorts for every budget</li>
-                        <li class="list-group-item">Clear prices with no hidden charges</li>
-                    </ul>
+                <div class="footer-bottom">
+                    <p>© 2026 BookingApp · SE-2513</p>
+                    <p>Student project. Illustrative stays. No real reservations or payments.</p>
                 </div>
             </div>
-            <div class="col-12 col-lg-6">
-                <div class="bg-primary text-white rounded shadow-sm p-4 h-100">
-                    <h2 class="h4 fw-bold mb-3">Need Help?</h2>
-                    <p>Our support team can help with hotels, transfers, and booking questions.</p>
-                    <a href="about.html#contact" class="btn btn-light btn-lg">Contact Us</a>
-                </div>
-            </div>
-        </section>
-    </main>
-    <div class="container my-3 text-end text-muted small">
-        Current Date & Time: <span id="current-date-time" class="fw-bold text-primary"></span>
-    </div>
-
-    <div class="container text-center mb-4">
-        <button id="change-bg-btn" class="btn btn-outline-secondary btn-sm">Change Background Theme</button>
-        <button id="open-popup-btn" class="btn btn-warning btn-sm ms-2">Subscribe for Discounts</button>
-    </div>
-
-    <section class="container my-5">
-        <h2 class="h4 fw-bold mb-3">Frequently Asked Questions (FAQ)</h2>
-        <div class="custom-accordion">
-            <div class="accordion-item mb-2 border rounded">
-                <button type="button" aria-expanded="false" class="accordion-header w-100 text-start p-3 bg-light border-0 fw-bold">How do I cancel my booking?</button>
-                <div class="accordion-content px-3 overflow-hidden" aria-hidden="true">
-                    <p class="py-2 m-0 text-muted">This is a demo website. For a real booking, cancellation rules would be shown in your confirmation email.</p>
-                </div>
-            </div>
-            <div class="accordion-item mb-2 border rounded">
-                <button type="button" aria-expanded="false" class="accordion-header w-100 text-start p-3 bg-light border-0 fw-bold">Is breakfast included in the price?</button>
-                <div class="accordion-content px-3 overflow-hidden" aria-hidden="true">
-                    <p class="py-2 m-0 text-muted">Check the hotel description before booking. Ocean View Resort includes breakfast in the example search results.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div id="popup-modal" class="popup-overlay" hidden>
-        <div class="popup-content bg-white p-4 rounded shadow-lg position-relative" role="dialog" aria-modal="true" aria-labelledby="popup-title">
-            <button id="close-popup-btn" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close"></button>
-            <h3 id="popup-title" class="h5 fw-bold mb-3">Subscribe to Newsletter</h3>
-            <p class="small text-secondary">Get hotel offers by email.</p>
-            <form id="subscribe-form" novalidate>
-                <div class="mb-3">
-                    <label for="popup-email" class="form-label">Email Address</label>
-                    <input type="email" id="popup-email" class="form-control" placeholder="name@example.com" required aria-describedby="email-error">
-                    <small id="email-error" class="text-danger" role="alert" hidden></small>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Subscribe</button>
-                <p id="subscribe-status" class="text-success small mt-3 mb-0" role="status"></p>
-            </form>
-        </div>
-    </div>
-
-    <footer class="bg-dark text-white text-center py-3 mt-5">
-        <p class="mb-0">&copy; 2026 BookingApp. Created by: Allazhar Aldongarov, Dias Serikov, Yerkenov Abylay</p>
-    </footer>
-</body>
+        </footer>
+        <div id="notification" class="notification" role="status" aria-live="polite" hidden></div>
+        <noscript
+            ><p class="container">Enable JavaScript for search, accounts, and demo bookings.</p></noscript
+        >
+    </body>
 </html>

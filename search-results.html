@@ -1,121 +1,190 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BookingApp - Search Results</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/allstyle.css">
-    <link rel="stylesheet" href="css/common.css">
-    <script src="https://code.jquery.com/jquery-4.0.0.min.js" defer></script>
-    <script src="js/hotels.js" defer></script>
-    <script src="js/common.js" defer></script>
-    <script src="js/script.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-2" aria-label="Main navigation">
-            <div class="container">
-                <a class="navbar-brand fw-bold" href="index.html">BookingApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="mainNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="search-results.html">Search</a></li>
-                        <li class="nav-item"><a class="nav-link" href="hotel-detail.html">Hotel Details</a></li>
-                        <li class="nav-item"><a class="nav-link" href="booking.html">Booking</a></li>
-                        <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
-                        <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
-                    </ul>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+            name="description"
+            content="BookingApp: explore illustrative stays, compare amenities and plan your next trip. A responsive student travel project."
+        />
+        <meta name="theme-color" content="#214fc6" />
+        <title>Explore stays | BookingApp</title>
+        <link rel="icon" href="image/favicon.svg" type="image/svg+xml" />
+        <script src="js/theme-init.js"></script>
+        <link rel="stylesheet" href="css/site.css" />
+        <script src="js/common.js" defer></script>
+        <script src="js/hotels.js" defer></script>
+        <script src="js/auth.js" defer></script>
+        <script src="js/script.js" defer></script>
+    </head>
+    <body data-page="search-results">
+        <a class="skip-link" href="#main-content">Skip to content</a>
+        <header class="site-header">
+            <div class="container header-inner">
+                <a href="index.html" class="brand" aria-label="BookingApp home"
+                    ><svg class="brand-mark" viewBox="0 0 32 32" width="36" height="36" aria-hidden="true">
+                        <path
+                            fill="currentColor"
+                            fill-rule="evenodd"
+                            d="M16 2C9.37 2 4 7.15 4 13.5c0 7.5 10.58 15.72 11.03 16.06a1.6 1.6 0 0 0 1.94 0C17.42 29.22 28 21 28 13.5 28 7.15 22.63 2 16 2Zm-4 9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10h-8Z"
+                        /></svg
+                    >BookingApp</a
+                >
+                <nav id="main-nav" class="main-nav" aria-label="Main navigation">
+                    <a href="search-results.html" aria-current="page">Explore stays</a
+                    ><a href="services.html">Travel services</a><a href="about.html">About</a>
+                </nav>
+                <div class="header-actions">
+                    <button
+                        id="theme-toggle"
+                        class="icon-button"
+                        type="button"
+                        aria-label="Switch to dark mode"
+                        aria-pressed="false"
+                    >
+                        <span data-icon="moon"></span></button
+                    ><a class="account-link" href="login.html" data-account-link
+                        ><span data-icon="user"></span><span>Log in</span></a
+                    ><button
+                        id="menu-toggle"
+                        class="icon-button menu-toggle"
+                        type="button"
+                        aria-label="Toggle navigation"
+                        aria-controls="main-nav"
+                        aria-expanded="false"
+                    >
+                        <span data-icon="menu"></span>
+                    </button>
                 </div>
             </div>
-        </nav>
-    </header>
+        </header>
+        <main id="main-content" class="container">
+            <header class="page-heading">
+                <p class="eyebrow">The stay collection</p>
+                <h1>Explore stays</h1>
+                <p class="lead">
+                    Compare six demo stays by destination, amenities, hotel category, and nightly price.
+                </p>
+                <p id="search-trip-context" class="small muted"></p>
+            </header>
+            <div class="search-layout">
+                <aside class="panel filter-panel" aria-labelledby="filters-heading">
+                    <h2 id="filters-heading">Filter stays</h2>
+                    <form id="filter-form" class="stack" novalidate>
+                        <div class="field">
+                            <label for="hotel-search">Where to?</label
+                            ><input
+                                id="hotel-search"
+                                name="query"
+                                type="search"
+                                placeholder="Paris, pool or Grand Palace"
+                                autocomplete="off"
+                                list="search-cities"
+                            /><datalist id="search-cities">
+                                <option value="Astana"></option>
+                                <option value="Almaty"></option>
+                                <option value="Miami"></option>
+                                <option value="Paris"></option>
+                                <option value="Dubai"></option>
+                                <option value="Maldives"></option>
+                            </datalist>
+                        </div>
+                        <fieldset>
+                            <legend>Hotel category</legend>
+                            <label class="check-row"
+                                ><input type="radio" name="rating" value="all" checked />All categories</label
+                            ><label class="check-row"
+                                ><input type="radio" name="rating" value="4" />4 stars &amp; above</label
+                            ><label class="check-row"
+                                ><input type="radio" name="rating" value="5" />5 stars</label
+                            >
+                        </fieldset>
+                        <fieldset>
+                            <legend>Amenities</legend>
+                            <label class="check-row"><input type="checkbox" id="wifi" />Wi-Fi</label
+                            ><label class="check-row"><input type="checkbox" id="pool" />Pool</label
+                            ><label class="check-row"
+                                ><input type="checkbox" id="breakfast" />Breakfast included</label
+                            ><label class="check-row"
+                                ><input type="checkbox" id="saved-only" />Saved stays only</label
+                            >
+                        </fieldset>
+                        <div class="filter-buttons">
+                            <button type="submit" class="button button-primary">Apply filters</button
+                            ><button type="reset" class="button button-secondary">Clear filters</button>
+                        </div>
+                    </form>
+                </aside>
+                <section aria-labelledby="results-count">
+                    <div class="results-toolbar">
+                        <h2 id="results-count" aria-live="polite" aria-atomic="true">Loading stays…</h2>
+                        <div class="field">
+                            <label for="sort-hotels">Sort by</label
+                            ><select id="sort-hotels">
+                                <option value="recommended">Recommended</option>
+                                <option value="price-asc">Price: low to high</option>
+                                <option value="price-desc">Price: high to low</option>
+                                <option value="rating">Hotel category</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="hotels-container" class="hotel-grid"></div>
+                    <noscript
+                        ><p class="empty-state">
+                            Enable JavaScript to search and compare the demo stays.
+                        </p></noscript
+                    >
+                    <p class="results-note">
+                        Prices are illustrative, in USD per room per night. Star categories describe demo
+                        listings, not guest reviews.
+                    </p>
+                </section>
+            </div>
+        </main>
 
-    <main class="container py-4 px-sm-2 px-lg-3 mt-lg-4">
-        <h1 class="fw-bold mb-4">Search Results</h1>
-        <div class="row g-4">
-            <aside class="col-12 col-md-4 col-lg-3">
-                <form id="filter-form" class="bg-white rounded shadow-sm p-3 p-lg-4" aria-label="Hotel filters">
-                    <h2 class="h5 fw-bold mb-3">Filter Hotels</h2>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" id="wifi">
-                        <label class="form-check-label" for="wifi">Free Wi-Fi</label>
+        <footer class="site-footer">
+            <div class="container">
+                <div class="footer-top">
+                    <div>
+                        <a href="index.html" class="brand"
+                            ><svg
+                                class="brand-mark"
+                                viewBox="0 0 32 32"
+                                width="36"
+                                height="36"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    fill="currentColor"
+                                    fill-rule="evenodd"
+                                    d="M16 2C9.37 2 4 7.15 4 13.5c0 7.5 10.58 15.72 11.03 16.06a1.6 1.6 0 0 0 1.94 0C17.42 29.22 28 21 28 13.5 28 7.15 22.63 2 16 2Zm-4 9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10h-8Z"
+                                /></svg
+                            >BookingApp</a
+                        >
+                        <p>Compare stays, check the weather,<br />and keep your travel plans together.</p>
                     </div>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="checkbox" id="pool">
-                        <label class="form-check-label" for="pool">Swimming pool</label>
+                    <div class="footer-links">
+                        <h3>Explore</h3>
+                        <a href="search-results.html">All stays</a
+                        ><a href="hotel-detail.html?hotel=grand-palace">Featured stay</a
+                        ><a href="services.html">Travel services</a><a href="booking.html">Plan a trip</a>
                     </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="breakfast">
-                        <label class="form-check-label" for="breakfast">Breakfast included</label>
+                    <div class="footer-links">
+                        <h3>Account and help</h3>
+                        <a href="about.html">Our team</a><a href="about.html#contact">Contact us</a
+                        ><a href="signup.html">Create an account</a
+                        ><a href="profile.html">My trips &amp; saved stays</a>
                     </div>
-                    <fieldset class="mb-3">
-                        <legend class="h6">Minimum rating</legend>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="rating" id="rating-all" value="all" checked>
-                            <label class="form-check-label" for="rating-all">Any rating</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="rating" id="rating4" value="4">
-                            <label class="form-check-label" for="rating4">4 stars</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="rating" id="rating5" value="5">
-                            <label class="form-check-label" for="rating5">5 stars</label>
-                        </div>
-                    </fieldset>
-                    <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
-                    <button type="reset" class="btn btn-outline-secondary w-100 mt-2">Clear Filters</button>
-                </form>
-            </aside>
-
-            <section class="col-12 col-md-8 col-lg-9" aria-labelledby="available-hotels">
-                <h2 id="available-hotels" class="visually-hidden">Available hotels</h2>
-                <div class="bg-white rounded shadow-sm p-3 mb-3">
-                    <label for="hotel-search" class="form-label fw-bold">Find a hotel</label>
-                    <div class="hotel-search-box">
-                        <input type="search" id="hotel-search" class="form-control" placeholder="Type a hotel name, city, or keyword" autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" aria-controls="search-suggestions" aria-describedby="search-help">
-                        <ul id="search-suggestions" class="search-suggestions" role="listbox" aria-label="Hotel and city suggestions" hidden></ul>
-                    </div>
-                    <p id="search-help" class="small text-secondary mt-2 mb-0">Results update as you type. Use the arrow keys and Enter to choose a suggestion.</p>
                 </div>
-                <p id="results-count" class="text-secondary mb-3" role="status"></p>
-                <div id="hotels-container"></div>
-            </section>
-        </div>
-    </main>
-    <div class="container my-3 text-end text-muted small">
-        Current Date & Time: <span id="current-date-time" class="fw-bold text-primary"></span>
-    </div>
-
-    <div class="container text-center mb-4">
-        <button id="change-bg-btn" class="btn btn-outline-secondary btn-sm">Change Background Theme</button>
-        <button id="open-popup-btn" class="btn btn-warning btn-sm ms-2">Subscribe for Discounts</button>
-    </div>
-
-    <div id="popup-modal" class="popup-overlay" hidden>
-        <div class="popup-content bg-white p-4 rounded shadow-lg position-relative" role="dialog" aria-modal="true" aria-labelledby="popup-title">
-            <button id="close-popup-btn" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close"></button>
-            <h3 id="popup-title" class="h5 fw-bold mb-3">Subscribe to Newsletter</h3>
-            <p class="small text-secondary">Get hotel offers by email.</p>
-            <form id="subscribe-form" novalidate>
-                <div class="mb-3">
-                    <label for="popup-email" class="form-label">Email Address</label>
-                    <input type="email" id="popup-email" class="form-control" placeholder="name@example.com" required aria-describedby="email-error">
-                    <small id="email-error" class="text-danger" role="alert" hidden></small>
+                <div class="footer-bottom">
+                    <p>© 2026 BookingApp · SE-2513</p>
+                    <p>Student project. Illustrative stays. No real reservations or payments.</p>
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Subscribe</button>
-                <p id="subscribe-status" class="text-success small mt-3 mb-0" role="status"></p>
-            </form>
-        </div>
-    </div>
-
-    <footer class="bg-dark text-white text-center py-3 mt-5">
-        <p class="mb-0">&copy; 2026 BookingApp. Created by: Allazhar Aldongarov, Dias Serikov, Yerkenov Abylay</p>
-    </footer>
-</body>
+            </div>
+        </footer>
+        <div id="notification" class="notification" role="status" aria-live="polite" hidden></div>
+        <noscript
+            ><p class="container">Enable JavaScript for search, accounts, and demo bookings.</p></noscript
+        >
+    </body>
 </html>

@@ -1,137 +1,332 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BookingApp - About Us</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/ablstyle.css">
-    <link rel="stylesheet" href="css/common.css">
-    <script src="https://code.jquery.com/jquery-4.0.0.min.js" defer></script>
-    <script src="js/common.js" defer></script>
-    <script src="js/about-services.js" defer></script>
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-2" aria-label="Main navigation">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+            name="description"
+            content="BookingApp: explore illustrative stays, compare amenities and plan your next trip. A responsive student travel project."
+        />
+        <meta name="theme-color" content="#214fc6" />
+        <title>About | BookingApp</title>
+        <link rel="icon" href="image/favicon.svg" type="image/svg+xml" />
+        <script src="js/theme-init.js"></script>
+        <link rel="stylesheet" href="css/site.css" />
+        <script src="js/common.js" defer></script>
+        <script src="js/hotels.js" defer></script>
+        <script src="js/auth.js" defer></script>
+        <script src="js/about-services.js" defer></script>
+    </head>
+    <body data-page="about">
+        <a class="skip-link" href="#main-content">Skip to content</a>
+        <header class="site-header">
+            <div class="container header-inner">
+                <a href="index.html" class="brand" aria-label="BookingApp home"
+                    ><svg class="brand-mark" viewBox="0 0 32 32" width="36" height="36" aria-hidden="true">
+                        <path
+                            fill="currentColor"
+                            fill-rule="evenodd"
+                            d="M16 2C9.37 2 4 7.15 4 13.5c0 7.5 10.58 15.72 11.03 16.06a1.6 1.6 0 0 0 1.94 0C17.42 29.22 28 21 28 13.5 28 7.15 22.63 2 16 2Zm-4 9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10h-8Z"
+                        /></svg
+                    >BookingApp</a
+                >
+                <nav id="main-nav" class="main-nav" aria-label="Main navigation">
+                    <a href="search-results.html">Explore stays</a><a href="services.html">Travel services</a
+                    ><a href="about.html" aria-current="page">About</a>
+                </nav>
+                <div class="header-actions">
+                    <button
+                        id="theme-toggle"
+                        class="icon-button"
+                        type="button"
+                        aria-label="Switch to dark mode"
+                        aria-pressed="false"
+                    >
+                        <span data-icon="moon"></span></button
+                    ><a class="account-link" href="login.html" data-account-link
+                        ><span data-icon="user"></span><span>Log in</span></a
+                    ><button
+                        id="menu-toggle"
+                        class="icon-button menu-toggle"
+                        type="button"
+                        aria-label="Toggle navigation"
+                        aria-controls="main-nav"
+                        aria-expanded="false"
+                    >
+                        <span data-icon="menu"></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <main id="main-content">
+            <section class="container section page-heading">
+                <p class="eyebrow">About BookingApp</p>
+                <h1>About BookingApp</h1>
+                <p class="lead">
+                    A student-built travel website for comparing hotels and planning a trip in one place.
+                </p>
+            </section>
+
+            <section class="container section grid-2" aria-labelledby="purpose-heading">
+                <div class="stack">
+                    <p class="eyebrow">Who it is for</p>
+                    <h2 id="purpose-heading">Compare before you choose</h2>
+                    <p>
+                        BookingApp is for travelers who want to compare destinations, amenities, and nightly
+                        prices in one clear view. Save a shortlist, check the local weather, and plan a stay
+                        with the details that matter to you.
+                    </p>
+                    <p class="muted">
+                        Created as a student team project, this website uses illustrative hotel listings and
+                        local booking simulations. It does not make real reservations or collect payments.
+                    </p>
+                    <div class="inline">
+                        <a class="button button-primary" href="search-results.html">Explore the stays</a>
+                        <a class="button button-ghost" href="#team">Meet our team</a>
+                    </div>
+                </div>
+                <img
+                    class="image-cover"
+                    src="image/destination-6.jpg"
+                    alt="A camera, notebook, and travel bag arranged on a map"
+                    width="720"
+                    height="540"
+                    loading="lazy"
+                />
+            </section>
+
+            <section id="team" class="container section" aria-labelledby="team-heading">
+                <div class="page-heading">
+                    <p class="eyebrow">The people behind the project</p>
+                    <h2 id="team-heading">Meet the team</h2>
+                    <p class="muted">
+                        The BookingApp team works across page layouts, design, content, and testing.
+                    </p>
+                </div>
+                <div class="grid-3">
+                    <article class="card team-card">
+                        <img
+                            src="image/allazhar.jpg"
+                            alt="Allazhar Aldongarov"
+                            width="480"
+                            height="480"
+                            loading="lazy"
+                        />
+                        <div class="stack team-content">
+                            <p class="eyebrow">Frontend Developer</p>
+                            <h3>Allazhar Aldongarov</h3>
+                            <p class="muted">Builds page layouts and reusable navigation components.</p>
+                        </div>
+                    </article>
+                    <article class="card team-card">
+                        <img
+                            src="image/dias.jpg"
+                            alt="Dias Serikov"
+                            width="480"
+                            height="480"
+                            loading="lazy"
+                        />
+                        <div class="stack team-content">
+                            <p class="eyebrow">UI Designer</p>
+                            <h3>Dias Serikov</h3>
+                            <p class="muted">Creates clear styles and responsive page designs.</p>
+                        </div>
+                    </article>
+                    <article class="card team-card">
+                        <img
+                            src="image/abylay.jpg"
+                            alt="Yerkenov Abylay"
+                            width="480"
+                            height="480"
+                            loading="lazy"
+                        />
+                        <div class="stack team-content">
+                            <p class="eyebrow">Content and Testing</p>
+                            <h3>Yerkenov Abylay</h3>
+                            <p class="muted">Checks page content, links, forms, and accessibility.</p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section id="contact" class="container section split-layout" aria-labelledby="contact-heading">
+                <div class="panel">
+                    <p class="eyebrow">Try the contact form</p>
+                    <h2 id="contact-heading">Save a feedback draft</h2>
+                    <p class="muted">
+                        Save a message on this browser or download a copy. This demo does not send messages,
+                        emails, or phone requests.
+                    </p>
+                    <form id="contact-form" class="stack" novalidate>
+                        <div class="field-grid">
+                            <div class="field">
+                                <label for="contact-name">Name</label>
+                                <input
+                                    id="contact-name"
+                                    name="name"
+                                    type="text"
+                                    autocomplete="name"
+                                    aria-describedby="contact-name-error"
+                                />
+                                <p id="contact-name-error" class="field-error"></p>
+                            </div>
+                            <div class="field">
+                                <label for="contact-email">Email address</label>
+                                <input
+                                    id="contact-email"
+                                    name="email"
+                                    type="text"
+                                    inputmode="email"
+                                    autocomplete="email"
+                                    aria-describedby="contact-email-error"
+                                />
+                                <p id="contact-email-error" class="field-error"></p>
+                            </div>
+                        </div>
+                        <div class="field-grid">
+                            <div class="field">
+                                <label for="contact-subject">Topic</label>
+                                <select
+                                    id="contact-subject"
+                                    name="subject"
+                                    aria-describedby="contact-subject-error"
+                                >
+                                    <option value="general">General question</option>
+                                    <option value="booking">Booking experience</option>
+                                    <option value="feedback">Website feedback</option>
+                                </select>
+                                <p id="contact-subject-error" class="field-error"></p>
+                            </div>
+                            <div class="field">
+                                <label for="contact-reply">Preferred reply method</label>
+                                <select
+                                    id="contact-reply"
+                                    name="reply"
+                                    aria-describedby="contact-reply-help contact-reply-error"
+                                >
+                                    <option value="email">Email</option>
+                                    <option value="phone">Phone</option>
+                                </select>
+                                <small id="contact-reply-help" class="muted"
+                                    >For this saved draft only; no reply will be sent.</small
+                                >
+                                <p id="contact-reply-error" class="field-error"></p>
+                            </div>
+                        </div>
+                        <div id="contact-phone-field" class="field" hidden>
+                            <label for="contact-phone">Phone number</label>
+                            <input
+                                id="contact-phone"
+                                name="phone"
+                                type="tel"
+                                autocomplete="tel"
+                                placeholder="+7 700 123 4567"
+                                aria-describedby="contact-phone-help contact-phone-error"
+                            />
+                            <small id="contact-phone-help" class="muted"
+                                >Include your country code. Spaces, parentheses, and hyphens are
+                                accepted.</small
+                            >
+                            <p id="contact-phone-error" class="field-error"></p>
+                        </div>
+                        <div class="field">
+                            <label for="contact-message">Message</label>
+                            <textarea
+                                id="contact-message"
+                                name="message"
+                                rows="5"
+                                placeholder="What would make planning your trip easier?"
+                                aria-describedby="contact-message-help contact-message-error"
+                            ></textarea>
+                            <small id="contact-message-help" class="muted"
+                                >Write 10–2,000 characters. Use sample details for this demo.</small
+                            >
+                            <p id="contact-message-error" class="field-error"></p>
+                        </div>
+                        <div class="inline">
+                            <button class="button button-primary" type="submit">Save demo message</button>
+                            <button id="contact-clear" class="button button-ghost" type="button">
+                                Clear draft
+                            </button>
+                            <button
+                                id="contact-download"
+                                class="button button-secondary"
+                                type="button"
+                                hidden
+                            >
+                                Download saved copy
+                            </button>
+                        </div>
+                        <p
+                            id="contact-status"
+                            class="form-status"
+                            role="status"
+                            aria-live="polite"
+                            tabindex="-1"
+                        ></p>
+                    </form>
+                </div>
+                <aside class="sidebar stack" aria-labelledby="contact-note-heading">
+                    <div class="panel">
+                        <p class="eyebrow">Before you plan</p>
+                        <h3 id="contact-note-heading">Planning with BookingApp</h3>
+                        <ul>
+                            <li>Search by destination and narrow your options with amenity filters.</li>
+                            <li>Save stays to compare them later.</li>
+                            <li>Log in to manage demo bookings in your profile.</li>
+                        </ul>
+                        <a class="button button-secondary" href="services.html">Explore travel services</a>
+                    </div>
+                    <p class="muted">
+                        Your draft stays in this browser until you clear it. It is never sent to a server.
+                    </p>
+                </aside>
+            </section>
+        </main>
+
+        <footer class="site-footer">
             <div class="container">
-                <a class="navbar-brand fw-bold" href="index.html">BookingApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="mainNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="search-results.html">Search</a></li>
-                        <li class="nav-item"><a class="nav-link" href="hotel-detail.html">Hotel Details</a></li>
-                        <li class="nav-item"><a class="nav-link" href="booking.html">Booking</a></li>
-                        <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="about.html">About Us</a></li>
-                    </ul>
+                <div class="footer-top">
+                    <div>
+                        <a href="index.html" class="brand"
+                            ><svg
+                                class="brand-mark"
+                                viewBox="0 0 32 32"
+                                width="36"
+                                height="36"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    fill="currentColor"
+                                    fill-rule="evenodd"
+                                    d="M16 2C9.37 2 4 7.15 4 13.5c0 7.5 10.58 15.72 11.03 16.06a1.6 1.6 0 0 0 1.94 0C17.42 29.22 28 21 28 13.5 28 7.15 22.63 2 16 2Zm-4 9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10h-8Z"
+                                /></svg
+                            >BookingApp</a
+                        >
+                        <p>Compare stays, check the weather,<br />and keep your travel plans together.</p>
+                    </div>
+                    <div class="footer-links">
+                        <h3>Explore</h3>
+                        <a href="search-results.html">All stays</a
+                        ><a href="hotel-detail.html?hotel=grand-palace">Featured stay</a
+                        ><a href="services.html">Travel services</a><a href="booking.html">Plan a trip</a>
+                    </div>
+                    <div class="footer-links">
+                        <h3>Account and help</h3>
+                        <a href="about.html">Our team</a><a href="about.html#contact">Contact us</a
+                        ><a href="signup.html">Create an account</a
+                        ><a href="profile.html">My trips &amp; saved stays</a>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>© 2026 BookingApp · SE-2513</p>
+                    <p>Student project. Illustrative stays. No real reservations or payments.</p>
                 </div>
             </div>
-        </nav>
-    </header>
-
-    <main class="container py-4 px-sm-2 px-lg-3 mt-lg-4">
-        <section class="bg-white rounded shadow-sm p-3 p-md-4 mb-5">
-            <h1 class="fw-bold mb-3">About BookingApp</h1>
-            <p class="mb-0">BookingApp helps travelers search for hotels, compare options, and complete a reservation with a simple responsive website.</p>
-        </section>
-
-        <div class="live-clock mb-5">
-            <strong>Current date and time:</strong>
-            <time id="current-date-time">Loading...</time>
-            <small>Your local time</small>
-        </div>
-
-        <section class="mb-5" aria-labelledby="team-heading">
-            <h2 id="team-heading" class="fw-bold mb-3">Our Team</h2>
-            <div class="team-grid">
-                <article class="team-card">
-                    <img src="image/allazhar.jpg" alt="Allazhar Aldongarov" class="profile-img">
-                    <h3>Allazhar Aldongarov</h3>
-                    <p class="role">Frontend Developer</p>
-                    <p>Builds page layouts and reusable navigation components.</p>
-                </article>
-                <article class="team-card">
-                    <img src="image/dias.jpg" alt="Dias Serikov" class="profile-img">
-                    <h3>Dias Serikov</h3>
-                    <p class="role">UI Designer</p>
-                    <p>Creates clear styles and responsive page designs.</p>
-                </article>
-                <article class="team-card">
-                    <img src="image/abylay.jpg" alt="Yerkenov Abylay" class="profile-img">
-                    <h3>Yerkenov Abylay</h3>
-                    <p class="role">Content and Testing</p>
-                    <p>Checks page content, links, forms, and accessibility.</p>
-                </article>
-            </div>
-        </section>
-
-        <section class="booking-stats mb-5" aria-labelledby="stats-heading">
-            <h2 id="stats-heading" class="fw-bold mb-3">BookingApp at a Glance</h2>
-            <div class="stats-grid">
-                <div class="stat-card"><strong class="stat-number" data-count="3">0</strong><span>Team members</span></div>
-                <div class="stat-card"><strong class="stat-number" data-count="3">0</strong><span>Travel services</span></div>
-                <div class="stat-card"><strong class="stat-number" data-count="3">0</strong><span>Pricing levels</span></div>
-            </div>
-        </section>
-
-        <section id="contact" class="bg-white rounded shadow-sm p-3 p-md-4">
-            <h2 class="fw-bold mb-3">Contact Us</h2>
-            <p class="text-secondary">Try our contact form. This demo checks your message but does not send it.</p>
-            <form id="contact-form" class="row g-3" novalidate>
-                <div class="col-12 col-md-6">
-                    <label for="contact-name" class="form-label">Your name</label>
-                    <input type="text" class="form-control" id="contact-name" name="name" required>
-                </div>
-                <div class="col-12 col-md-6">
-                    <label for="contact-email" class="form-label">Your email</label>
-                    <div class="input-group">
-                        <span class="input-group-text">@</span>
-                        <input type="email" class="form-control" id="contact-email" name="email" required>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6">
-                    <label for="subject" class="form-label">Topic</label>
-                    <select class="form-select" id="subject" name="subject">
-                        <option value="general">General question</option>
-                        <option value="support">Booking support</option>
-                        <option value="feedback">Feedback</option>
-                    </select>
-                </div>
-                <fieldset class="col-12 col-md-6">
-                    <legend class="form-label">Reply method</legend>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="reply" id="reply-email" value="email" checked>
-                        <label class="form-check-label" for="reply-email">Email</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="reply" id="reply-phone" value="phone">
-                        <label class="form-check-label" for="reply-phone">Phone</label>
-                    </div>
-                </fieldset>
-                <div class="col-12">
-                    <label for="contact-message" class="form-label">Message</label>
-                    <textarea class="form-control" id="contact-message" name="message" rows="4" required></textarea>
-                </div>
-                <div class="col-12">
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="copy-message">
-                        <label class="form-check-label" for="copy-message">Send me a copy of this message.</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
-                    <button type="reset" class="btn btn-outline-secondary btn-lg ms-2">Clear</button>
-                    <p id="contact-status" class="contact-status mt-3 mb-0" role="status" tabindex="-1"></p>
-                </div>
-            </form>
-        </section>
-    </main>
-
-    <footer class="bg-dark text-white text-center py-3 mt-5">
-        <p class="mb-0">&copy; 2026 BookingApp. Created by: Allazhar Aldongarov, Dias Serikov, Yerkenov Abylay</p>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+        </footer>
+        <div id="notification" class="notification" role="status" aria-live="polite" hidden></div>
+        <noscript
+            ><p class="container">Enable JavaScript for search, accounts, and demo bookings.</p></noscript
+        >
+    </body>
 </html>

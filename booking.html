@@ -1,163 +1,307 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BookingApp - Book Your Stay</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/common.css">
-    <script src="https://code.jquery.com/jquery-4.0.0.min.js" defer></script>
-    <script src="js/hotels.js" defer></script>
-    <script src="js/common.js" defer></script>
-    <script src="js/booking.js" defer></script>
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-2" aria-label="Main navigation">
-            <div class="container">
-                <a class="navbar-brand fw-bold" href="index.html">BookingApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="mainNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="search-results.html">Search</a></li>
-                        <li class="nav-item"><a class="nav-link" href="hotel-detail.html">Hotel Details</a></li>
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="booking.html">Booking</a></li>
-                        <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
-                        <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
-                    </ul>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+            name="description"
+            content="BookingApp: explore illustrative stays, compare amenities and plan your next trip. A responsive student travel project."
+        />
+        <meta name="theme-color" content="#214fc6" />
+        <title>Plan your stay | BookingApp</title>
+        <link rel="icon" href="image/favicon.svg" type="image/svg+xml" />
+        <script src="js/theme-init.js"></script>
+        <link rel="stylesheet" href="css/site.css" />
+        <script src="js/common.js" defer></script>
+        <script src="js/hotels.js" defer></script>
+        <script src="js/auth.js" defer></script>
+        <script src="js/booking.js" defer></script>
+    </head>
+    <body data-page="booking">
+        <a class="skip-link" href="#main-content">Skip to content</a>
+        <header class="site-header">
+            <div class="container header-inner">
+                <a href="index.html" class="brand" aria-label="BookingApp home"
+                    ><svg class="brand-mark" viewBox="0 0 32 32" width="36" height="36" aria-hidden="true">
+                        <path
+                            fill="currentColor"
+                            fill-rule="evenodd"
+                            d="M16 2C9.37 2 4 7.15 4 13.5c0 7.5 10.58 15.72 11.03 16.06a1.6 1.6 0 0 0 1.94 0C17.42 29.22 28 21 28 13.5 28 7.15 22.63 2 16 2Zm-4 9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10h-8Z"
+                        /></svg
+                    >BookingApp</a
+                >
+                <nav id="main-nav" class="main-nav" aria-label="Main navigation">
+                    <a href="search-results.html" aria-current="page">Explore stays</a
+                    ><a href="services.html">Travel services</a><a href="about.html">About</a>
+                </nav>
+                <div class="header-actions">
+                    <button
+                        id="theme-toggle"
+                        class="icon-button"
+                        type="button"
+                        aria-label="Switch to dark mode"
+                        aria-pressed="false"
+                    >
+                        <span data-icon="moon"></span></button
+                    ><a class="account-link" href="login.html" data-account-link
+                        ><span data-icon="user"></span><span>Log in</span></a
+                    ><button
+                        id="menu-toggle"
+                        class="icon-button menu-toggle"
+                        type="button"
+                        aria-label="Toggle navigation"
+                        aria-controls="main-nav"
+                        aria-expanded="false"
+                    >
+                        <span data-icon="menu"></span>
+                    </button>
                 </div>
             </div>
-        </nav>
-    </header>
-
-    <main class="container py-4 px-sm-2 px-lg-3 mt-lg-4">
-        <section class="row justify-content-center">
-            <div class="col-12 col-lg-9">
-                <div class="bg-white rounded shadow-sm p-3 p-md-4 p-lg-5">
-                    <h1 class="fw-bold mb-2">Complete Your Booking</h1>
-                    <p class="text-secondary mb-4">Plan your stay at <strong id="booking-hotel-name">Grand Palace Hotel</strong>.</p>
-                    <ol class="booking-progress mb-4" aria-label="Booking steps">
-                        <li class="active" aria-current="step">1. Guest details</li>
-                        <li>2. Your stay</li>
-                        <li>3. Review</li>
-                    </ol>
-                    <form id="booking-form" novalidate>
-                        <fieldset class="booking-step row g-3">
-                            <legend class="h4 fw-bold" tabindex="-1">Guest details</legend>
-                            <div class="col-12 col-md-6">
-                                <label for="fullname" class="form-label">Full name</label>
-                                <input type="text" class="form-control" id="fullname" name="fullname" placeholder="John Doe" autocomplete="name" aria-describedby="fullname-error" required>
-                                <p id="fullname-error" class="field-error"></p>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <label for="email" class="form-label">Email address</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">@</span>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" autocomplete="email" aria-describedby="email-error" required>
+        </header>
+        <main id="main-content">
+            <div class="container section" id="booking-content">
+                <a class="back-link" href="hotel-detail.html" id="booking-back-to-hotel"
+                    >&larr; Back to your stay</a
+                >
+                <div class="page-heading">
+                    <p class="eyebrow">Demo booking</p>
+                    <h1>Plan your stay</h1>
+                    <p class="lead muted">
+                        Choose dates, a room, and guest details, then save a demo booking to your profile. No
+                        reservation or payment is made.
+                    </p>
+                </div>
+                <div class="split-layout">
+                    <section class="panel" aria-labelledby="booking-form-title">
+                        <h2 id="booking-form-title" class="sr-only">Plan your stay</h2>
+                        <ol class="step-list" aria-label="Booking progress">
+                            <li aria-current="step"><span>01</span> Your stay</li>
+                            <li><span>02</span> Guest details</li>
+                            <li><span>03</span> Review</li>
+                        </ol>
+                        <form id="booking-form" novalidate>
+                            <fieldset class="booking-step" data-step="0">
+                                <legend tabindex="-1">Choose dates and a room</legend>
+                                <div class="field-grid">
+                                    <div class="field">
+                                        <label for="checkin">Check-in</label
+                                        ><input id="checkin" name="checkin" type="date" />
+                                        <p id="checkin-error" class="field-error"></p>
+                                    </div>
+                                    <div class="field">
+                                        <label for="checkout">Check-out</label
+                                        ><input id="checkout" name="checkout" type="date" />
+                                        <p id="checkout-error" class="field-error"></p>
+                                    </div>
+                                    <div class="field">
+                                        <label for="guests">Guests</label
+                                        ><select id="guests" name="guests">
+                                            <option value="1">1 guest</option>
+                                            <option value="2">2 guests</option>
+                                            <option value="3">3 guests</option>
+                                            <option value="4">4 guests</option>
+                                            <option value="5">5 guests</option>
+                                            <option value="6">6 guests</option>
+                                        </select>
+                                        <p id="guests-error" class="field-error"></p>
+                                    </div>
+                                    <div class="field">
+                                        <label for="room">Room</label
+                                        ><select id="room" name="room">
+                                            <option value="standard">Standard room</option>
+                                            <option value="deluxe">Deluxe room</option>
+                                            <option value="suite">Suite</option>
+                                        </select>
+                                        <p id="room-error" class="field-error"></p>
+                                    </div>
                                 </div>
-                                <p id="email-error" class="field-error"></p>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" minlength="8" autocomplete="new-password" aria-describedby="password-help password-error" required>
-                                <small id="password-help" class="text-secondary">Use at least 8 characters for this demo.</small>
-                                <p id="password-error" class="field-error"></p>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <label for="confirm-password" class="form-label">Confirm password</label>
-                                <input type="password" class="form-control" id="confirm-password" autocomplete="new-password" aria-describedby="confirm-password-error" required>
-                                <p id="confirm-password-error" class="field-error"></p>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <label for="phone" class="form-label">Phone number</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">+7</span>
-                                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="700 000 00 00" autocomplete="tel-national" aria-describedby="phone-error" required>
+                                <div class="field">
+                                    <label for="service">Optional travel service</label
+                                    ><select id="service" name="service">
+                                        <option value="none">Just the stay</option>
+                                        <option value="transfer">Airport transfer · $35 per booking</option>
+                                        <option value="car">Car rental · $55 per day</option>
+                                        <option value="tour">Guided city tour · $45 per guest</option>
+                                    </select>
+                                    <p id="service-error" class="field-error"></p>
                                 </div>
-                                <p id="phone-error" class="field-error"></p>
-                            </div>
-                        </fieldset>
-                        <fieldset class="booking-step row g-3" hidden>
-                            <legend class="h4 fw-bold" tabindex="-1">Your stay</legend>
-                            <div class="col-12 col-md-6">
-                                <label for="checkin" class="form-label">Check-in date</label>
-                                <input type="date" class="form-control" id="checkin" name="checkin" aria-describedby="checkin-error" required>
-                                <p id="checkin-error" class="field-error"></p>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <label for="checkout" class="form-label">Check-out date</label>
-                                <input type="date" class="form-control" id="checkout" name="checkout" aria-describedby="checkout-error" required>
-                                <p id="checkout-error" class="field-error"></p>
-                            </div>
-                            <fieldset class="col-12">
-                                <legend class="form-label">Room type and price per night</legend>
-                                <div class="btn-group w-100" role="group" aria-label="Room type selection">
-                                    <input type="radio" class="btn-check" name="room" id="standard" value="standard" aria-describedby="standard-error" checked required>
-                                    <label class="btn btn-outline-primary btn-sm" for="standard">Standard · $120</label>
-                                    <input type="radio" class="btn-check" name="room" id="deluxe" value="deluxe">
-                                    <label class="btn btn-outline-primary btn-sm" for="deluxe">Deluxe · $160</label>
-                                    <input type="radio" class="btn-check" name="room" id="suite" value="suite">
-                                    <label class="btn btn-outline-primary btn-sm" for="suite">Suite · $220</label>
-                                </div>
-                                <p id="standard-error" class="field-error"></p>
+                                <p class="small muted">
+                                    Room rates are per room, per night for your selected party, up to six
+                                    guests. Car rental days follow the number of nights.
+                                </p>
                             </fieldset>
-                            <div class="col-12 col-md-6">
-                                <label for="guests" class="form-label">Number of guests</label>
-                                <select class="form-select" id="guests" name="guests" aria-describedby="guests-error" required>
-                                    <option value="1">1 guest</option>
-                                    <option value="2">2 guests</option>
-                                    <option value="3">3 guests</option>
-                                    <option value="4">4 guests</option>
-                                </select>
-                                <p id="guests-error" class="field-error"></p>
-                            </div>
-                            <div class="col-12">
-                                <label for="notes" class="form-label">Special requests</label>
-                                <textarea class="form-control" id="notes" name="notes" rows="4" placeholder="Late check-in, quiet room, or other request"></textarea>
-                            </div>
-                        </fieldset>
-                        <fieldset class="booking-step row g-3" hidden>
-                            <legend class="h4 fw-bold" tabindex="-1">Review your stay</legend>
-                            <div class="col-12">
-                                <dl id="booking-summary" class="booking-summary"></dl>
-                                <button type="button" class="copy-button btn btn-outline-primary btn-sm mb-3" data-copy-target="#booking-summary">
-                                    <span class="copy-icon" aria-hidden="true">⧉</span>
-                                    <span class="copy-label">Copy booking details</span>
-                                    <span class="copy-tooltip" role="status" hidden></span>
-                                </button>
-                                <p class="text-secondary small">The total is a sample room estimate. No payment will be taken.</p>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="terms" aria-describedby="terms-error" required>
-                                    <label class="form-check-label" for="terms">I agree to the booking terms.</label>
+                            <fieldset class="booking-step" data-step="1" hidden>
+                                <legend tabindex="-1">Enter guest details</legend>
+                                <div class="field">
+                                    <label for="fullname">Full name</label
+                                    ><input
+                                        id="fullname"
+                                        name="fullname"
+                                        type="text"
+                                        autocomplete="name"
+                                        placeholder="Alex Morgan"
+                                    />
+                                    <p id="fullname-error" class="field-error"></p>
                                 </div>
-                                <p id="terms-error" class="field-error"></p>
+                                <div class="field-grid">
+                                    <div class="field">
+                                        <label for="email">Email address</label
+                                        ><input
+                                            id="email"
+                                            name="email"
+                                            type="text"
+                                            inputmode="email"
+                                            autocomplete="email"
+                                            placeholder="you@example.com"
+                                        />
+                                        <p id="email-error" class="field-error"></p>
+                                    </div>
+                                    <div class="field">
+                                        <label for="phone">Phone number</label
+                                        ><input
+                                            id="phone"
+                                            name="phone"
+                                            type="tel"
+                                            autocomplete="tel"
+                                            placeholder="+7 700 123 45 67"
+                                        />
+                                        <p id="phone-error" class="field-error"></p>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label for="notes"
+                                        >Anything else? <span class="muted">(optional)</span></label
+                                    ><textarea
+                                        id="notes"
+                                        name="notes"
+                                        rows="3"
+                                        placeholder="A quiet room, a late arrival…"
+                                    ></textarea>
+                                    <p id="notes-error" class="field-error"></p>
+                                </div>
+                                <p class="small muted">
+                                    Use sample contact details for this student project. Your plan is saved
+                                    only in this browser.
+                                </p>
+                            </fieldset>
+                            <fieldset class="booking-step" data-step="2" hidden>
+                                <legend tabindex="-1">Review your booking</legend>
+                                <dl class="booking-summary" id="booking-review"></dl>
+                                <div id="booking-account" class="account-notice"></div>
+                                <div class="field checkbox-field">
+                                    <label for="terms"
+                                        ><input id="terms" name="terms" type="checkbox" /> I understand this
+                                        saves a demo plan only. No hotel reservation or payment is
+                                        made.</label
+                                    >
+                                    <p id="terms-error" class="field-error"></p>
+                                </div>
+                            </fieldset>
+                            <p
+                                id="booking-status"
+                                class="form-status"
+                                role="status"
+                                aria-live="polite"
+                                tabindex="-1"
+                            ></p>
+                            <div class="inline booking-actions">
+                                <button
+                                    id="booking-back"
+                                    type="button"
+                                    class="button button-secondary"
+                                    hidden
+                                >
+                                    Back</button
+                                ><button id="booking-next" type="button" class="button button-primary">
+                                    Continue <span aria-hidden="true">&rarr;</span></button
+                                ><button
+                                    id="booking-confirm"
+                                    type="submit"
+                                    class="button button-primary"
+                                    hidden
+                                >
+                                    Save demo booking
+                                </button>
                             </div>
-                        </fieldset>
-                        <div class="mt-4">
-                            <p class="text-secondary small mb-1">Practice form: no account or reservation is created.</p>
-                            <p id="booking-status" class="form-status mb-0" role="status" aria-live="polite" tabindex="-1"></p>
+                        </form>
+                        <div id="booking-success" class="empty-state stack" hidden tabindex="-1">
+                            <span class="success-mark" aria-hidden="true">✓</span>
+                            <p class="eyebrow">Demo booking</p>
+                            <h2>Demo booking saved</h2>
+                            <p id="booking-success-details"></p>
+                            <p class="muted">
+                                You’ll find the details in your profile. This is a demo, so no actual
+                                reservation or payment was made.
+                            </p>
+                            <div class="inline">
+                                <a href="profile.html" class="button button-primary"
+                                    >View my trips <span aria-hidden="true">&rarr;</span></a
+                                ><a href="search-results.html" class="button button-secondary"
+                                    >Explore more stays</a
+                                >
+                            </div>
                         </div>
-                        <div class="d-flex flex-column flex-sm-row gap-2 mt-3">
-                            <button id="booking-back" type="button" class="btn btn-outline-primary" hidden>Back</button>
-                            <button id="booking-next" type="button" class="btn btn-primary">Next</button>
-                            <button id="booking-confirm" type="submit" class="btn btn-primary" hidden>Confirm Demo Booking</button>
-                            <button type="reset" class="btn btn-outline-secondary">Clear Form</button>
+                    </section>
+                    <aside class="sidebar">
+                        <div class="card booking-preview">
+                            <img id="booking-hotel-image" src="image/1.jpg" alt="" class="image-cover" />
+                            <div class="panel stack">
+                                <p class="eyebrow" id="booking-hotel-location"></p>
+                                <h2 id="booking-hotel-name"></h2>
+                                <dl class="booking-summary" id="booking-cost"></dl>
+                                <p class="small muted">
+                                    Transparent demo pricing in USD. No added fees and no payment details.
+                                </p>
+                            </div>
                         </div>
-                    </form>
+                    </aside>
                 </div>
             </div>
-        </section>
-    </main>
+        </main>
 
-    <footer class="bg-dark text-white text-center py-3 mt-5">
-        <p class="mb-0">&copy; 2026 BookingApp. Created by: Allazhar Aldongarov, Dias Serikov, Yerkenov Abylay</p>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+        <footer class="site-footer">
+            <div class="container">
+                <div class="footer-top">
+                    <div>
+                        <a href="index.html" class="brand"
+                            ><svg
+                                class="brand-mark"
+                                viewBox="0 0 32 32"
+                                width="36"
+                                height="36"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    fill="currentColor"
+                                    fill-rule="evenodd"
+                                    d="M16 2C9.37 2 4 7.15 4 13.5c0 7.5 10.58 15.72 11.03 16.06a1.6 1.6 0 0 0 1.94 0C17.42 29.22 28 21 28 13.5 28 7.15 22.63 2 16 2Zm-4 9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v10h-8Z"
+                                /></svg
+                            >BookingApp</a
+                        >
+                        <p>Compare stays, check the weather,<br />and keep your travel plans together.</p>
+                    </div>
+                    <div class="footer-links">
+                        <h3>Explore</h3>
+                        <a href="search-results.html">All stays</a
+                        ><a href="hotel-detail.html?hotel=grand-palace">Featured stay</a
+                        ><a href="services.html">Travel services</a><a href="booking.html">Plan a trip</a>
+                    </div>
+                    <div class="footer-links">
+                        <h3>Account and help</h3>
+                        <a href="about.html">Our team</a><a href="about.html#contact">Contact us</a
+                        ><a href="signup.html">Create an account</a
+                        ><a href="profile.html">My trips &amp; saved stays</a>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>© 2026 BookingApp · SE-2513</p>
+                    <p>Student project. Illustrative stays. No real reservations or payments.</p>
+                </div>
+            </div>
+        </footer>
+        <div id="notification" class="notification" role="status" aria-live="polite" hidden></div>
+        <noscript
+            ><p class="container">Enable JavaScript for search, accounts, and demo bookings.</p></noscript
+        >
+    </body>
 </html>

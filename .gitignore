@@ -1,0 +1,7 @@
+node_modules/
+.playwright-cli/
+__pycache__/
+work/
+outputs/
+.DS_Store
+Thumbs.db
