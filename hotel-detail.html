@@ -12,11 +12,17 @@
         <link rel="icon" href="image/favicon.svg" type="image/svg+xml" />
         <script src="js/theme-init.js"></script>
         <link rel="stylesheet" href="css/site.css" />
+        <link rel="stylesheet" href="css/assignment.css" />
+        <link rel="stylesheet" href="css/assignment-booking.css" />
+        <script src="js/vendor/jquery-4.0.0.min.js" defer></script>
+        <script src="js/vendor/bootstrap.bundle-5.3.2.min.js" defer></script>
+        <script src="js/services-data.js" defer></script>
         <script src="js/common.js" defer></script>
         <script src="js/hotels.js" defer></script>
         <script src="js/auth.js" defer></script>
         <script src="js/booking.js" defer></script>
         <script src="js/weather.js" defer></script>
+        <script src="js/assignment.js" defer></script>
     </head>
     <body data-page="hotel-detail">
         <a class="skip-link" href="#main-content">Skip to content</a>
@@ -32,8 +38,12 @@
                     >BookingApp</a
                 >
                 <nav id="main-nav" class="main-nav" aria-label="Main navigation">
-                    <a href="search-results.html" aria-current="page">Explore stays</a
-                    ><a href="services.html">Travel services</a><a href="about.html">About</a>
+                    <a href="index.html">Home</a>
+                    <a href="search-results.html">Explore stays</a>
+                    <a href="hotel-detail.html" aria-current="page">Hotel details</a>
+                    <a href="booking.html">Booking</a>
+                    <a href="services.html">Travel services</a>
+                    <a href="about.html">About</a>
                 </nav>
                 <div class="header-actions">
                     <button
@@ -67,6 +77,13 @@
                         <p class="eyebrow" id="hotel-tag">Stay details</p>
                         <h1 id="hotel-name">Stay details</h1>
                         <p class="lead muted" id="hotel-location"></p>
+                        <button
+                            type="button"
+                            class="button button-ghost button-small copy-button"
+                            data-copy-target="#hotel-location"
+                        >
+                            Copy hotel location
+                        </button>
                     </div>
                     <button
                         class="button button-secondary"
@@ -87,6 +104,27 @@
                             <p class="muted">
                                 Review the amenities and local forecast before choosing a room and dates.
                             </p>
+                            <div id="hotel-more" class="hotel-more stack" hidden>
+                                <p>
+                                    For this demo, check-in starts at 3:00 PM and check-out is before 12:00
+                                    PM. Reception, luggage storage, and local travel advice are part of the
+                                    sample stay.
+                                </p>
+                                <p>
+                                    Choose a standard room, deluxe room, or suite. Add a quiet-room or
+                                    late-arrival request in the booking form. These are illustrative options,
+                                    not confirmed hotel services.
+                                </p>
+                            </div>
+                            <button
+                                id="hotel-read-more"
+                                class="button button-ghost button-small"
+                                type="button"
+                                aria-expanded="false"
+                                aria-controls="hotel-more"
+                            >
+                                Read More
+                            </button>
                         </section>
                         <section class="panel" aria-labelledby="amenities-title">
                             <h2 id="amenities-title">Amenities</h2>
@@ -128,8 +166,9 @@
                             <details>
                                 <summary>How does a demo booking work?</summary>
                                 <p>
-                                    Choose your dates and room, add your guest details, and save your plan to
-                                    your profile. Nothing is sent to a hotel and no payment is taken.
+                                    Choose your dates and room, then add your guest details. Confirm as a
+                                    guest for a receipt in this tab, or log in to save the plan to your
+                                    profile. Nothing is sent to a hotel and no payment is taken.
                                 </p>
                             </details>
                             <details>
@@ -147,6 +186,34 @@
                                     live availability.
                                 </p>
                             </details>
+                        </section>
+                        <section class="sample-reviews" aria-labelledby="reviews-heading">
+                            <h2 id="reviews-heading">Sample Guest Reviews</h2>
+                            <p class="muted">
+                                Fictional examples from our original assignment, not reviews from real guests.
+                            </p>
+                            <div class="sample-review-list">
+                                <article>
+                                    <h3>Alexey M.</h3>
+                                    <p aria-label="Sample rating: 5 out of 5 stars">★★★★★</p>
+                                    <p>
+                                        The room was clean, quiet, and comfortable. The staff were very
+                                        helpful.
+                                    </p>
+                                </article>
+                                <article>
+                                    <h3>Sophia K.</h3>
+                                    <p aria-label="Sample rating: 4 out of 5 stars">★★★★☆</p>
+                                    <p>
+                                        The room was comfortable and the hotel location was very convenient.
+                                    </p>
+                                </article>
+                                <article>
+                                    <h3>Dana T.</h3>
+                                    <p aria-label="Sample rating: 5 out of 5 stars">★★★★★</p>
+                                    <p>Easy booking, friendly service, and a relaxing stay.</p>
+                                </article>
+                            </div>
                         </section>
                     </div>
                     <aside class="sidebar">

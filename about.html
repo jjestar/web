@@ -12,10 +12,16 @@
         <link rel="icon" href="image/favicon.svg" type="image/svg+xml" />
         <script src="js/theme-init.js"></script>
         <link rel="stylesheet" href="css/site.css" />
+        <link rel="stylesheet" href="css/assignment-services.css" />
+        <link rel="stylesheet" href="css/assignment.css" />
+        <script src="js/vendor/jquery-4.0.0.min.js" defer></script>
+        <script src="js/vendor/bootstrap.bundle-5.3.2.min.js" defer></script>
+        <script src="js/services-data.js" defer></script>
         <script src="js/common.js" defer></script>
         <script src="js/hotels.js" defer></script>
         <script src="js/auth.js" defer></script>
         <script src="js/about-services.js" defer></script>
+        <script src="js/assignment.js" defer></script>
     </head>
     <body data-page="about">
         <a class="skip-link" href="#main-content">Skip to content</a>
@@ -31,8 +37,12 @@
                     >BookingApp</a
                 >
                 <nav id="main-nav" class="main-nav" aria-label="Main navigation">
-                    <a href="search-results.html">Explore stays</a><a href="services.html">Travel services</a
-                    ><a href="about.html" aria-current="page">About</a>
+                    <a href="index.html">Home</a>
+                    <a href="search-results.html">Explore stays</a>
+                    <a href="hotel-detail.html">Hotel details</a>
+                    <a href="booking.html">Booking</a>
+                    <a href="services.html">Travel services</a>
+                    <a href="about.html" aria-current="page">About</a>
                 </nav>
                 <div class="header-actions">
                     <button
@@ -87,7 +97,8 @@
                 </div>
                 <img
                     class="image-cover"
-                    src="image/destination-6.jpg"
+                    src="image/placeholder.svg"
+                    data-src="image/destination-6.jpg"
                     alt="A camera, notebook, and travel bag arranged on a map"
                     width="720"
                     height="540"
@@ -106,7 +117,8 @@
                 <div class="grid-3">
                     <article class="card team-card">
                         <img
-                            src="image/allazhar.jpg"
+                            src="image/placeholder.svg"
+                            data-src="image/allazhar.jpg"
                             alt="Allazhar Aldongarov"
                             width="480"
                             height="480"
@@ -120,7 +132,8 @@
                     </article>
                     <article class="card team-card">
                         <img
-                            src="image/dias.jpg"
+                            src="image/placeholder.svg"
+                            data-src="image/dias.jpg"
                             alt="Dias Serikov"
                             width="480"
                             height="480"
@@ -134,7 +147,8 @@
                     </article>
                     <article class="card team-card">
                         <img
-                            src="image/abylay.jpg"
+                            src="image/placeholder.svg"
+                            data-src="image/abylay.jpg"
                             alt="Yerkenov Abylay"
                             width="480"
                             height="480"
@@ -146,6 +160,29 @@
                             <p class="muted">Checks page content, links, forms, and accessibility.</p>
                         </div>
                     </article>
+                </div>
+            </section>
+
+            <section class="container section booking-stats" aria-labelledby="stats-heading">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="stats-heading">BookingApp at a glance</h2>
+                        <p class="muted">The people and options behind this student project.</p>
+                    </div>
+                </div>
+                <div class="assignment-stats-grid">
+                    <div class="assignment-stat">
+                        <strong class="stat-number" data-count="3" aria-hidden="true">0</strong>
+                        <span><span class="visually-hidden">3 </span>Team members</span>
+                    </div>
+                    <div class="assignment-stat">
+                        <strong class="stat-number" data-count="3" aria-hidden="true">0</strong>
+                        <span><span class="visually-hidden">3 </span>Travel services</span>
+                    </div>
+                    <div class="assignment-stat">
+                        <strong class="stat-number" data-count="3" aria-hidden="true">0</strong>
+                        <span><span class="visually-hidden">3 </span>Pricing levels</span>
+                    </div>
                 </div>
             </section>
 

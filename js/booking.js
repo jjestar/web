@@ -14,16 +14,19 @@
     }
 
     const params = new URLSearchParams(window.location.search);
+    const clearedForm = params.get('reset') === '1';
     const savedSearch = App.read('search', {});
     const search = savedSearch && typeof savedSearch === 'object' ? savedSearch : {};
-    const tripParam = (key) => (params.has(key) ? params.get(key) : search[key] || '');
+    const tripParam = (key) => (params.has(key) ? params.get(key) : clearedForm ? '' : search[key] || '');
     const tripParams = {
         hotel: hotel.id,
         checkin: tripParam('checkin'),
         checkout: tripParam('checkout'),
         guests: tripParam('guests'),
         room: params.get('room') || '',
-        service: params.get('service') || ''
+        service: params.get('service') || '',
+        serviceTier: params.get('serviceTier') || '',
+        serviceQuantity: params.get('serviceQuantity') || ''
     };
 
     if (detail) {
@@ -41,12 +44,15 @@
         const gallery = document.getElementById('hotel-gallery');
         hotel.photos.forEach((photo, index) => {
             const image = document.createElement('img');
-            image.src = photo.src;
+            image.src = index > 0 ? 'image/placeholder.svg' : photo.src;
             image.alt = photo.alt;
             image.className = 'image-cover';
             image.width = 900;
             image.height = 600;
-            if (index > 0) image.loading = 'lazy';
+            if (index > 0) {
+                image.loading = 'lazy';
+                image.dataset.src = photo.src;
+            }
             gallery.append(image);
         });
         const amenities = document.getElementById('hotel-amenities');
@@ -76,6 +82,13 @@
             }
         });
         window.addEventListener('storage', updateFavorite);
+        const readMore = document.getElementById('hotel-read-more');
+        const more = document.getElementById('hotel-more');
+        readMore.addEventListener('click', () => {
+            more.hidden = !more.hidden;
+            readMore.setAttribute('aria-expanded', String(!more.hidden));
+            readMore.textContent = more.hidden ? 'Read More' : 'Read Less';
+        });
         return;
     }
 
@@ -94,6 +107,8 @@
         'guests',
         'room',
         'service',
+        'serviceTier',
+        'serviceQuantity',
         'fullname',
         'email',
         'phone',
@@ -107,12 +122,12 @@
         deluxe: hotel.price + 40,
         suite: hotel.price + 100
     };
+    const services = window.travelServices || {};
     const serviceNames = {
         none: 'No extra service',
-        transfer: 'Airport transfer',
-        car: 'Car rental',
-        tour: 'Guided city tour'
+        ...Object.fromEntries(Object.entries(services).map(([id, service]) => [id, service.name]))
     };
+    const tierNames = { standard: 'Standard', premium: 'Premium', vip: 'VIP' };
     const roomNames = { standard: 'Standard room', deluxe: 'Deluxe room', suite: 'Suite' };
     let currentStep = 0;
     let submitted = false;
@@ -123,10 +138,7 @@
     const hotelImage = document.getElementById('booking-hotel-image');
     hotelImage.src = hotel.image;
     hotelImage.alt = hotel.photos[0].alt;
-    document.getElementById('booking-back-to-hotel').href = App.url(
-        'hotel-detail.html',
-        tripParams
-    );
+    document.getElementById('booking-back-to-hotel').href = App.url('hotel-detail.html', tripParams);
     Object.keys(roomPrices).forEach((room) => {
         fields.room.querySelector('option[value="' + room + '"]').textContent =
             roomNames[room] + ' · ' + App.money(roomPrices[room]) + ' / night';
@@ -135,6 +147,7 @@
     const user = App.getUser();
     const savedDraft = App.read('bookingDraft', null);
     const draft =
+        !clearedForm &&
         savedDraft &&
         savedDraft.hotelId === hotel.id &&
         (!savedDraft.userId || savedDraft.userId === user?.id)
@@ -145,35 +158,107 @@
     fields.guests.value = String(tripParam('guests') || draft?.guests || 2);
     fields.room.value = params.get('room') || draft?.room || 'standard';
     fields.service.value = params.get('service') || draft?.service || 'none';
-    fields.fullname.value = draft?.name || user?.name || '';
-    fields.email.value = draft?.email || user?.email || '';
-    fields.phone.value = draft?.phone || user?.phone || '';
+    fields.serviceTier.value = params.get('serviceTier') || draft?.serviceTier || 'standard';
+    fields.serviceQuantity.value = params.get('serviceQuantity') || draft?.serviceQuantity || '1';
+    fields.fullname.value = clearedForm ? '' : draft?.name || user?.name || '';
+    fields.email.value = clearedForm ? '' : draft?.email || user?.email || '';
+    fields.phone.value = clearedForm ? '' : draft?.phone || user?.phone || '';
     fields.notes.value = draft?.notes || '';
 
     function selection() {
-        const nights =
-            (Date.parse(fields.checkout.value) - Date.parse(fields.checkin.value)) / 86400000;
+        const nights = (Date.parse(fields.checkout.value) - Date.parse(fields.checkin.value)) / 86400000;
         const validNights = Number.isInteger(nights) && nights > 0 ? nights : 0;
         const guests = Number(fields.guests.value);
         const roomPrice = roomPrices[fields.room.value] || 0;
         const service = fields.service.value;
-        const serviceTotal =
-            service === 'transfer'
-                ? 35
-                : service === 'car'
-                  ? 55 * validNights
-                  : service === 'tour'
-                    ? 45 * guests
-                    : 0;
+        const serviceTier = fields.serviceTier.value || 'standard';
+        // Car rental follows stay length; private and special tours are priced per party.
+        const quantity =
+            service === 'car'
+                ? validNights
+                : service === 'tour'
+                  ? serviceTier === 'standard'
+                      ? guests
+                      : 1
+                  : Number(fields.serviceQuantity.value);
+        const serviceQuantity = Number.isInteger(quantity) && quantity > 0 ? quantity : 0;
+        const serviceRate = services[service]?.rates[serviceTier] ?? 0;
+        const serviceTotal = service === 'none' ? 0 : serviceRate * serviceQuantity;
         return {
             nights: validNights,
             guests,
             roomPrice,
             room: fields.room.value,
             service,
+            serviceTier,
+            serviceQuantity,
+            serviceRate,
             serviceTotal,
             total: roomPrice * validNights + serviceTotal
         };
+    }
+
+    function serviceLabel(plan) {
+        if (plan.service === 'none') return serviceNames.none;
+        return (
+            (serviceNames[plan.service] || 'Travel service') +
+            ' · ' +
+            (tierNames[plan.serviceTier] || 'Choose a tier')
+        );
+    }
+
+    function renderServiceOptions() {
+        const service = fields.service.value;
+        const options = document.getElementById('booking-service-options');
+        const description = document.getElementById('booking-service-description');
+        const available = Boolean(services[service]);
+        options.hidden = !available;
+        description.hidden = !available;
+        fields.serviceTier.disabled = !available;
+        fields.serviceQuantity.disabled = !available;
+        if (!available) return;
+        const rateLabels =
+            service === 'transfer'
+                ? { standard: 'one-way trip', premium: 'round trip', vip: 'included' }
+                : service === 'car'
+                  ? { standard: 'day', premium: 'day', vip: 'day' }
+                  : { standard: 'person', premium: 'party · private guide', vip: 'party · special tour' };
+        [...fields.serviceTier.options].forEach((option) => {
+            const rate = services[service].rates[option.value];
+            option.textContent =
+                tierNames[option.value] +
+                ' · ' +
+                (service === 'transfer' && option.value === 'vip'
+                    ? 'Included ($0)'
+                    : App.money(rate) + ' / ' + rateLabels[option.value]);
+        });
+        const plan = selection();
+        fields.serviceQuantity.readOnly = service !== 'transfer';
+        if (service !== 'transfer') fields.serviceQuantity.value = String(plan.serviceQuantity);
+        document.getElementById('service-quantity-label').textContent =
+            service === 'transfer'
+                ? plan.serviceTier === 'premium'
+                    ? 'Round trips'
+                    : 'Trips'
+                : service === 'car'
+                  ? 'Rental days'
+                  : plan.serviceTier === 'standard'
+                    ? 'Guests on tour'
+                    : 'Parties';
+        document.getElementById('service-quantity-help').textContent =
+            service === 'transfer'
+                ? 'Enter a whole number from 1 to 30.'
+                : service === 'car'
+                  ? 'Matches the number of nights in your stay.'
+                  : plan.serviceTier === 'standard'
+                    ? 'Matches the number of guests.'
+                    : 'One private or special tour for your whole party.';
+        description.textContent =
+            service === 'transfer'
+                ? 'Standard: $25 one way. Premium: $45 round trip. VIP transfers are included at $0.'
+                : service === 'car'
+                  ? 'Standard: $35, Premium: $70, or VIP: $120 per rental day.'
+                  : 'Standard: $20 per person. Premium: $50 per party with a private guide. VIP: $100 per party for a special tour.';
     }
 
     function renderDefinitionList(target, entries) {
@@ -194,7 +279,9 @@
             checkout: fields.checkout.value,
             guests: fields.guests.value,
             room: fields.room.value,
-            service: fields.service.value
+            service: fields.service.value,
+            serviceTier: fields.serviceTier.value,
+            serviceQuantity: fields.serviceQuantity.value
         });
     }
 
@@ -205,18 +292,21 @@
                 '<p class="small muted">Saving this trip to <strong>' +
                 App.escape(activeUser.name) +
                 '’s</strong> profile.</p>';
+            confirm.textContent = 'Save demo booking';
         } else {
             const nextUrl = bookingUrl();
             account.innerHTML =
-                '<p><strong>Log in to save this booking</strong></p><p class="muted">Log in or create a demo account to save this booking to your profile. Your selections will be kept.</p><div class="inline"><a data-booking-auth href="' +
+                '<p><strong>You can confirm as a guest</strong></p><p class="muted">Guest confirmation creates a receipt for this browser tab. To keep the booking in your profile, log in or create an account. Your selections will be kept.</p><div class="inline"><a data-booking-auth href="' +
                 App.escape(App.url('login.html', { next: nextUrl })) +
                 '" class="button button-secondary">Log in</a><a data-booking-auth href="' +
                 App.escape(App.url('signup.html', { next: nextUrl })) +
                 '" class="button button-ghost">Create account</a></div>';
+            confirm.textContent = 'Confirm demo booking as guest';
         }
     }
 
     function updateSummary() {
+        renderServiceOptions();
         const plan = selection();
         document.getElementById('booking-back-to-hotel').href = App.url('hotel-detail.html', {
             hotel: hotel.id,
@@ -224,18 +314,18 @@
             checkout: fields.checkout.value,
             guests: fields.guests.value,
             room: fields.room.value,
-            service: fields.service.value
+            service: fields.service.value,
+            serviceTier: fields.serviceTier.value,
+            serviceQuantity: fields.serviceQuantity.value
         });
         renderDefinitionList(document.getElementById('booking-cost'), [
             [roomNames[plan.room] || 'Choose a room', App.money(plan.roomPrice) + ' / night'],
             [
                 'Length of stay',
-                plan.nights
-                    ? plan.nights + (plan.nights === 1 ? ' night' : ' nights')
-                    : 'Choose dates'
+                plan.nights ? plan.nights + (plan.nights === 1 ? ' night' : ' nights') : 'Choose dates'
             ],
             ['Guests', String(plan.guests || 'Choose guests')],
-            [serviceNames[plan.service] || 'Extra service', App.money(plan.serviceTotal)],
+            [serviceLabel(plan), App.money(plan.serviceTotal)],
             ['Estimated total', plan.nights ? App.money(plan.total) : 'Choose dates']
         ]);
         if (currentStep === 2) {
@@ -247,7 +337,9 @@
                 ['Guest name', fields.fullname.value.trim()],
                 ['Email', fields.email.value.trim()],
                 ['Phone', fields.phone.value.trim()],
-                ['Extra', serviceNames[plan.service]],
+                ['Extra', serviceLabel(plan)],
+                ['Service quantity', plan.service === 'none' ? 'None' : String(plan.serviceQuantity)],
+                ['Service total', App.money(plan.serviceTotal)],
                 ['Requests', fields.notes.value.trim() || 'None'],
                 ['Total', App.money(plan.total)]
             ]);
@@ -262,10 +354,18 @@
             const guests = Number(fields.guests.value);
             if (!Number.isInteger(guests) || guests < 1 || guests > 6)
                 errors.guests = 'Choose between 1 and 6 guests.';
-            if (!Object.hasOwn(roomPrices, fields.room.value))
-                errors.room = 'Choose an available room type.';
+            if (!Object.hasOwn(roomPrices, fields.room.value)) errors.room = 'Choose an available room type.';
             if (!Object.hasOwn(serviceNames, fields.service.value))
                 errors.service = 'Choose a service or select “Just the stay”.';
+            if (fields.service.value !== 'none' && !Object.hasOwn(tierNames, fields.serviceTier.value))
+                errors.serviceTier = 'Choose Standard, Premium, or VIP.';
+            if (
+                fields.service.value === 'transfer' &&
+                (!/^\d+$/.test(fields.serviceQuantity.value.trim()) ||
+                    Number(fields.serviceQuantity.value) < 1 ||
+                    Number(fields.serviceQuantity.value) > 30)
+            )
+                errors.serviceQuantity = 'Enter a whole number of trips from 1 to 30.';
         } else if (step === 1) {
             const name = fields.fullname.value.trim();
             if (name.length < 2 || name.length > 100)
@@ -323,6 +423,8 @@
             guests: fields.guests.value,
             room: fields.room.value,
             service: fields.service.value,
+            serviceTier: fields.serviceTier.value,
+            serviceQuantity: fields.serviceQuantity.value,
             name: fields.fullname.value.trim(),
             email: fields.email.value.trim(),
             phone: fields.phone.value.trim(),
@@ -351,6 +453,45 @@
         }
     });
 
+    function resetBooking(event) {
+        event?.preventDefault();
+        // Reset only this unfinished plan. Saved profile bookings are never removed.
+        ['bookingDraft', 'pendingBookingUrl', 'search', 'serviceEstimate'].forEach((key) => App.remove(key));
+        try {
+            sessionStorage.removeItem('bookingapp.guestReceipt');
+        } catch (_) {
+            /* The visible form can still be cleared if storage is unavailable. */
+        }
+        history.replaceState(null, '', App.url('booking.html', { hotel: hotel.id, reset: 1 }));
+        ['checkin', 'checkout', 'fullname', 'email', 'phone', 'notes'].forEach((id) => {
+            fields[id].value = '';
+        });
+        fields.guests.value = '2';
+        fields.room.value = 'standard';
+        fields.service.value = 'none';
+        fields.serviceTier.value = 'standard';
+        fields.serviceQuantity.value = '1';
+        fields.terms.checked = false;
+        submitted = false;
+        confirm.disabled = false;
+        back.disabled = false;
+        next.disabled = false;
+        form.hidden = false;
+        document.querySelector('.step-list').hidden = false;
+        document.getElementById('booking-success').hidden = true;
+        document.getElementById('booking-success-details').textContent = '';
+        document.getElementById('booking-success-summary').replaceChildren();
+        document.getElementById('booking-review').replaceChildren();
+        App.errors(form, {});
+        status.classList.remove('error');
+        renderAccount();
+        showStep(0);
+        status.textContent = 'Form cleared. Any saved bookings are unchanged.';
+    }
+
+    form.addEventListener('reset', resetBooking);
+    document.getElementById('booking-success-reset').addEventListener('click', resetBooking);
+
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         if (submitted) return;
@@ -363,15 +504,8 @@
             if (!validateStep(index)) return;
         }
         const activeUser = App.getUser();
-        if (!activeUser) {
-            renderAccount();
-            status.textContent = 'Log in or create an account above to save your demo booking.';
-            status.classList.add('error');
-            account.querySelector('a').focus();
-            return;
-        }
         confirm.disabled = true;
-        confirm.textContent = 'Saving demo booking…';
+        confirm.textContent = activeUser ? 'Saving demo booking…' : 'Confirming demo booking…';
         try {
             const plan = selection();
             const id =
@@ -381,7 +515,7 @@
                     : Date.now().toString(36).toUpperCase());
             const record = {
                 id,
-                userId: activeUser.id,
+                userId: activeUser?.id || null,
                 hotelId: hotel.id,
                 hotelName: hotel.name,
                 name: fields.fullname.value.trim(),
@@ -393,6 +527,9 @@
                 room: plan.room,
                 roomPrice: plan.roomPrice,
                 service: plan.service,
+                serviceTier: plan.serviceTier,
+                serviceQuantity: plan.serviceQuantity,
+                serviceRate: plan.serviceRate,
                 serviceTotal: plan.serviceTotal,
                 nights: plan.nights,
                 total: plan.total,
@@ -400,9 +537,14 @@
                 createdAt: new Date().toISOString(),
                 status: 'confirmed'
             };
-            const saved = App.read('bookings', []);
-            const records = Array.isArray(saved) ? saved : [];
-            App.write('bookings', [...records, record]);
+            if (activeUser) {
+                const saved = App.read('bookings', []);
+                const records = Array.isArray(saved) ? saved : [];
+                App.write('bookings', [...records, record]);
+            } else {
+                // A guest receipt belongs to this tab and is kept apart from account records.
+                sessionStorage.setItem('bookingapp.guestReceipt', JSON.stringify(record));
+            }
             submitted = true;
             // Cleanup is best-effort after the booking has been saved successfully.
             try {
@@ -413,6 +555,13 @@
             }
             form.hidden = true;
             document.querySelector('.step-list').hidden = true;
+            document.getElementById('booking-success-title').textContent = activeUser
+                ? 'Demo booking saved'
+                : 'Guest demo booking confirmed';
+            document.getElementById('booking-success-message').textContent = activeUser
+                ? 'You’ll find the details in your profile. No actual reservation or payment was made.'
+                : 'Your guest receipt is stored for this browser tab. It is not linked to an account, and no reservation or payment was made.';
+            document.getElementById('booking-profile-link').hidden = !activeUser;
             document.getElementById('booking-success-details').textContent =
                 hotel.name +
                 ' · ' +
@@ -422,16 +571,35 @@
                 App.money(record.total) +
                 ' · Reference ' +
                 id;
+            renderDefinitionList(document.getElementById('booking-success-summary'), [
+                ['Reference', id],
+                ['Stay', hotel.name],
+                ['Dates', record.checkin + ' to ' + record.checkout],
+                ['Room', roomNames[record.room]],
+                ['Guests', String(record.guests)],
+                ['Guest name', record.name],
+                ['Email', record.email],
+                ['Phone', record.phone],
+                ['Extra', serviceLabel(plan)],
+                ['Service quantity', plan.service === 'none' ? 'None' : String(plan.serviceQuantity)],
+                ['Service total', App.money(plan.serviceTotal)],
+                ['Requests', record.notes || 'None'],
+                ['Total', App.money(record.total)]
+            ]);
             const success = document.getElementById('booking-success');
             success.hidden = false;
             success.focus();
-            App.notify('Your demo booking is saved in your profile.');
+            App.notify(
+                activeUser
+                    ? 'Your demo booking is saved in your profile.'
+                    : 'Your guest demo booking is confirmed.'
+            );
         } catch (error) {
             status.textContent = error.message || 'Unable to save the booking. Try again.';
             status.classList.add('error');
             status.focus();
             confirm.disabled = false;
-            confirm.textContent = 'Save demo booking';
+            renderAccount();
         }
     });
 

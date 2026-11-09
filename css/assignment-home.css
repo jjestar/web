@@ -1,0 +1,211 @@
+/* Restored home/search interactions use the existing site's color and spacing tokens. */
+.hotel-search-box {
+    position: relative;
+    min-width: 0;
+}
+.search-suggestions {
+    position: absolute;
+    z-index: 60;
+    inset-inline: 0;
+    top: calc(100% + 6px);
+    max-height: 18rem;
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--control-line);
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+}
+.search-suggestions [role='option'] {
+    padding: 10px 12px;
+    min-height: 44px;
+    border-radius: 3px;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+    font-size: 15px;
+}
+.search-suggestions [aria-selected='true'] {
+    color: var(--on-primary);
+    background: var(--primary);
+}
+@media (hover: hover) {
+    .search-suggestions [role='option']:hover {
+        color: var(--on-primary);
+        background: var(--primary);
+    }
+}
+.newsletter-dialog {
+    width: min(480px, calc(100% - 32px));
+    max-width: none;
+    max-height: calc(100dvh - 32px);
+    margin: auto;
+    padding: 32px;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--control-line);
+    border-radius: var(--radius);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+.newsletter-dialog::backdrop {
+    background: rgb(10 18 30 / 65%);
+}
+.newsletter-dialog h2 {
+    padding-inline-end: 36px;
+    font-size: 30px;
+}
+.newsletter-close {
+    position: absolute;
+    inset-block-start: 16px;
+    inset-inline-end: 16px;
+    min-width: 44px;
+    min-height: 44px;
+}
+.newsletter-dialog .form-status {
+    margin-bottom: 0;
+}
+.newsletter [data-newsletter-open] {
+    padding-inline: 0;
+    margin-top: 4px;
+}
+.travel-inspiration {
+    margin-block: 0 72px;
+}
+.travel-carousel {
+    position: relative;
+}
+.travel-carousel.pointer-event {
+    touch-action: pan-y;
+}
+.travel-carousel .carousel-inner {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+.travel-carousel .carousel-inner::after {
+    display: block;
+    clear: both;
+    content: '';
+}
+/* These class names are the Bootstrap Carousel API's transition contract. */
+.travel-carousel .carousel-item {
+    display: none;
+    position: relative;
+    float: left;
+    width: 100%;
+    margin-right: -100%;
+    backface-visibility: hidden;
+}
+.travel-carousel .carousel-item.active,
+.travel-carousel .carousel-item-next,
+.travel-carousel .carousel-item-prev {
+    display: block;
+}
+.travel-carousel .carousel-item-next:not(.carousel-item-start),
+.travel-carousel .active.carousel-item-end {
+    transform: translateX(100%);
+}
+.travel-carousel .carousel-item-prev:not(.carousel-item-end),
+.travel-carousel .active.carousel-item-start {
+    transform: translateX(-100%);
+}
+.inspiration-photos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+.inspiration-photos a {
+    min-width: 0;
+    display: block;
+}
+.inspiration-photos img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1.6;
+    object-fit: cover;
+    border-radius: 4px;
+}
+.inspiration-photos a:focus-visible {
+    outline-offset: -4px;
+}
+.travel-carousel h3 {
+    margin: 16px 0 0;
+    font-size: 20px;
+}
+.carousel-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 16px;
+}
+.carousel-arrows,
+.travel-indicators {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.carousel-toolbar button {
+    min-height: 44px;
+}
+.travel-indicators button {
+    width: 44px;
+    padding: 8px;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--control-line);
+    border-radius: 50%;
+    font: inherit;
+    cursor: pointer;
+}
+.travel-indicators [aria-current='true'] {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--on-primary);
+    font-weight: 600;
+}
+@media (prefers-reduced-motion: no-preference) {
+    .travel-carousel .carousel-item {
+        transition: transform 450ms ease;
+    }
+    .travel-indicators button {
+        transition:
+            background-color 160ms ease,
+            color 160ms ease;
+    }
+}
+@media (max-width: 640px) {
+    .travel-inspiration {
+        margin-bottom: 48px;
+    }
+    .inspiration-photos {
+        gap: 6px;
+    }
+    .inspiration-photos img {
+        aspect-ratio: 0.8;
+    }
+    .travel-carousel h3 {
+        font-size: 18px;
+    }
+    .carousel-toolbar {
+        justify-content: flex-start;
+    }
+    .newsletter-dialog {
+        padding: 24px;
+    }
+    .newsletter-dialog h2 {
+        font-size: 27px;
+    }
+}
+@media (forced-colors: active) {
+    .travel-indicators [aria-current='true'],
+    .search-suggestions [aria-selected='true'] {
+        outline: 2px solid Highlight;
+        outline-offset: -3px;
+    }
+}

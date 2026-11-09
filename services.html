@@ -12,10 +12,16 @@
         <link rel="icon" href="image/favicon.svg" type="image/svg+xml" />
         <script src="js/theme-init.js"></script>
         <link rel="stylesheet" href="css/site.css" />
+        <link rel="stylesheet" href="css/assignment-services.css" />
+        <link rel="stylesheet" href="css/assignment.css" />
+        <script src="js/vendor/jquery-4.0.0.min.js" defer></script>
+        <script src="js/vendor/bootstrap.bundle-5.3.2.min.js" defer></script>
+        <script src="js/services-data.js" defer></script>
         <script src="js/common.js" defer></script>
         <script src="js/hotels.js" defer></script>
         <script src="js/auth.js" defer></script>
         <script src="js/about-services.js" defer></script>
+        <script src="js/assignment.js" defer></script>
     </head>
     <body data-page="services">
         <a class="skip-link" href="#main-content">Skip to content</a>
@@ -31,9 +37,12 @@
                     >BookingApp</a
                 >
                 <nav id="main-nav" class="main-nav" aria-label="Main navigation">
-                    <a href="search-results.html">Explore stays</a
-                    ><a href="services.html" aria-current="page">Travel services</a
-                    ><a href="about.html">About</a>
+                    <a href="index.html">Home</a>
+                    <a href="search-results.html">Explore stays</a>
+                    <a href="hotel-detail.html">Hotel details</a>
+                    <a href="booking.html">Booking</a>
+                    <a href="services.html" aria-current="page">Travel services</a>
+                    <a href="about.html">About</a>
                 </nav>
                 <div class="header-actions">
                     <button
@@ -71,13 +80,16 @@
             <section class="container section" aria-labelledby="services-heading">
                 <div class="page-heading">
                     <h2 id="services-heading">Choose a travel service</h2>
-                    <p class="muted">Three optional services with fixed demo rates in USD.</p>
+                    <p class="muted">
+                        Three optional services, each with Standard, Premium, and VIP pricing in USD.
+                    </p>
                 </div>
                 <div class="grid-3">
                     <article class="card service-card">
                         <img
                             class="image-cover"
-                            src="image/destination-7.jpg"
+                            src="image/placeholder.svg"
+                            data-src="image/destination-7.jpg"
                             alt="A hotel arrival area and pool lit up at dusk"
                             width="640"
                             height="420"
@@ -87,16 +99,16 @@
                             <p class="eyebrow">Airport to hotel</p>
                             <h3>Airport transfer</h3>
                             <p class="muted">
-                                Add a one-way arrival transfer from the airport to your hotel to your demo
-                                itinerary.
+                                Choose a one-way transfer, a round trip, or an included VIP transfer for your
+                                demo itinerary.
                             </p>
                             <p>
-                                <span class="price">$35</span>
-                                <span class="muted">one-time fee</span>
+                                <span class="price">$25</span>
+                                <span class="muted">per one-way trip · Standard</span>
                             </p>
                             <a
                                 class="button button-secondary"
-                                href="booking.html?service=transfer"
+                                href="booking.html?service=transfer&amp;serviceTier=standard&amp;serviceQuantity=1"
                                 data-service-booking="transfer"
                                 >Choose a transfer</a
                             >
@@ -105,7 +117,8 @@
                     <article class="card service-card">
                         <img
                             class="image-cover"
-                            src="image/destination-6.jpg"
+                            src="image/placeholder.svg"
+                            data-src="image/destination-6.jpg"
                             alt="A camera and notebook on a map, ready for a day of exploring"
                             width="640"
                             height="420"
@@ -117,10 +130,13 @@
                             <p class="muted">
                                 Plan independent day trips with a rental car for the duration of your stay.
                             </p>
-                            <p><span class="price">$55</span> <span class="muted">per day</span></p>
+                            <p>
+                                <span class="price">$35</span>
+                                <span class="muted">per day · Standard</span>
+                            </p>
                             <a
                                 class="button button-secondary"
-                                href="booking.html?service=car"
+                                href="booking.html?service=car&amp;serviceTier=standard&amp;serviceQuantity=1"
                                 data-service-booking="car"
                                 >Choose a rental</a
                             >
@@ -129,7 +145,8 @@
                     <article class="card service-card">
                         <img
                             class="image-cover"
-                            src="image/destination-4.jpg"
+                            src="image/placeholder.svg"
+                            data-src="image/destination-4.jpg"
                             alt="An ornate bridge and city lights beside the river at sunset"
                             width="640"
                             height="420"
@@ -139,19 +156,103 @@
                             <p class="eyebrow">Explore with a guide</p>
                             <h3>Guided city tour</h3>
                             <p class="muted">
-                                Include a city tour in your plans, with a price for every traveler in your
-                                booking.
+                                Join a group tour priced per traveler, or choose a private guide or special
+                                tour for your party.
                             </p>
-                            <p><span class="price">$45</span> <span class="muted">per person</span></p>
+                            <p>
+                                <span class="price">$20</span>
+                                <span class="muted">per person · Standard</span>
+                            </p>
                             <a
                                 class="button button-secondary"
-                                href="booking.html?service=tour"
+                                href="booking.html?service=tour&amp;serviceTier=standard&amp;serviceQuantity=1"
                                 data-service-booking="tour"
                                 >Choose a tour</a
                             >
                         </div>
                     </article>
                 </div>
+            </section>
+
+            <section class="container section" aria-labelledby="pricing-heading">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="pricing-heading">Compare service prices</h2>
+                        <p class="muted">
+                            Choose the level that fits your demo itinerary. Hotel accommodation is separate.
+                        </p>
+                    </div>
+                </div>
+                <div
+                    class="assignment-price-scroll"
+                    role="region"
+                    aria-label="Travel service pricing table"
+                    tabindex="0"
+                >
+                    <table class="assignment-price-table">
+                        <caption>
+                            Service rates in USD
+                        </caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Service</th>
+                                <th scope="col">Standard</th>
+                                <th scope="col">Premium</th>
+                                <th scope="col">VIP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Airport transfer</th>
+                                <td>
+                                    <strong data-service-rate="transfer" data-tier="standard">$25</strong
+                                    ><span>per one-way trip</span>
+                                </td>
+                                <td>
+                                    <strong data-service-rate="transfer" data-tier="premium">$45</strong
+                                    ><span>per round trip</span>
+                                </td>
+                                <td>
+                                    <strong data-service-rate="transfer" data-tier="vip">Included</strong
+                                    ><span>$0 per trip</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Car rental</th>
+                                <td>
+                                    <strong data-service-rate="car" data-tier="standard">$35</strong
+                                    ><span>per day</span>
+                                </td>
+                                <td>
+                                    <strong data-service-rate="car" data-tier="premium">$70</strong
+                                    ><span>per day</span>
+                                </td>
+                                <td>
+                                    <strong data-service-rate="car" data-tier="vip">$120</strong
+                                    ><span>per day</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Guided city tour</th>
+                                <td>
+                                    <strong data-service-rate="tour" data-tier="standard">$20</strong
+                                    ><span>per person · group tour</span>
+                                </td>
+                                <td>
+                                    <strong data-service-rate="tour" data-tier="premium">$50</strong
+                                    ><span>per party · private guide</span>
+                                </td>
+                                <td>
+                                    <strong data-service-rate="tour" data-tier="vip">$100</strong
+                                    ><span>per party · special tour</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="muted small assignment-table-note">
+                    On a small screen, scroll the table sideways to compare all three levels.
+                </p>
             </section>
 
             <section id="estimate" class="container section split-layout" aria-labelledby="estimate-heading">
@@ -176,8 +277,21 @@
                                 </select>
                                 <p id="service-choice-error" class="field-error"></p>
                             </div>
-                            <div id="service-quantity-field" class="field" hidden>
-                                <label for="service-quantity" id="quantity-label">Number of days</label>
+                            <div class="field">
+                                <label for="service-tier">Pricing level</label>
+                                <select
+                                    id="service-tier"
+                                    name="serviceTier"
+                                    aria-describedby="service-tier-error"
+                                >
+                                    <option value="standard">Standard</option>
+                                    <option value="premium">Premium</option>
+                                    <option value="vip">VIP</option>
+                                </select>
+                                <p id="service-tier-error" class="field-error"></p>
+                            </div>
+                            <div id="service-quantity-field" class="field">
+                                <label for="service-quantity" id="quantity-label">Number of trips</label>
                                 <input
                                     id="service-quantity"
                                     name="quantity"
@@ -192,10 +306,11 @@
                                 <p id="service-quantity-error" class="field-error"></p>
                             </div>
                         </div>
-                        <p id="service-rate" class="muted">
-                            $35 for one arrival transfer. This is a flat fee.
-                        </p>
-                        <button class="button button-primary" type="submit">Calculate estimate</button>
+                        <p id="service-rate" class="muted">$25 per one-way trip with Standard pricing.</p>
+                        <div class="inline">
+                            <button class="button button-primary" type="submit">Calculate estimate</button>
+                            <button class="button button-ghost" type="reset">Clear estimate</button>
+                        </div>
                         <p
                             id="service-estimate-status"
                             class="form-status"
@@ -218,12 +333,13 @@
                         <a
                             id="estimate-continue"
                             class="button button-primary"
-                            href="booking.html?service=transfer"
+                            href="booking.html?service=transfer&amp;serviceTier=standard&amp;serviceQuantity=1"
                             >Continue to booking</a
                         >
                         <p class="muted">
-                            Your service choice carries over. The final estimate uses your booking dates and
-                            number of guests.
+                            Your service, pricing level, and trip quantity carry over. Car rental uses your
+                            booking nights; Standard tours use the guest count. Private and special tours are
+                            priced once per party.
                         </p>
                     </div>
                     <div class="divider"></div>
@@ -245,23 +361,25 @@
                     <details class="panel">
                         <summary>What does the transfer price cover?</summary>
                         <p>
-                            The $35 flat fee represents one arrival transfer from the airport to the selected
-                            hotel. It is added once to the demo booking, regardless of the number of nights.
+                            Standard costs $25 per one-way trip. Premium costs $45 per round trip, including
+                            the return journey. VIP transfer is included at $0. Choose 1–30 trips in the
+                            estimator; transfer quantities carry into the booking.
                         </p>
                     </details>
                     <details class="panel">
                         <summary>How are rental days calculated?</summary>
                         <p>
-                            Car rental costs $55 per day. In a booking, the number of rental days matches the
-                            number of nights between check-in and check-out. For example, a three-night stay
-                            adds $165.
+                            Daily rental rates are $35 Standard, $70 Premium, and $120 VIP. In a booking,
+                            rental days match the nights between check-in and check-out. A three-night
+                            Standard rental adds $105.
                         </p>
                     </details>
                     <details class="panel">
                         <summary>How much is a tour for my group?</summary>
                         <p>
-                            The guided city tour costs $45 per person. A booking for two guests adds $90. The
-                            estimator lets you compare a different group size before continuing.
+                            The Standard group tour is $20 per person, so two guests add $40. Premium includes
+                            a private guide for $50 per party; the VIP special tour costs $100 per party.
+                            These private-party prices are charged once, not multiplied by guests.
                         </p>
                     </details>
                     <details class="panel">

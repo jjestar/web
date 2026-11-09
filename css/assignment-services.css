@@ -1,0 +1,138 @@
+/* Earlier assignment interactions, fitted to the current travel interface. */
+.assignment-scroll-track {
+    position: fixed;
+    inset: 0 0 auto;
+    height: 3px;
+    z-index: 1200;
+    background: transparent;
+    pointer-events: none;
+}
+.assignment-scroll-fill {
+    width: 0;
+    height: 100%;
+    background: var(--primary);
+}
+.assignment-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    border-block: 1px solid var(--line);
+    padding-block: 26px;
+}
+.assignment-stat {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+}
+.assignment-stat .stat-number {
+    color: var(--primary);
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+.assignment-stat > span {
+    color: var(--muted);
+}
+.booking-stats .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+.assignment-price-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+    border-block: 1px solid var(--line);
+    scrollbar-gutter: stable;
+}
+.assignment-price-scroll:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 4px;
+}
+.assignment-price-table {
+    width: 100%;
+    min-width: 570px;
+    border-collapse: collapse;
+    text-align: left;
+}
+.assignment-price-table caption {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--muted);
+}
+.assignment-price-table th,
+.assignment-price-table td {
+    padding: 20px 16px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+}
+.assignment-price-table thead th {
+    background: var(--surface);
+    color: var(--ink);
+    font-weight: 600;
+}
+.assignment-price-table tbody th {
+    font-weight: 500;
+}
+.assignment-price-table tbody tr:last-child > * {
+    border-bottom: 0;
+}
+.assignment-price-table strong {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--ink);
+}
+.assignment-price-table td span {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+}
+.assignment-table-note {
+    margin-top: 12px;
+}
+.assignment-submit-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    flex: 0 0 auto;
+    animation: assignment-service-spin 700ms linear infinite;
+}
+@keyframes assignment-service-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+@media (max-width: 600px) {
+    .assignment-stats-grid {
+        gap: 16px;
+    }
+    .assignment-stat {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .assignment-stat > span {
+        font-size: 13px;
+    }
+    .assignment-price-table th,
+    .assignment-price-table td {
+        padding: 15px 12px;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .assignment-submit-spinner {
+        animation: none;
+    }
+}

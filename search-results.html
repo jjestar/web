@@ -12,10 +12,16 @@
         <link rel="icon" href="image/favicon.svg" type="image/svg+xml" />
         <script src="js/theme-init.js"></script>
         <link rel="stylesheet" href="css/site.css" />
+        <link rel="stylesheet" href="css/assignment.css" />
+        <link rel="stylesheet" href="css/assignment-home.css" />
+        <script src="js/vendor/jquery-4.0.0.min.js" defer></script>
+        <script src="js/vendor/bootstrap.bundle-5.3.2.min.js" defer></script>
+        <script src="js/services-data.js" defer></script>
         <script src="js/common.js" defer></script>
         <script src="js/hotels.js" defer></script>
         <script src="js/auth.js" defer></script>
         <script src="js/script.js" defer></script>
+        <script src="js/assignment.js" defer></script>
     </head>
     <body data-page="search-results">
         <a class="skip-link" href="#main-content">Skip to content</a>
@@ -31,8 +37,12 @@
                     >BookingApp</a
                 >
                 <nav id="main-nav" class="main-nav" aria-label="Main navigation">
-                    <a href="search-results.html" aria-current="page">Explore stays</a
-                    ><a href="services.html">Travel services</a><a href="about.html">About</a>
+                    <a href="index.html">Home</a>
+                    <a href="search-results.html" aria-current="page">Explore stays</a>
+                    <a href="hotel-detail.html">Hotel details</a>
+                    <a href="booking.html">Booking</a>
+                    <a href="services.html">Travel services</a>
+                    <a href="about.html">About</a>
                 </nav>
                 <div class="header-actions">
                     <button
@@ -66,28 +76,49 @@
                     Compare six demo stays by destination, amenities, hotel category, and nightly price.
                 </p>
                 <p id="search-trip-context" class="small muted"></p>
+                <button
+                    id="open-popup-btn"
+                    class="button button-secondary button-small"
+                    type="button"
+                    data-newsletter-open
+                    aria-haspopup="dialog"
+                    aria-controls="popup-modal"
+                >
+                    Subscribe for discounts
+                </button>
             </header>
             <div class="search-layout">
                 <aside class="panel filter-panel" aria-labelledby="filters-heading">
                     <h2 id="filters-heading">Filter stays</h2>
                     <form id="filter-form" class="stack" novalidate>
                         <div class="field">
-                            <label for="hotel-search">Where to?</label
-                            ><input
-                                id="hotel-search"
-                                name="query"
-                                type="search"
-                                placeholder="Paris, pool or Grand Palace"
-                                autocomplete="off"
-                                list="search-cities"
-                            /><datalist id="search-cities">
-                                <option value="Astana"></option>
-                                <option value="Almaty"></option>
-                                <option value="Miami"></option>
-                                <option value="Paris"></option>
-                                <option value="Dubai"></option>
-                                <option value="Maldives"></option>
-                            </datalist>
+                            <label for="hotel-search">Where to?</label>
+                            <div class="hotel-search-box">
+                                <input
+                                    id="hotel-search"
+                                    name="query"
+                                    type="search"
+                                    placeholder="Paris, pool or Grand Palace"
+                                    autocomplete="off"
+                                    role="combobox"
+                                    aria-autocomplete="list"
+                                    aria-expanded="false"
+                                    aria-controls="search-suggestions"
+                                    aria-describedby="search-help"
+                                    spellcheck="false"
+                                />
+                                <ul
+                                    id="search-suggestions"
+                                    class="search-suggestions"
+                                    role="listbox"
+                                    aria-label="Hotel and destination suggestions"
+                                    hidden
+                                ></ul>
+                            </div>
+                            <small id="search-help"
+                                >Results update as you type. Use the arrow keys and Enter to choose a
+                                suggestion.</small
+                            >
                         </div>
                         <fieldset>
                             <legend>Hotel category</legend>

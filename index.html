@@ -12,10 +12,16 @@
         <link rel="icon" href="image/favicon.svg" type="image/svg+xml" />
         <script src="js/theme-init.js"></script>
         <link rel="stylesheet" href="css/site.css" />
+        <link rel="stylesheet" href="css/assignment.css" />
+        <link rel="stylesheet" href="css/assignment-home.css" />
+        <script src="js/vendor/jquery-4.0.0.min.js" defer></script>
+        <script src="js/vendor/bootstrap.bundle-5.3.2.min.js" defer></script>
+        <script src="js/services-data.js" defer></script>
         <script src="js/common.js" defer></script>
         <script src="js/hotels.js" defer></script>
         <script src="js/auth.js" defer></script>
         <script src="js/script.js" defer></script>
+        <script src="js/assignment.js" defer></script>
     </head>
     <body data-page="index">
         <a class="skip-link" href="#main-content">Skip to content</a>
@@ -31,8 +37,12 @@
                     >BookingApp</a
                 >
                 <nav id="main-nav" class="main-nav" aria-label="Main navigation">
-                    <a href="search-results.html">Explore stays</a><a href="services.html">Travel services</a
-                    ><a href="about.html">About</a>
+                    <a href="index.html" aria-current="page">Home</a>
+                    <a href="search-results.html">Explore stays</a>
+                    <a href="hotel-detail.html">Hotel details</a>
+                    <a href="booking.html">Booking</a>
+                    <a href="services.html">Travel services</a>
+                    <a href="about.html">About</a>
                 </nav>
                 <div class="header-actions">
                     <button
@@ -71,22 +81,33 @@
                     <form id="home-search" novalidate>
                         <div class="search-grid">
                             <div class="field">
-                                <label for="destination">Destination</label
-                                ><input
-                                    id="destination"
-                                    name="destination"
-                                    type="text"
-                                    list="destination-options"
-                                    placeholder="Paris, Dubai or Astana"
-                                    autocomplete="off"
-                                /><datalist id="destination-options">
-                                    <option value="Astana"></option>
-                                    <option value="Almaty"></option>
-                                    <option value="Miami"></option>
-                                    <option value="Paris"></option>
-                                    <option value="Dubai"></option>
-                                    <option value="Maldives"></option>
-                                </datalist>
+                                <label for="destination">Destination</label>
+                                <div class="hotel-search-box">
+                                    <input
+                                        id="destination"
+                                        name="destination"
+                                        type="text"
+                                        placeholder="Paris, Dubai or Astana"
+                                        autocomplete="off"
+                                        role="combobox"
+                                        aria-autocomplete="list"
+                                        aria-expanded="false"
+                                        aria-controls="destination-suggestions"
+                                        aria-describedby="destination-help"
+                                        spellcheck="false"
+                                    />
+                                    <ul
+                                        id="destination-suggestions"
+                                        class="search-suggestions"
+                                        role="listbox"
+                                        aria-label="Hotel and destination suggestions"
+                                        hidden
+                                    ></ul>
+                                </div>
+                                <span id="destination-help" class="sr-only"
+                                    >Type a hotel or destination. Use the arrow keys and Enter to choose a
+                                    suggestion.</span
+                                >
                             </div>
                             <div class="field">
                                 <label for="checkin">Check-in</label
@@ -162,7 +183,8 @@
                 <div class="grid-3">
                     <a class="destination-card" href="search-results.html?destination=Paris"
                         ><img
-                            src="image/destination-4.jpg"
+                            src="image/placeholder.svg"
+                            data-src="image/destination-4.jpg"
                             alt="An ornate Paris bridge illuminated at dusk"
                             width="400"
                             height="305"
@@ -176,7 +198,8 @@
                     ></a>
                     <a class="destination-card" href="search-results.html?destination=Dubai"
                         ><img
-                            src="image/destination-5.jpg"
+                            src="image/placeholder.svg"
+                            data-src="image/destination-5.jpg"
                             alt="Dubai skyline in warm evening light"
                             width="400"
                             height="305"
@@ -190,7 +213,8 @@
                     ></a>
                     <a class="destination-card" href="search-results.html?destination=Maldives"
                         ><img
-                            src="image/destination-1.jpg"
+                            src="image/placeholder.svg"
+                            data-src="image/destination-1.jpg"
                             alt="Sunlight over a tropical beach"
                             width="400"
                             height="305"
@@ -227,9 +251,196 @@
                     </div>
                 </div>
             </section>
+            <section class="container travel-inspiration" aria-labelledby="inspiration-heading">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="inspiration-heading">Find a little inspiration</h2>
+                        <p class="muted">Explore beaches, cities and places to unwind.</p>
+                    </div>
+                </div>
+                <div
+                    id="destinationCarousel"
+                    class="carousel slide travel-carousel"
+                    role="region"
+                    aria-roledescription="carousel"
+                    aria-label="Travel inspiration"
+                >
+                    <div class="carousel-inner">
+                        <div
+                            class="carousel-item active"
+                            role="group"
+                            aria-roledescription="slide"
+                            aria-label="1 of 3: Beach, mountains and comfort"
+                        >
+                            <div class="inspiration-photos">
+                                <a href="search-results.html?destination=Maldives"
+                                    ><img
+                                        src="image/placeholder.svg"
+                                        data-src="image/destination-1.jpg"
+                                        alt="Tropical beach — explore Maldives stays"
+                                        width="400"
+                                        height="260"
+                                        loading="lazy"
+                                /></a>
+                                <a href="search-results.html?destination=Almaty"
+                                    ><img
+                                        src="image/placeholder.svg"
+                                        data-src="image/destination-2.jpg"
+                                        alt="Mountain scenery — explore Almaty stays"
+                                        width="400"
+                                        height="260"
+                                        loading="lazy"
+                                /></a>
+                                <a href="hotel-detail.html?hotel=comfort-city"
+                                    ><img
+                                        src="image/placeholder.svg"
+                                        data-src="image/destination-3.jpg"
+                                        alt="Illustrative city skyline at dusk — view Comfort City Hotel"
+                                        width="400"
+                                        height="260"
+                                        loading="lazy"
+                                /></a>
+                            </div>
+                            <h3>Beach, mountains and comfort</h3>
+                        </div>
+                        <div
+                            class="carousel-item"
+                            role="group"
+                            aria-roledescription="slide"
+                            aria-label="2 of 3: City breaks and new adventures"
+                            aria-hidden="true"
+                            inert
+                        >
+                            <div class="inspiration-photos">
+                                <a href="search-results.html?destination=Paris"
+                                    ><img
+                                        src="image/placeholder.svg"
+                                        data-src="image/destination-4.jpg"
+                                        alt="Paris at dusk — explore Paris stays"
+                                        width="400"
+                                        height="260"
+                                        loading="lazy"
+                                /></a>
+                                <a href="search-results.html?destination=Dubai"
+                                    ><img
+                                        src="image/placeholder.svg"
+                                        data-src="image/destination-5.jpg"
+                                        alt="Dubai skyline — explore Dubai stays"
+                                        width="400"
+                                        height="260"
+                                        loading="lazy"
+                                /></a>
+                                <a href="services.html"
+                                    ><img
+                                        src="image/placeholder.svg"
+                                        data-src="image/destination-6.jpg"
+                                        alt="Travel notebook and camera — explore travel services"
+                                        width="400"
+                                        height="260"
+                                        loading="lazy"
+                                /></a>
+                            </div>
+                            <h3>City breaks and new adventures</h3>
+                        </div>
+                        <div
+                            class="carousel-item"
+                            role="group"
+                            aria-roledescription="slide"
+                            aria-label="3 of 3: Hotels and relaxing resorts"
+                            aria-hidden="true"
+                            inert
+                        >
+                            <div class="inspiration-photos">
+                                <a href="hotel-detail.html?hotel=grand-palace"
+                                    ><img
+                                        src="image/placeholder.svg"
+                                        data-src="image/destination-7.jpg"
+                                        alt="Hotel exterior — view Grand Palace Hotel"
+                                        width="400"
+                                        height="260"
+                                        loading="lazy"
+                                /></a>
+                                <a href="hotel-detail.html?hotel=ocean-view"
+                                    ><img
+                                        src="image/placeholder.svg"
+                                        data-src="image/destination-8.jpg"
+                                        alt="Resort pool — view Ocean View Resort"
+                                        width="400"
+                                        height="260"
+                                        loading="lazy"
+                                /></a>
+                                <a href="hotel-detail.html?hotel=island-retreat"
+                                    ><img
+                                        src="image/placeholder.svg"
+                                        data-src="image/destination-9.jpg"
+                                        alt="Poolside terrace — view Island Retreat"
+                                        width="400"
+                                        height="260"
+                                        loading="lazy"
+                                /></a>
+                            </div>
+                            <h3>Hotels and relaxing resorts</h3>
+                        </div>
+                    </div>
+                    <div class="carousel-toolbar">
+                        <div class="carousel-arrows">
+                            <button
+                                id="carousel-prev"
+                                class="button button-secondary button-small"
+                                type="button"
+                                aria-controls="destinationCarousel"
+                            >
+                                Previous
+                            </button>
+                            <button
+                                id="carousel-next"
+                                class="button button-secondary button-small"
+                                type="button"
+                                aria-controls="destinationCarousel"
+                            >
+                                Next
+                            </button>
+                        </div>
+                        <div class="travel-indicators" role="group" aria-label="Choose inspiration slide">
+                            <button
+                                type="button"
+                                data-carousel-slide="0"
+                                aria-label="Slide 1: Beach, mountains and comfort"
+                                aria-current="true"
+                            >
+                                1
+                            </button>
+                            <button
+                                type="button"
+                                data-carousel-slide="1"
+                                aria-label="Slide 2: City breaks and new adventures"
+                            >
+                                2
+                            </button>
+                            <button
+                                type="button"
+                                data-carousel-slide="2"
+                                aria-label="Slide 3: Hotels and relaxing resorts"
+                            >
+                                3
+                            </button>
+                        </div>
+                        <button
+                            id="carousel-playback"
+                            class="button button-ghost button-small"
+                            type="button"
+                            aria-controls="destinationCarousel"
+                        >
+                            Pause slideshow
+                        </button>
+                    </div>
+                    <p id="carousel-status" class="sr-only" role="status" aria-atomic="true"></p>
+                </div>
+            </section>
             <section class="container story-banner" aria-labelledby="story-heading">
                 <img
-                    src="image/destination-6.jpg"
+                    src="image/placeholder.svg"
+                    data-src="image/destination-6.jpg"
                     alt="A camera, map and travel notebook"
                     width="600"
                     height="350"
@@ -289,6 +500,16 @@
                             Save a newsletter preference on this device. This student demo does not send
                             emails.
                         </p>
+                        <button
+                            id="open-popup-btn"
+                            class="button button-ghost button-small"
+                            type="button"
+                            data-newsletter-open
+                            aria-haspopup="dialog"
+                            aria-controls="popup-modal"
+                        >
+                            Subscribe for discounts
+                        </button>
                     </div>
                     <form id="subscribe-form" novalidate>
                         <div class="inline">

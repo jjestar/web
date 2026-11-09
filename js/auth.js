@@ -5,8 +5,7 @@
         const stored = App.read('users', []);
         return Array.isArray(stored)
             ? stored.filter(
-                  (account) =>
-                      account && typeof account === 'object' && typeof account.id === 'string'
+                  (account) => account && typeof account === 'object' && typeof account.id === 'string'
               )
             : [];
     }
@@ -63,16 +62,12 @@
     function uniqueId(prefix) {
         if (window.crypto && typeof window.crypto.randomUUID === 'function')
             return prefix + '-' + window.crypto.randomUUID();
-        return (
-            prefix + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12)
-        );
+        return prefix + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12);
     }
 
     function requireCrypto() {
         if (!window.crypto || !window.crypto.subtle) {
-            throw new Error(
-                'Open BookingApp on its HTTPS website or localhost to use demo accounts.'
-            );
+            throw new Error('Open BookingApp on its HTTPS website or localhost to use demo accounts.');
         }
     }
 
@@ -90,9 +85,7 @@
             'SHA-256',
             new TextEncoder().encode(salt + ':' + password)
         );
-        return Array.from(new Uint8Array(digest), (byte) =>
-            byte.toString(16).padStart(2, '0')
-        ).join('');
+        return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
     }
 
     function signOut() {
@@ -114,10 +107,18 @@
         try {
             const expected = new URL('booking.html', window.location.href);
             const candidate = new URL(value, window.location.href);
-            if (candidate.origin !== expected.origin || candidate.pathname !== expected.pathname)
-                return '';
+            if (candidate.origin !== expected.origin || candidate.pathname !== expected.pathname) return '';
             const params = {};
-            ['hotel', 'checkin', 'checkout', 'guests', 'room', 'service'].forEach((key) => {
+            [
+                'hotel',
+                'checkin',
+                'checkout',
+                'guests',
+                'room',
+                'service',
+                'serviceTier',
+                'serviceQuantity'
+            ].forEach((key) => {
                 if (candidate.searchParams.has(key)) params[key] = candidate.searchParams.get(key);
             });
             return App.url('booking.html', params);
@@ -190,8 +191,7 @@
                 !issues['signup-email'] &&
                 accounts().some((account) => String(account.email || '').toLowerCase() === email)
             ) {
-                issues['signup-email'] =
-                    'An account with this email already exists. Log in instead.';
+                issues['signup-email'] = 'An account with this email already exists. Log in instead.';
             }
             if (App.errors(form, issues)) {
                 status(output, 'Check the highlighted fields and try again.', true);
@@ -205,11 +205,7 @@
                 const hash = await passwordHash(password, salt);
                 const latestAccounts = accounts();
                 // Recheck after the async digest in case another tab created this account.
-                if (
-                    latestAccounts.some(
-                        (account) => String(account.email || '').toLowerCase() === email
-                    )
-                ) {
+                if (latestAccounts.some((account) => String(account.email || '').toLowerCase() === email)) {
                     App.errors(form, {
                         'signup-email': 'An account with this email already exists. Log in instead.'
                     });
@@ -272,16 +268,12 @@
             submitting = true;
             setBusy(form, true, 'Logging in…');
             try {
-                const account = accounts().find(
-                    (item) => String(item.email || '').toLowerCase() === email
-                );
+                const account = accounts().find((item) => String(item.email || '').toLowerCase() === email);
                 const isValidAccount =
                     account &&
                     typeof account.passwordSalt === 'string' &&
                     typeof account.passwordHash === 'string';
-                const digest = isValidAccount
-                    ? await passwordHash(password, account.passwordSalt)
-                    : '';
+                const digest = isValidAccount ? await passwordHash(password, account.passwordSalt) : '';
                 if (!isValidAccount || digest !== account.passwordHash) {
                     App.errors(form, {
                         'login-password': 'The email or password does not match. Try again.'
@@ -307,8 +299,7 @@
     }
 
     function formatDate(value) {
-        if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value))
-            return 'Date unavailable';
+        if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return 'Date unavailable';
         const date = new Date(value + 'T12:00:00');
         return Number.isNaN(date.getTime())
             ? 'Date unavailable'
@@ -343,7 +334,7 @@
             .map(
                 (hotel) =>
                     '<article class="card saved-hotel">' +
-                    '<img class="image-cover" src="' +
+                    '<img class="image-cover" src="image/placeholder.svg" data-src="' +
                     App.escape(hotel.image) +
                     '" alt="' +
                     App.escape(hotel.name) +
@@ -370,9 +361,7 @@
 
     function bookingRecords() {
         const value = App.read('bookings', []);
-        return Array.isArray(value)
-            ? value.filter((booking) => booking && typeof booking === 'object')
-            : [];
+        return Array.isArray(value) ? value.filter((booking) => booking && typeof booking === 'object') : [];
     }
 
     function renderBookings() {
@@ -422,7 +411,15 @@
                     App.escape(String(booking.guests || 1)) +
                     ' guest(s) · ' +
                     App.escape(String(booking.room || 'Room')) +
-                    (service ? ' · ' + service : '') +
+                    (service
+                        ? ' · ' +
+                          service +
+                          (['standard', 'premium', 'vip'].includes(booking.serviceTier)
+                              ? ' (' +
+                                App.escape(booking.serviceTier === 'vip' ? 'VIP' : booking.serviceTier) +
+                                ')'
+                              : '')
+                        : '') +
                     '</p>' +
                     '<p class="price">' +
                     App.escape(App.money(Number.isFinite(total) ? total : 0)) +
@@ -462,9 +459,7 @@
         const form = document.getElementById('profile-form');
         const output = document.getElementById('profile-status');
         document.getElementById('profile-name-heading').textContent = 'Trips and saved stays';
-        document.getElementById('profile-email').textContent = String(
-            user.email || 'Email unavailable'
-        );
+        document.getElementById('profile-email').textContent = String(user.email || 'Email unavailable');
         form.elements.namedItem('name').value = String(user.name || '');
         form.elements.namedItem('phone').value = String(user.phone || '');
         if (new URLSearchParams(window.location.search).get('welcome') === '1')
@@ -502,8 +497,7 @@
                         account.id === user.id ? { ...account, name: name, phone: phone } : account
                     )
                 );
-                document.getElementById('profile-name-heading').textContent =
-                    'Trips and saved stays';
+                document.getElementById('profile-name-heading').textContent = 'Trips and saved stays';
                 status(output, 'Details saved.', false);
                 announceAuthChange();
             } catch (error) {
@@ -517,19 +511,11 @@
             if (!button) return;
             try {
                 if (currentUser()?.id !== user.id)
-                    throw new Error(
-                        'Your session changed. Log in again to update your saved stays.'
-                    );
+                    throw new Error('Your session changed. Log in again to update your saved stays.');
                 App.toggleFavorite(button.dataset.removeFavorite);
                 renderFavorites();
-                status(
-                    document.getElementById('saved-status'),
-                    'Stay removed from saved stays.',
-                    false
-                );
-                const next = document.querySelector(
-                    '#profile-favorites button, #profile-favorites a'
-                );
+                status(document.getElementById('saved-status'), 'Stay removed from saved stays.', false);
+                const next = document.querySelector('#profile-favorites button, #profile-favorites a');
                 if (next) next.focus();
             } catch (error) {
                 status(
@@ -569,8 +555,7 @@
                     const latest = bookingRecords();
                     const target = latest.find(
                         (booking) =>
-                            booking.id === button.dataset.confirmCancel &&
-                            booking.userId === activeUser.id
+                            booking.id === button.dataset.confirmCancel && booking.userId === activeUser.id
                     );
                     if (!target)
                         throw new Error(
@@ -584,11 +569,7 @@
                     );
                     renderBookings();
                     const message = document.getElementById('bookings-status');
-                    status(
-                        message,
-                        'Your demo booking has been cancelled. No payment was taken.',
-                        false
-                    );
+                    status(message, 'Your demo booking has been cancelled. No payment was taken.', false);
                     message.focus();
                 } catch (error) {
                     status(

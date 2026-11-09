@@ -2,11 +2,142 @@
 (() => {
     'use strict';
 
-    const services = {
-        transfer: { name: 'Airport transfer', price: 35, unit: 'arrival transfer' },
-        car: { name: 'Car rental', price: 55, unit: 'day' },
-        tour: { name: 'Guided city tour', price: 45, unit: 'person' }
-    };
+    const tierNames = { standard: 'Standard', premium: 'Premium', vip: 'VIP' };
+
+    function initializeScrollProgress() {
+        const $ = window.jQuery;
+        if (!['about', 'services'].includes(document.body.dataset.page)) return;
+        const $track = $('<div>', {
+            class: 'assignment-scroll-track',
+            role: 'progressbar',
+            'aria-label': 'Page reading progress',
+            'aria-valuemin': '0',
+            'aria-valuemax': '100',
+            'aria-valuenow': '0'
+        })
+            .append($('<div>', { class: 'assignment-scroll-fill' }))
+            .prependTo('body');
+        let scheduled = false;
+        const update = () => {
+            scheduled = false;
+            const available = Math.max(0, $(document).height() - $(window).height());
+            const progress = available ? Math.min(100, Math.max(0, (window.scrollY / available) * 100)) : 100;
+            $track.children().css('width', progress + '%');
+            $track.attr('aria-valuenow', Math.round(progress));
+        };
+        $(window).on('scroll.assignmentProgress resize.assignmentProgress load.assignmentProgress', () => {
+            if (!scheduled) {
+                scheduled = true;
+                window.requestAnimationFrame(update);
+            }
+        });
+        update();
+    }
+
+    function initializeCounters() {
+        const $ = window.jQuery;
+        const section = document.querySelector('.booking-stats');
+        if (!section) return;
+        const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let played = false;
+        const animations = [];
+        const reveal = () => {
+            if (played) return;
+            played = true;
+            $('.stat-number', section).each(function () {
+                const output = this;
+                const target = Number(output.dataset.count);
+                if (motion.matches) {
+                    output.textContent = String(target);
+                    return;
+                }
+                const animation = $({ value: 0 });
+                animations.push(animation);
+                animation.animate(
+                    { value: target },
+                    {
+                        duration: 1400,
+                        easing: 'swing',
+                        step(value) {
+                            output.textContent = String(Math.floor(value));
+                        },
+                        complete() {
+                            output.textContent = String(target);
+                        }
+                    }
+                );
+            });
+        };
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    if (entries.some((entry) => entry.isIntersecting)) {
+                        reveal();
+                        observer.disconnect();
+                    }
+                },
+                { threshold: 0.25 }
+            );
+            observer.observe(section);
+        } else reveal();
+        motion.addEventListener('change', () => {
+            if (motion.matches) {
+                animations.forEach((animation) => animation.stop(true, true));
+                $('.stat-number', section).each(function () {
+                    this.textContent = this.dataset.count;
+                });
+            }
+        });
+    }
+
+    // Capture validated values before the demonstration delay. Reset cancels the
+    // pending completion, so an old submission cannot overwrite a cleared form.
+    function attachSubmitSpinner(form, readValues, complete) {
+        const $ = window.jQuery;
+        const button = form.querySelector('button[type="submit"]');
+        const label = button.innerHTML;
+        let pending = null;
+        let lockedFields = [];
+        function restore() {
+            button.innerHTML = label;
+            button.disabled = false;
+            form.setAttribute('aria-busy', 'false');
+            lockedFields.forEach(([field, wasDisabled]) => {
+                field.disabled = wasDisabled;
+            });
+            lockedFields = [];
+        }
+        function cancel() {
+            if (pending !== null) window.clearTimeout(pending);
+            pending = null;
+            restore();
+        }
+        $(form).on('submit.assignmentSubmit', (event) => {
+            event.preventDefault();
+            if (pending !== null || button.disabled) return;
+            const values = readValues();
+            if (!values) return;
+            const captured = Object.freeze({ ...values });
+            button.innerHTML =
+                '<span class="assignment-submit-spinner" aria-hidden="true"></span>Please wait…';
+            button.disabled = true;
+            form.setAttribute('aria-busy', 'true');
+            lockedFields = [...form.querySelectorAll('input,select,textarea')].map((field) => [
+                field,
+                field.disabled
+            ]);
+            lockedFields.forEach(([field]) => {
+                field.disabled = true;
+            });
+            pending = window.setTimeout(() => {
+                pending = null;
+                restore();
+                complete(captured);
+            }, 1200);
+        });
+        $(form).on('reset.assignmentSubmit', cancel);
+        return { cancel };
+    }
 
     function initializeContact() {
         const form = document.getElementById('contact-form');
@@ -89,33 +220,45 @@
             download.hidden = true;
         });
 
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const values = readValues();
-            if (validate(values)) {
-                setStatus('Check the highlighted fields, then save your message again.', true);
-                return;
+        attachSubmitSpinner(
+            form,
+            () => {
+                const values = readValues();
+                if (validate(values)) {
+                    setStatus('Check the highlighted fields, then save your message again.', true);
+                    return null;
+                }
+                download.hidden = true;
+                setStatus('Saving your demo message in this browser…');
+                return {
+                    ...values,
+                    phone: values.reply === 'phone' ? values.phone : ''
+                };
+            },
+            (values) => {
+                const draft = { ...values, savedAt: new Date().toISOString() };
+                try {
+                    App.write('contactDraft', draft);
+                    savedDraft = draft;
+                    download.hidden = false;
+                    setStatus(
+                        'Your demo message is saved in this browser. No message, email, or phone request was sent.'
+                    );
+                    status.focus();
+                } catch (error) {
+                    setStatus(
+                        error.message ||
+                            'Your draft could not be saved. Check browser storage and try again.',
+                        true
+                    );
+                }
             }
-            const draft = {
-                ...values,
-                phone: values.reply === 'phone' ? values.phone : '',
-                savedAt: new Date().toISOString()
-            };
-            try {
-                App.write('contactDraft', draft);
-                savedDraft = draft;
-                download.hidden = false;
-                setStatus(
-                    'Your demo message is saved in this browser. No message, email, or phone request was sent.'
-                );
-                status.focus();
-            } catch (error) {
-                setStatus(
-                    error.message ||
-                        'Your draft could not be saved. Check browser storage and try again.',
-                    true
-                );
-            }
+        );
+        window.jQuery(form).on('reset.contactDraft', () => {
+            App.errors(form, {});
+            download.hidden = true;
+            setStatus('');
+            window.setTimeout(updatePhoneField, 0);
         });
 
         document.getElementById('contact-clear').addEventListener('click', () => {
@@ -162,24 +305,45 @@
     function initializeServices() {
         const form = document.getElementById('service-estimate-form');
         if (!form) return;
-
+        const $ = window.jQuery;
+        const services = window.travelServices;
         const choice = document.getElementById('service-choice');
+        const tier = document.getElementById('service-tier');
         const quantity = document.getElementById('service-quantity');
         const quantityField = document.getElementById('service-quantity-field');
         const status = document.getElementById('service-estimate-status');
         const result = document.getElementById('service-estimate-result');
         const empty = document.getElementById('estimate-empty');
         const query = new URLSearchParams(window.location.search);
-        const selectedHotel = window.hotelsDatabase?.find(
-            (hotel) => String(hotel.id) === query.get('hotel')
-        );
-
-        function bookingUrl(service) {
-            return App.url('booking.html', { hotel: selectedHotel?.id || '', service });
+        const selectedHotel = window.hotelsDatabase?.find((hotel) => String(hotel.id) === query.get('hotel'));
+        const hasService = (id) => services && Object.hasOwn(services, id);
+        const hasTier = (value) => Object.hasOwn(tierNames, value);
+        if (!services) {
+            status.textContent = 'Service prices could not be loaded. Reload the page and try again.';
+            status.classList.add('is-error');
+            form.querySelector('button[type="submit"]').disabled = true;
+            return;
         }
 
-        document.querySelectorAll('[data-service-booking]').forEach((link) => {
-            link.href = bookingUrl(link.dataset.serviceBooking);
+        function bookingUrl(service, serviceTier = 'standard', serviceQuantity = 1) {
+            const params = {
+                hotel: selectedHotel?.id || '',
+                service,
+                serviceTier,
+                serviceQuantity
+            };
+            ['checkin', 'checkout', 'guests', 'room'].forEach((key) => {
+                if (query.has(key)) params[key] = query.get(key);
+            });
+            return App.url('booking.html', params);
+        }
+        $('[data-service-booking]').each(function () {
+            this.href = bookingUrl(this.dataset.serviceBooking);
+        });
+        $('[data-service-rate]').each(function () {
+            const service = services[this.dataset.serviceRate];
+            const value = service?.rates[this.dataset.tier];
+            if (Number.isFinite(value)) this.textContent = value === 0 ? 'Included' : App.money(value);
         });
 
         function hideEstimate() {
@@ -188,55 +352,121 @@
             status.textContent = '';
             status.classList.remove('is-error');
         }
-
+        function perParty(service, serviceTier) {
+            return service === 'tour' && serviceTier !== 'standard';
+        }
         function updateServiceDetails() {
-            const service = services[choice.value];
-            quantityField.hidden = choice.value === 'transfer';
-            quantity.disabled = quantityField.hidden;
+            const service = hasService(choice.value) ? services[choice.value] : null;
+            const serviceTier = tier.value;
+            const party = perParty(choice.value, serviceTier);
+            quantityField.hidden = party;
+            quantity.disabled = party;
+            if (party) quantity.value = '1';
             document.getElementById('quantity-label').textContent =
-                choice.value === 'tour' ? 'Number of people' : 'Number of days';
-            document.getElementById('service-rate').textContent = service
-                ? choice.value === 'transfer'
-                    ? `${App.money(service.price)} for one arrival transfer. This is a flat fee.`
-                    : `${App.money(service.price)} per ${service.unit}. Hotel accommodation is priced separately.`
-                : 'Choose a service to see its price.';
+                choice.value === 'transfer'
+                    ? serviceTier === 'premium'
+                        ? 'Number of round trips'
+                        : 'Number of trips'
+                    : choice.value === 'tour'
+                      ? 'Number of people'
+                      : 'Number of days';
+            let rateText = 'Choose a service and pricing level.';
+            if (service && hasTier(serviceTier)) {
+                const rate = App.money(service.rates[serviceTier]);
+                if (choice.value === 'transfer') {
+                    rateText =
+                        serviceTier === 'vip'
+                            ? 'VIP transfer is included ($0). Choose the number of trips for your itinerary.'
+                            : `${tierNames[serviceTier]} transfer: ${rate} per ${serviceTier === 'premium' ? 'round trip' : 'one-way trip'}.`;
+                } else if (choice.value === 'tour') {
+                    rateText =
+                        serviceTier === 'standard'
+                            ? `Standard group tour: ${rate} per person.`
+                            : `${tierNames[serviceTier]} ${serviceTier === 'premium' ? 'private guide' : 'special tour'}: ${rate} for one party. Guest count does not multiply this price.`;
+                } else rateText = `${tierNames[serviceTier]} car rental: ${rate} per day.`;
+            }
+            document.getElementById('service-rate').textContent = rateText;
             App.errors(form, {});
             hideEstimate();
         }
 
-        function calculate() {
-            const errors = {};
-            const service = services[choice.value];
-            const count = choice.value === 'transfer' ? 1 : Number(quantity.value.trim());
-            if (!service) errors['service-choice'] = 'Choose one of the available travel services.';
-            if (
-                choice.value !== 'transfer' &&
-                (!/^\d+$/.test(quantity.value.trim()) ||
-                    !Number.isInteger(count) ||
-                    count < 1 ||
-                    count > 30)
-            ) {
-                errors['service-quantity'] = 'Enter a whole number from 1 to 30.';
+        function readEstimate() {
+            const issues = {};
+            const serviceId = choice.value;
+            const serviceTier = tier.value;
+            const validService = hasService(serviceId);
+            const validTier = hasTier(serviceTier);
+            const party = serviceId === 'tour' && validTier && perParty(serviceId, serviceTier);
+            const rawCount = quantity.value.trim();
+            const count = party ? 1 : Number(rawCount);
+            if (!validService) issues['service-choice'] = 'Choose one of the available travel services.';
+            if (!validTier) issues['service-tier'] = 'Choose Standard, Premium, or VIP.';
+            if (!party && (!/^\d+$/.test(rawCount) || !Number.isInteger(count) || count < 1 || count > 30)) {
+                issues['service-quantity'] = 'Enter a whole number from 1 to 30.';
             }
-            if (App.errors(form, errors)) {
+            if (App.errors(form, issues)) {
                 hideEstimate();
-                status.textContent = 'Check the highlighted field to calculate your estimate.';
+                status.textContent = 'Check the highlighted fields to calculate your estimate.';
                 status.classList.add('is-error');
-                return;
+                return null;
             }
-            const total = service.price * count;
+            const service = services[serviceId];
+            const price = service.rates[serviceTier];
+            hideEstimate();
+            status.textContent = 'Calculating your service estimate…';
+            return {
+                service: serviceId,
+                name: service.name,
+                serviceTier,
+                serviceQuantity: count,
+                price,
+                total: price * count
+            };
+        }
+
+        function showEstimate(estimate) {
+            let unit =
+                estimate.service === 'car'
+                    ? estimate.serviceQuantity === 1
+                        ? 'day'
+                        : 'days'
+                    : estimate.service === 'tour'
+                      ? estimate.serviceQuantity === 1
+                          ? 'person'
+                          : 'people'
+                      : estimate.serviceTier === 'premium'
+                        ? estimate.serviceQuantity === 1
+                            ? 'round trip'
+                            : 'round trips'
+                        : estimate.serviceQuantity === 1
+                          ? 'trip'
+                          : 'trips';
+            if (perParty(estimate.service, estimate.serviceTier)) unit = 'party';
             document.getElementById('estimate-description').textContent =
-                choice.value === 'transfer'
-                    ? `${service.name} · one-time fee`
-                    : `${service.name} · ${count} ${choice.value === 'tour' ? (count === 1 ? 'person' : 'people') : count === 1 ? 'day' : 'days'} × ${App.money(service.price)}`;
-            document.getElementById('estimate-total').textContent = App.money(total);
-            document.getElementById('estimate-continue').href = bookingUrl(choice.value);
+                `${estimate.name} · ${tierNames[estimate.serviceTier]} · ${estimate.serviceQuantity} ${unit} × ${App.money(estimate.price)}`;
+            document.getElementById('estimate-total').textContent =
+                estimate.price === 0 ? 'Included · $0' : App.money(estimate.total);
+            document.getElementById('estimate-continue').href = bookingUrl(
+                estimate.service,
+                estimate.serviceTier,
+                estimate.serviceQuantity
+            );
             empty.hidden = true;
             result.hidden = false;
             status.classList.remove('is-error');
             status.textContent = 'Estimate calculated. No service has been booked.';
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                $(result).stop(true, true).css('opacity', 0).animate({ opacity: 1 }, 200);
+            }
             try {
-                App.write('serviceEstimate', { service: choice.value, quantity: count, total });
+                App.write('serviceEstimate', {
+                    service: estimate.service,
+                    serviceTier: estimate.serviceTier,
+                    serviceQuantity: estimate.serviceQuantity,
+                    tier: estimate.serviceTier,
+                    quantity: estimate.serviceQuantity,
+                    total: estimate.total
+                });
             } catch (error) {
                 status.textContent =
                     'Estimate calculated. Browser storage is unavailable, so this estimate will not be remembered.';
@@ -244,28 +474,45 @@
         }
 
         const previous = App.read('serviceEstimate', null);
-        if (previous && services[previous.service]) {
+        if (previous && typeof previous === 'object' && hasService(previous.service)) {
             choice.value = previous.service;
-            if (
-                Number.isInteger(previous.quantity) &&
-                previous.quantity >= 1 &&
-                previous.quantity <= 30
-            ) {
-                quantity.value = String(previous.quantity);
-            }
+            const savedTier = previous.serviceTier || previous.tier;
+            if (hasTier(savedTier)) tier.value = savedTier;
+            const savedQuantity = previous.serviceQuantity ?? previous.quantity;
+            if (Number.isInteger(savedQuantity) && savedQuantity >= 1 && savedQuantity <= 30)
+                quantity.value = String(savedQuantity);
         }
-        if (services[query.get('service')]) choice.value = query.get('service');
+        if (hasService(query.get('service'))) choice.value = query.get('service');
+        if (hasTier(query.get('serviceTier'))) tier.value = query.get('serviceTier');
+        if (/^\d+$/.test(query.get('serviceQuantity') || '')) {
+            const requested = Number(query.get('serviceQuantity'));
+            if (requested >= 1 && requested <= 30) quantity.value = String(requested);
+        }
         updateServiceDetails();
-
-        choice.addEventListener('change', updateServiceDetails);
-        quantity.addEventListener('input', hideEstimate);
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            calculate();
+        $(choice).add(tier).on('change.serviceEstimate', updateServiceDetails);
+        $(quantity).on('input.serviceEstimate', hideEstimate);
+        attachSubmitSpinner(form, readEstimate, showEstimate);
+        $(form).on('reset.serviceEstimate', () => {
+            hideEstimate();
+            App.errors(form, {});
+            App.remove('serviceEstimate');
+            window.setTimeout(() => {
+                updateServiceDetails();
+                status.textContent = 'Estimate cleared. Choose a service to start again.';
+            }, 0);
         });
     }
 
     function initialize() {
+        if (!window.jQuery) {
+            document.querySelectorAll('#contact-status, #service-estimate-status').forEach((output) => {
+                output.textContent = 'Interactive features could not load. Reload the page and try again.';
+                output.classList.add('is-error');
+            });
+            return;
+        }
+        initializeScrollProgress();
+        initializeCounters();
         initializeContact();
         initializeServices();
     }

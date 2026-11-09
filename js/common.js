@@ -13,8 +13,7 @@
         user: '<circle cx="12" cy="8" r="4"/><path d="M4 22v-2a8 8 0 0 1 16 0v2"/>',
         menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
         close: '<path d="m6 6 12 12M6 18 18 6"/>',
-        calendar:
-            '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/>',
+        calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18"/>',
         star: '<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9Z"/>',
         compass: '<circle cx="12" cy="12" r="9"/><path d="m16 8-2 6-6 2 2-6Z"/>',
         wifi: '<path d="M2 8a16 16 0 0 1 20 0M5 12a11 11 0 0 1 14 0m-11 4a6 6 0 0 1 8 0"/><circle cx="12" cy="20" r=".7"/>',
@@ -85,8 +84,7 @@
             if (!valid(checkin)) e.checkin = 'Choose a valid check-in date.';
             else if (checkin < App.today()) e.checkin = 'Choose today or a future check-in date.';
             if (!valid(checkout)) e.checkout = 'Choose a valid check-out date.';
-            else if (valid(checkin) && checkout <= checkin)
-                e.checkout = 'Check-out must be after check-in.';
+            else if (valid(checkin) && checkout <= checkin) e.checkout = 'Check-out must be after check-in.';
             return e;
         },
         emailError(v) {
@@ -119,9 +117,7 @@
                 el.textContent = '';
                 el.hidden = true;
             });
-            form.querySelectorAll('[aria-invalid]').forEach((el) =>
-                el.removeAttribute('aria-invalid')
-            );
+            form.querySelectorAll('[aria-invalid]').forEach((el) => el.removeAttribute('aria-invalid'));
             let first;
             Object.entries(errors).forEach(([id, message]) => {
                 if (!message) return;
@@ -137,9 +133,7 @@
                 output.textContent = message;
                 output.hidden = false;
                 field.setAttribute('aria-invalid', 'true');
-                const d = new Set(
-                    (field.getAttribute('aria-describedby') || '').split(' ').filter(Boolean)
-                );
+                const d = new Set((field.getAttribute('aria-describedby') || '').split(' ').filter(Boolean));
                 d.add(output.id);
                 field.setAttribute('aria-describedby', [...d].join(' '));
                 first ||= field;
@@ -159,7 +153,10 @@
             if (content) content.textContent = message;
             else t.textContent = message;
             t.dataset.type = type;
+            window.jQuery(t).stop(true, true);
             t.hidden = false;
+            // Retain the assignment's jQuery fade feedback without queuing stale notices.
+            window.jQuery(t).css('display', 'flex').hide().fadeIn(180);
             const announcement = document.getElementById('notification-announcement');
             if (announcement) {
                 announcement.textContent = '';
@@ -168,7 +165,12 @@
                 }, 0);
             }
             if (type !== 'error' && !t.contains(document.activeElement)) {
-                App.toastTimer = setTimeout(() => (t.hidden = true), 4500);
+                App.toastTimer = setTimeout(() => {
+                    if (t.contains(document.activeElement)) return;
+                    window.jQuery(t).fadeOut(350, () => {
+                        t.hidden = true;
+                    });
+                }, 4500);
             }
         },
         favoriteIds() {
@@ -188,9 +190,7 @@
     };
     window.App = App;
     document.addEventListener('DOMContentLoaded', () => {
-        document
-            .querySelectorAll('[data-icon]')
-            .forEach((el) => (el.innerHTML = App.icon(el.dataset.icon)));
+        document.querySelectorAll('[data-icon]').forEach((el) => (el.innerHTML = App.icon(el.dataset.icon)));
         document.getElementById('main-content')?.setAttribute('tabindex', '-1');
         const notice = document.getElementById('notification');
         if (notice) {
@@ -213,12 +213,14 @@
             let previousFocus;
             notice.addEventListener('focusin', (event) => {
                 clearTimeout(App.toastTimer);
+                window.jQuery(notice).stop(true, false).css({ display: 'flex', opacity: 1 });
                 if (event.relatedTarget && !notice.contains(event.relatedTarget))
                     previousFocus = event.relatedTarget;
             });
             dismiss.addEventListener('click', () => {
                 const restoreFocus = notice.contains(document.activeElement);
                 clearTimeout(App.toastTimer);
+                window.jQuery(notice).stop(true, false);
                 notice.hidden = true;
                 if (restoreFocus && previousFocus?.isConnected) previousFocus.focus();
             });
@@ -243,10 +245,7 @@
             if (!themeButton) return;
             const dark = document.documentElement.dataset.theme === 'dark';
             themeButton.innerHTML = App.icon(dark ? 'sun' : 'moon');
-            themeButton.setAttribute(
-                'aria-label',
-                dark ? 'Switch to light mode' : 'Switch to dark mode'
-            );
+            themeButton.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
             themeButton.setAttribute('aria-pressed', String(dark));
         }
         let themeChangeVersion = 0;

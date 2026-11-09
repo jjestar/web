@@ -43,9 +43,7 @@
         if (
             !daily.time
                 .slice(0, 3)
-                .every(
-                    (date) => /^\d{4}-\d{2}-\d{2}$/.test(date) && Number.isFinite(Date.parse(date))
-                )
+                .every((date) => /^\d{4}-\d{2}-\d{2}$/.test(date) && Number.isFinite(Date.parse(date)))
         )
             throw new Error('Weather is unavailable.');
         return data;
