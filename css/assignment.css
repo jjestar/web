@@ -12,16 +12,16 @@
     --bg: #f3e8ff;
 }
 :root[data-theme='dark'][data-backdrop='1'] {
-    --bg: #1b2432;
+    --bg: #20221f;
 }
 :root[data-theme='dark'][data-backdrop='2'] {
-    --bg: #29251a;
+    --bg: #25231f;
 }
 :root[data-theme='dark'][data-backdrop='3'] {
-    --bg: #142936;
+    --bg: #202326;
 }
 :root[data-theme='dark'][data-backdrop='4'] {
-    --bg: #241d32;
+    --bg: #242321;
 }
 .utility-bar {
     display: flex;
