@@ -2834,6 +2834,30 @@ body[data-page='services'] #services-heading {
     }
 }
 
-/* The site name is presented in page content, not as a header or footer mark. */
+.brand {
+    flex: 0 0 auto;
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.brand:hover {
+    color: var(--primary);
+}
+.site-header .brand {
+    color: var(--header-fg);
+}
+.site-header .brand:hover {
+    color: #ffffff;
+}
 .main-nav { margin-left: 0; }
 .site-header .header-actions { margin-left: auto; }
+.site-footer .footer-brand {
+    margin: 0 0 12px;
+    color: #f3f0e8;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+}
