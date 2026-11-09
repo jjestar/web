@@ -7,7 +7,7 @@
             name="description"
             content="BookingApp: explore illustrative stays, compare amenities and plan your next trip. A responsive student travel project."
         />
-        <meta name="theme-color" content="#214fc6" />
+        <meta name="theme-color" content="#252622" />
         <title>Compare stays and plan a trip | BookingApp</title>
         <link rel="icon" href="image/favicon.svg" type="image/svg+xml" />
         <script src="js/theme-init.js"></script>
@@ -69,201 +69,18 @@
             </div>
         </header>
         <main id="main-content">
-            <section class="container home-intro" aria-labelledby="find-heading">
-                <div class="search-panel">
-                    <div class="search-heading">
-                        <p class="collection-label">The BookingApp collection</p>
-                        <h1 id="find-heading"><span>Find your</span> <span>next stay</span></h1>
-                        <p class="muted">
-                            Choose a destination and dates. Compare rooms and prices before saving your trip.
-                        </p>
-                    </div>
-                    <form id="home-search" novalidate>
-                        <div class="search-grid">
-                            <div class="field">
-                                <label for="destination">Destination</label>
-                                <div class="hotel-search-box">
-                                    <input
-                                        id="destination"
-                                        name="destination"
-                                        type="text"
-                                        placeholder="Paris, Dubai or Astana"
-                                        autocomplete="off"
-                                        role="combobox"
-                                        aria-autocomplete="list"
-                                        aria-expanded="false"
-                                        aria-controls="destination-suggestions"
-                                        aria-describedby="destination-help"
-                                        spellcheck="false"
-                                    />
-                                    <ul
-                                        id="destination-suggestions"
-                                        class="search-suggestions"
-                                        role="listbox"
-                                        aria-label="Hotel and destination suggestions"
-                                        hidden
-                                    ></ul>
-                                </div>
-                                <span id="destination-help" class="sr-only"
-                                    >Type a hotel or destination. Use the arrow keys and Enter to choose a
-                                    suggestion.</span
-                                >
-                            </div>
-                            <div class="field">
-                                <label for="checkin">Check-in</label
-                                ><input id="checkin" name="checkin" type="date" />
-                            </div>
-                            <div class="field">
-                                <label for="checkout">Check-out</label
-                                ><input id="checkout" name="checkout" type="date" />
-                            </div>
-                            <div class="field">
-                                <label for="guests">Guests</label
-                                ><select id="guests" name="guests">
-                                    <option value="1">1 guest</option>
-                                    <option value="2" selected>2 guests</option>
-                                    <option value="3">3 guests</option>
-                                    <option value="4">4 guests</option>
-                                    <option value="5">5 guests</option>
-                                    <option value="6">6 guests</option>
-                                </select>
-                            </div>
-                            <button class="button button-primary" type="submit">
-                                <span data-icon="search"></span>Find a stay
-                            </button>
-                        </div>
-                        <p class="form-status" id="home-search-status" role="status"></p>
-                    </form>
-                    <p class="search-footnote">Six destinations · All prices in USD</p>
-                </div>
-                <figure class="featured-stay">
-                    <a
-                        class="featured-photo"
-                        href="hotel-detail.html?hotel=paris-atelier"
-                        aria-label="Explore Atelier Paris Stay in Paris"
-                    >
-                        <img
-                            src="image/destination-4.jpg"
-                            alt="Lamps along an ornate Paris bridge at dusk"
-                            width="1200"
-                            height="849"
-                            fetchpriority="high"
-                        />
-                    </a>
-                    <figcaption class="featured-caption">
-                        <div>
-                            <p class="collection-label">France</p>
-                            <h2>Paris</h2>
-                        </div>
-                        <div class="featured-rate">
-                            <p>Atelier Paris Stay</p>
-                            <span>From <strong>$175</strong> / night</span>
-                        </div>
-                        <a
-                            class="feature-link"
-                            href="hotel-detail.html?hotel=paris-atelier"
-                            aria-label="View Atelier Paris Stay"
-                            ><span data-icon="arrow"></span
-                        ></a>
-                    </figcaption>
-                </figure>
-            </section>
-            <section class="container destinations" aria-labelledby="destinations-heading">
-                <div class="section-heading">
-                    <div>
-                        <h2 id="destinations-heading">City streets or sea air</h2>
-                        <p class="muted">
-                            Three places to start. Explore the full collection to compare all six stays.
-                        </p>
-                    </div>
-                    <a class="button button-ghost" href="search-results.html"
-                        >Explore all stays <span data-icon="arrow"></span
-                    ></a>
-                </div>
-                <div class="grid-3">
-                    <a class="destination-card" href="search-results.html?destination=Paris"
-                        ><img
-                            src="image/placeholder.svg"
-                            data-src="image/destination-4.jpg"
-                            alt="An ornate Paris bridge illuminated at dusk"
-                            width="400"
-                            height="305"
-                            loading="lazy" />
-                        <div class="destination-caption">
-                            <div>
-                                <h3>Paris</h3>
-                                <p>Atelier Paris Stay · From $175 / night</p>
-                            </div>
-                            <span data-icon="arrow"></span></div
-                    ></a>
-                    <a class="destination-card" href="search-results.html?destination=Dubai"
-                        ><img
-                            src="image/placeholder.svg"
-                            data-src="image/destination-5.jpg"
-                            alt="Dubai skyline in warm evening light"
-                            width="400"
-                            height="305"
-                            loading="lazy" />
-                        <div class="destination-caption">
-                            <div>
-                                <h3>Dubai</h3>
-                                <p>Harbour House Dubai · From $195 / night</p>
-                            </div>
-                            <span data-icon="arrow"></span></div
-                    ></a>
-                    <a class="destination-card" href="search-results.html?destination=Maldives"
-                        ><img
-                            src="image/placeholder.svg"
-                            data-src="image/destination-1.jpg"
-                            alt="Sunlight over a tropical beach"
-                            width="400"
-                            height="305"
-                            loading="lazy" />
-                        <div class="destination-caption">
-                            <div>
-                                <h3>Maldives</h3>
-                                <p>Island Retreat · From $285 / night</p>
-                            </div>
-                            <span data-icon="arrow"></span></div
-                    ></a>
-                </div>
-                <div class="benefits">
-                    <div class="benefit">
-                        <div class="benefit-icon" data-icon="search"></div>
-                        <div>
-                            <h3>Compare stays</h3>
-                            <p>Filter by amenities and sort by nightly price.</p>
-                        </div>
-                    </div>
-                    <div class="benefit">
-                        <div class="benefit-icon" data-icon="heart"></div>
-                        <div>
-                            <h3>Save stays</h3>
-                            <p>Build a shortlist and return to it in My trips.</p>
-                        </div>
-                    </div>
-                    <div class="benefit">
-                        <div class="benefit-icon" data-icon="sun"></div>
-                        <div>
-                            <h3>Check the forecast</h3>
-                            <p>See current weather and a three-day forecast.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="container travel-inspiration" aria-labelledby="inspiration-heading">
-                <div class="section-heading">
-                    <div>
-                        <h2 id="inspiration-heading">Find a little inspiration</h2>
-                        <p class="muted">Explore beaches, cities and places to unwind.</p>
-                    </div>
+            <section class="container travel-inspiration home-carousel" aria-labelledby="inspiration-heading">
+                <div class="home-carousel-heading">
+                    <p class="collection-label">A stay for every kind of trip</p>
+                    <h1 id="inspiration-heading">Explore popular destinations</h1>
+                    <p class="muted">Find a city break, a quiet coast, or somewhere new to explore.</p>
                 </div>
                 <div
                     id="destinationCarousel"
                     class="carousel slide travel-carousel"
                     role="region"
                     aria-roledescription="carousel"
-                    aria-label="Travel inspiration"
+                    aria-label="Popular destination carousel"
                 >
                     <div class="carousel-inner">
                         <div
@@ -435,6 +252,157 @@
                         </button>
                     </div>
                     <p id="carousel-status" class="sr-only" role="status" aria-atomic="true"></p>
+                </div>
+            </section>
+            <section class="container home-search" aria-labelledby="find-heading">
+                <div class="search-panel">
+                    <div class="search-heading">
+                        <p class="collection-label">The BookingApp collection</p>
+                        <h2 id="find-heading">Find your next stay</h2>
+                        <p class="muted">
+                            Choose a destination and dates. Compare rooms and prices before saving your trip.
+                        </p>
+                    </div>
+                    <form id="home-search" novalidate>
+                        <div class="search-grid">
+                            <div class="field">
+                                <label for="destination">Destination</label>
+                                <div class="hotel-search-box">
+                                    <input
+                                        id="destination"
+                                        name="destination"
+                                        type="text"
+                                        placeholder="Paris, Dubai or Astana"
+                                        autocomplete="off"
+                                        role="combobox"
+                                        aria-autocomplete="list"
+                                        aria-expanded="false"
+                                        aria-controls="destination-suggestions"
+                                        aria-describedby="destination-help"
+                                        spellcheck="false"
+                                    />
+                                    <ul
+                                        id="destination-suggestions"
+                                        class="search-suggestions"
+                                        role="listbox"
+                                        aria-label="Hotel and destination suggestions"
+                                        hidden
+                                    ></ul>
+                                </div>
+                                <span id="destination-help" class="sr-only"
+                                    >Type a hotel or destination. Use the arrow keys and Enter to choose a
+                                    suggestion.</span
+                                >
+                            </div>
+                            <div class="field">
+                                <label for="checkin">Check-in</label
+                                ><input id="checkin" name="checkin" type="date" />
+                            </div>
+                            <div class="field">
+                                <label for="checkout">Check-out</label
+                                ><input id="checkout" name="checkout" type="date" />
+                            </div>
+                            <div class="field">
+                                <label for="guests">Guests</label
+                                ><select id="guests" name="guests">
+                                    <option value="1">1 guest</option>
+                                    <option value="2" selected>2 guests</option>
+                                    <option value="3">3 guests</option>
+                                    <option value="4">4 guests</option>
+                                    <option value="5">5 guests</option>
+                                    <option value="6">6 guests</option>
+                                </select>
+                            </div>
+                            <button class="button button-primary" type="submit">
+                                <span data-icon="search"></span>Find a stay
+                            </button>
+                        </div>
+                        <p class="form-status" id="home-search-status" role="status"></p>
+                    </form>
+                    <p class="search-footnote">Six destinations · All prices in USD</p>
+                </div>
+            </section>
+            <section class="container destinations" aria-labelledby="destinations-heading">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="destinations-heading">City streets or sea air</h2>
+                        <p class="muted">
+                            Three places to start. Explore the full collection to compare all six stays.
+                        </p>
+                    </div>
+                    <a class="button button-ghost" href="search-results.html"
+                        >Explore all stays <span data-icon="arrow"></span
+                    ></a>
+                </div>
+                <div class="grid-3">
+                    <a class="destination-card" href="search-results.html?destination=Paris"
+                        ><img
+                            src="image/placeholder.svg"
+                            data-src="image/destination-4.jpg"
+                            alt="An ornate Paris bridge illuminated at dusk"
+                            width="400"
+                            height="305"
+                            loading="lazy" />
+                        <div class="destination-caption">
+                            <div>
+                                <h3>Paris</h3>
+                                <p>Atelier Paris Stay · From $175 / night</p>
+                            </div>
+                            <span data-icon="arrow"></span></div
+                    ></a>
+                    <a class="destination-card" href="search-results.html?destination=Dubai"
+                        ><img
+                            src="image/placeholder.svg"
+                            data-src="image/destination-5.jpg"
+                            alt="Dubai skyline in warm evening light"
+                            width="400"
+                            height="305"
+                            loading="lazy" />
+                        <div class="destination-caption">
+                            <div>
+                                <h3>Dubai</h3>
+                                <p>Harbour House Dubai · From $195 / night</p>
+                            </div>
+                            <span data-icon="arrow"></span></div
+                    ></a>
+                    <a class="destination-card" href="search-results.html?destination=Maldives"
+                        ><img
+                            src="image/placeholder.svg"
+                            data-src="image/destination-1.jpg"
+                            alt="Sunlight over a tropical beach"
+                            width="400"
+                            height="305"
+                            loading="lazy" />
+                        <div class="destination-caption">
+                            <div>
+                                <h3>Maldives</h3>
+                                <p>Island Retreat · From $285 / night</p>
+                            </div>
+                            <span data-icon="arrow"></span></div
+                    ></a>
+                </div>
+                <div class="benefits">
+                    <div class="benefit">
+                        <div class="benefit-icon" data-icon="search"></div>
+                        <div>
+                            <h3>Compare stays</h3>
+                            <p>Filter by amenities and sort by nightly price.</p>
+                        </div>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon" data-icon="heart"></div>
+                        <div>
+                            <h3>Save stays</h3>
+                            <p>Build a shortlist and return to it in My trips.</p>
+                        </div>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon" data-icon="sun"></div>
+                        <div>
+                            <h3>Check the forecast</h3>
+                            <p>See current weather and a three-day forecast.</p>
+                        </div>
+                    </div>
                 </div>
             </section>
             <section class="container story-banner" aria-labelledby="story-heading">

@@ -2662,3 +2662,211 @@ body[data-page='services'] #services-heading {
         margin-top: 0;
     }
 }
+
+/* Assignment 6 composition: dark masthead, destination triptych, then search. */
+.site-header {
+    --header-bg: #252622;
+    --header-fg: #f3f0e8;
+    --header-muted: #c5c3bb;
+    background: var(--header-bg);
+    color: var(--header-fg);
+    border-color: #44453f;
+}
+.site-header .brand,
+.site-header .account-link {
+    color: var(--header-fg);
+}
+.site-header .main-nav > a {
+    color: var(--header-muted);
+}
+.site-header .main-nav > a[aria-current='page'],
+.site-header .main-nav > a:hover {
+    color: var(--header-fg);
+}
+.site-header .icon-button {
+    color: var(--header-fg);
+    border-color: #55564f;
+}
+.site-header .icon-button:hover {
+    color: var(--header-fg);
+    background: #393a34;
+}
+@media (max-width: 800px) {
+    .site-header .main-nav {
+        background: var(--header-bg);
+        border-color: #44453f;
+    }
+}
+.site-footer {
+    color: #f3f0e8;
+    background: #252622;
+    border-color: #44453f;
+}
+.site-footer .brand,
+.site-footer .footer-links h3 {
+    color: #f3f0e8;
+}
+.site-footer .footer-top p,
+.site-footer .footer-links a,
+.site-footer .footer-bottom {
+    color: #c5c3bb;
+}
+.site-footer .footer-links a:hover {
+    color: #fff;
+}
+.home-carousel {
+    padding-top: 30px;
+    margin-block-end: 0;
+}
+.home-carousel-heading {
+    margin: 0 auto 22px;
+    text-align: center;
+}
+.home-carousel-heading .collection-label {
+    margin-bottom: 8px;
+}
+.home-carousel-heading h1 {
+    margin-bottom: 10px;
+    font-size: clamp(34px, 4vw, 48px);
+}
+.home-carousel-heading > p:last-child {
+    color: var(--muted);
+}
+.home-carousel .travel-carousel {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: var(--surface);
+}
+.home-carousel .carousel-item {
+    position: relative;
+}
+.home-carousel .inspiration-photos {
+    gap: 0;
+}
+.home-carousel .inspiration-photos img {
+    height: clamp(260px, 30vw, 400px);
+    aspect-ratio: auto;
+    border-radius: 0;
+}
+.home-carousel .travel-carousel h3 {
+    position: absolute;
+    left: 50%;
+    bottom: 24px;
+    width: max-content;
+    max-width: calc(100% - 32px);
+    margin: 0;
+    padding: 12px 24px;
+    transform: translateX(-50%);
+    color: #fff;
+    background: rgb(37 38 34 / 88%);
+    border-radius: 3px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 500;
+}
+.home-carousel .carousel-toolbar {
+    padding: 12px 16px;
+}
+.home-search {
+    padding-block: 32px 60px;
+}
+.home-search .search-panel {
+    padding: 28px 30px 22px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+}
+.home-search .search-heading {
+    margin-bottom: 22px;
+}
+.home-search .search-heading .collection-label {
+    margin-bottom: 6px;
+}
+.home-search .search-heading h2 {
+    margin-bottom: 8px;
+    font-size: 28px;
+}
+.home-search .search-heading > p:last-child {
+    max-width: none;
+    margin-bottom: 0;
+    font-size: 14px;
+}
+.home-search .search-grid {
+    grid-template-columns: minmax(220px, 1.5fr) repeat(2, minmax(140px, 1fr)) minmax(110px, 0.75fr) auto;
+    gap: 12px;
+    align-items: end;
+}
+.home-search .search-grid > .field:first-child,
+.home-search .search-grid > .field:nth-child(4),
+.home-search .search-grid > .button {
+    grid-column: auto;
+    margin-top: 0;
+}
+.home-search .search-grid .button {
+    min-height: 46px;
+    white-space: nowrap;
+}
+.home-search .search-footnote {
+    padding-top: 14px;
+    margin-top: 18px;
+}
+@media (max-width: 1000px) {
+    .home-search .search-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+    .home-search .search-grid > .field:first-child {
+        grid-column: 1 / -1;
+    }
+    .home-search .search-grid > .button {
+        grid-column: 2;
+    }
+}
+@media (max-width: 600px) {
+    .home-carousel {
+        padding-top: 22px;
+    }
+    .home-carousel-heading {
+        margin-bottom: 16px;
+        text-align: left;
+    }
+    .home-carousel-heading h1 {
+        font-size: 34px;
+    }
+    .home-carousel-heading > p:last-child {
+        font-size: 14px;
+    }
+    .home-carousel .inspiration-photos img {
+        height: 215px;
+    }
+    .home-carousel .travel-carousel h3 {
+        bottom: 12px;
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+    .home-carousel .carousel-toolbar {
+        padding: 8px;
+        gap: 8px;
+    }
+    .home-carousel .carousel-toolbar .button-small {
+        padding-inline: 10px;
+    }
+    .home-search {
+        padding-block: 24px 44px;
+    }
+    .home-search .search-panel {
+        padding: 22px 18px 18px;
+    }
+    .home-search .search-heading h2 {
+        font-size: 25px;
+    }
+    .home-search .search-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    .home-search .search-grid > .field:first-child,
+    .home-search .search-grid > .button {
+        grid-column: auto;
+    }
+}

@@ -209,3 +209,6 @@
         outline-offset: -3px;
     }
 }
+.home-carousel {
+    margin-block-end: 0;
+}
