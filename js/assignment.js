@@ -3,7 +3,6 @@
     'use strict';
     const $ = window.jQuery;
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-    const backgrounds = ['Default', 'Slate', 'Sand', 'Sky', 'Lilac'];
     const imageFallback = new URL('image/placeholder.svg', document.baseURI).href;
 
     // Capture image failures, including lazy images and newly rendered search results.
@@ -96,9 +95,7 @@
         const bar = document.createElement('div');
         bar.className = 'utility-bar container';
         bar.innerHTML =
-            '<div class="live-clock"><span>Local time</span> <time id="current-date-time" aria-live="off"></time></div>' +
-            '<div class="utility-actions"><button type="button" id="change-bg-btn" class="utility-button"></button>' +
-            '<button type="button" id="sound-toggle" class="utility-button" aria-pressed="true"></button></div>';
+            '<div class="live-clock"><span>Local time</span> <time id="current-date-time" aria-live="off"></time></div>';
         document.querySelector('.site-header')?.after(bar);
         const clock = document.getElementById('current-date-time');
         const clockFormat = new Intl.DateTimeFormat('en-GB', {
@@ -117,74 +114,6 @@
         }
         updateClock();
         setInterval(updateClock, 1000);
-
-        let backdrop = Number(App.read('background', 0));
-        if (!Number.isInteger(backdrop) || backdrop < 0 || backdrop > 4) backdrop = 0;
-        const backgroundButton = document.getElementById('change-bg-btn');
-        function renderBackground() {
-            document.documentElement.dataset.backdrop = String(backdrop);
-            backgroundButton.textContent = 'Page color: ' + backgrounds[backdrop];
-            backgroundButton.setAttribute(
-                'aria-label',
-                'Change page color. Current: ' + backgrounds[backdrop]
-            );
-        }
-        renderBackground();
-        backgroundButton.addEventListener('click', () => {
-            backdrop = (backdrop + 1) % backgrounds.length;
-            renderBackground();
-            try {
-                App.write('background', backdrop);
-            } catch (error) {
-                App.notify(error.message, 'error');
-            }
-        });
-
-        let soundEnabled = App.read('sound', true) !== false;
-        const soundButton = document.getElementById('sound-toggle');
-        const sound = new Audio('image/click.mp3');
-        sound.volume = 0.2;
-        function renderSound() {
-            soundButton.textContent = 'Click sound: ' + (soundEnabled ? 'on' : 'off');
-            soundButton.setAttribute('aria-pressed', String(soundEnabled));
-        }
-        function playSound() {
-            sound.pause();
-            sound.currentTime = 0;
-            sound.play().catch(() => {
-                /* Browsers may block sound; the clicked action still works. */
-            });
-        }
-        renderSound();
-        soundButton.addEventListener('click', () => {
-            soundEnabled = !soundEnabled;
-            renderSound();
-            if (soundEnabled) playSound();
-            try {
-                App.write('sound', soundEnabled);
-            } catch (error) {
-                App.notify(error.message, 'error');
-            }
-        });
-        document.addEventListener(
-            'click',
-            (event) => {
-                const button = event.target.closest('button');
-                if (button && button !== soundButton && !button.disabled && soundEnabled) playSound();
-            },
-            true
-        );
-        window.addEventListener('storage', (event) => {
-            if (event.key === 'bookingapp.background') {
-                const saved = Number(App.read('background', 0));
-                backdrop = Number.isInteger(saved) && saved >= 0 && saved <= 4 ? saved : 0;
-                renderBackground();
-            }
-            if (event.key === 'bookingapp.sound') {
-                soundEnabled = App.read('sound', true) !== false;
-                renderSound();
-            }
-        });
 
         $('.main-nav').on('keydown', 'a', function (event) {
             const links = [...this.closest('nav').querySelectorAll('a')];

@@ -49,7 +49,7 @@
             (id) => typeof id === 'string' && validIds.has(id)
         );
         try {
-            // Keep the guest list intact until its valid entries are saved to the account.
+
             App.write('favorites.' + userId, merged);
             App.remove('favorites.guest');
             document.dispatchEvent(new Event('bookingapp:favoriteschange'));
@@ -259,7 +259,7 @@
             const password = form.elements.namedItem('password').value;
             const issues = {
                 'login-email': App.emailError(email),
-                'login-password': App.passwordError(password)
+                'login-password': password ? '' : 'Enter your password.'
             };
             if (App.errors(form, issues)) {
                 status(output, 'Check your email and password, then try again.', true);

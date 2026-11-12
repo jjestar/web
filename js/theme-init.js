@@ -10,10 +10,3 @@ try {
 } catch {
     document.documentElement.dataset.theme = 'light';
 }
-try {
-    const background = JSON.parse(localStorage.getItem('bookingapp.background'));
-    document.documentElement.dataset.backdrop =
-        Number.isInteger(background) && background >= 0 && background <= 4 ? String(background) : '0';
-} catch {
-    document.documentElement.dataset.backdrop = '0';
-}
