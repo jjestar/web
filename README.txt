@@ -113,6 +113,7 @@ not the weather on the selected booking dates. No API key is shipped.
 FILE ORGANIZATION
 css/site.css             Shared tokens, page components, responsive/dark modes
 css/assignment*.css      Restored controls, carousel, booking and service styles
+css/final-design.css     Shared blue, gray and white design across all nine pages
 js/theme-init.js         Appearance applied before first paint
 js/common.js             Shared helpers, storage, validation, nav, notifications
 js/assignment.js         jQuery lazy images, clock, page color, sound and copying
@@ -128,11 +129,11 @@ image/                   Local photos, travel photography and illustrations
 archive/                 Previous assignment reports and explanation (historical)
 
 DESIGN AND ACCESSIBILITY
-The home page pairs a Paris destination feature with an immediately usable
-search form. Photo captions identify the destination, listing and nightly rate.
-Search results use comparison rows; services and destination photos use open
-layouts. Interface headings use the system sans-serif; destination names use
-Georgia. Photos are illustrative, with descriptions matched to their subjects.
+The home page pairs a three-photo destination carousel with a full-width search
+form. All nine pages share a dark header and footer, blue actions, a cool gray
+background, white panels and Arial typography. The carousel, search suggestions,
+service tiers and all restored assignment controls retain their existing behavior.
+Photos are illustrative, with descriptions matched to their subjects.
 CSS Grid and Flexbox; responsive layouts; persistent light/dark semantic colors;
 visible focus; labelled form controls; skip link; mobile navigation with Escape;
 aria-live feedback; native keyboard-friendly FAQ; reduced-motion support.
@@ -153,6 +154,10 @@ receipts separate, and preserved historical totals and saved bookings on reset.
 Booking/detail checks at 390, 768 and 1440 CSS pixels found no horizontal
 overflow, prohibited validation attributes or JavaScript errors. Test data is
 not bundled. Recheck the published version before submitting.
+The shared design was checked on all nine pages at 320, 390, 768, 1024 and 1440
+CSS pixels in both themes: no page overflow, missing local assets or JavaScript
+errors. Account, search, booking, service tiers, carousel, newsletter, contact
+drafts and weather retry were regression-checked before publication.
 
 HOSTING
 GitHub Pages serves the main branch from the repository root. .nojekyll keeps
