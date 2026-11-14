@@ -1,4 +1,3 @@
-/* Restored home/search interactions use the existing site's color and spacing tokens. */
 .hotel-search-box {
     position: relative;
     min-width: 0;
@@ -91,7 +90,6 @@
     clear: both;
     content: '';
 }
-/* These class names are the Bootstrap Carousel API's transition contract. */
 .travel-carousel .carousel-item {
     display: none;
     position: relative;
@@ -118,19 +116,12 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
 }
-.inspiration-photos a {
-    min-width: 0;
-    display: block;
-}
 .inspiration-photos img {
     width: 100%;
     height: auto;
     aspect-ratio: 1.6;
     object-fit: cover;
     border-radius: 4px;
-}
-.inspiration-photos a:focus-visible {
-    outline-offset: -4px;
 }
 .travel-carousel h3 {
     margin: 16px 0 0;

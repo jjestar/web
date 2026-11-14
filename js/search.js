@@ -1,6 +1,5 @@
-/* Home/search assignment interactions, saved filters and dynamic hotel results. */
 jQuery(function ($) {
-    // Keep focus in the input while jQuery builds and updates its suggestion list.
+
     function hotelSuggestions(input, list, onChoose = () => {}) {
         const $input = $(input),
             $list = $(list),
@@ -87,7 +86,6 @@ jQuery(function ($) {
         return close;
     }
 
-    // Native modal focus containment and Escape behavior complement the inline form.
     const modal = document.createElement('dialog');
     modal.id = 'popup-modal';
     modal.className = 'newsletter-dialog';

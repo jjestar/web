@@ -16,12 +16,10 @@
         <link rel="stylesheet" href="css/final-design.css" />
         <script src="js/vendor/jquery-4.0.0.min.js" defer></script>
         <script src="js/vendor/bootstrap.bundle-5.3.2.min.js" defer></script>
-        <script src="js/services-data.js" defer></script>
+        <script src="js/data.js" defer></script>
         <script src="js/common.js" defer></script>
-        <script src="js/hotels.js" defer></script>
         <script src="js/auth.js" defer></script>
-        <script src="js/script.js" defer></script>
-        <script src="js/assignment.js" defer></script>
+        <script src="js/search.js" defer></script>
     </head>
     <body data-page="index">
         <a class="skip-link" href="#main-content">Skip to content</a>
@@ -82,33 +80,30 @@
                             aria-label="1 of 3: Beach, mountains and comfort"
                         >
                             <div class="inspiration-photos">
-                                <a href="search-results.html?destination=Maldives"
-                                    ><img
-                                        src="image/placeholder.svg"
-                                        data-src="image/destination-1.jpg"
-                                        alt="Tropical beach — explore Maldives stays"
-                                        width="400"
-                                        height="260"
-                                        loading="lazy"
-                                /></a>
-                                <a href="search-results.html?destination=Almaty"
-                                    ><img
-                                        src="image/placeholder.svg"
-                                        data-src="image/destination-2.jpg"
-                                        alt="Mountain scenery — explore Almaty stays"
-                                        width="400"
-                                        height="260"
-                                        loading="lazy"
-                                /></a>
-                                <a href="hotel-detail.html?hotel=comfort-city"
-                                    ><img
-                                        src="image/placeholder.svg"
-                                        data-src="image/destination-3.jpg"
-                                        alt="Illustrative city skyline at dusk — view Comfort City Hotel"
-                                        width="400"
-                                        height="260"
-                                        loading="lazy"
-                                /></a>
+                                <img
+                                    src="image/placeholder.svg"
+                                    data-src="image/destination-1.jpg"
+                                    alt="Tropical beach"
+                                    width="400"
+                                    height="260"
+                                    loading="lazy"
+                                />
+                                <img
+                                    src="image/placeholder.svg"
+                                    data-src="image/destination-2.jpg"
+                                    alt="Mountain scenery"
+                                    width="400"
+                                    height="260"
+                                    loading="lazy"
+                                />
+                                <img
+                                    src="image/placeholder.svg"
+                                    data-src="image/destination-3.jpg"
+                                    alt="Illustrative city skyline at dusk"
+                                    width="400"
+                                    height="260"
+                                    loading="lazy"
+                                />
                             </div>
                             <h3>Beach, mountains and comfort</h3>
                         </div>
@@ -121,33 +116,30 @@
                             inert
                         >
                             <div class="inspiration-photos">
-                                <a href="search-results.html?destination=Paris"
-                                    ><img
-                                        src="image/placeholder.svg"
-                                        data-src="image/destination-4.jpg"
-                                        alt="Paris at dusk — explore Paris stays"
-                                        width="400"
-                                        height="260"
-                                        loading="lazy"
-                                /></a>
-                                <a href="search-results.html?destination=Dubai"
-                                    ><img
-                                        src="image/placeholder.svg"
-                                        data-src="image/destination-5.jpg"
-                                        alt="Dubai skyline — explore Dubai stays"
-                                        width="400"
-                                        height="260"
-                                        loading="lazy"
-                                /></a>
-                                <a href="services.html"
-                                    ><img
-                                        src="image/placeholder.svg"
-                                        data-src="image/destination-6.jpg"
-                                        alt="Travel notebook and camera — explore travel services"
-                                        width="400"
-                                        height="260"
-                                        loading="lazy"
-                                /></a>
+                                <img
+                                    src="image/placeholder.svg"
+                                    data-src="image/destination-4.jpg"
+                                    alt="Paris at dusk"
+                                    width="400"
+                                    height="260"
+                                    loading="lazy"
+                                />
+                                <img
+                                    src="image/placeholder.svg"
+                                    data-src="image/destination-5.jpg"
+                                    alt="Dubai skyline"
+                                    width="400"
+                                    height="260"
+                                    loading="lazy"
+                                />
+                                <img
+                                    src="image/placeholder.svg"
+                                    data-src="image/destination-6.jpg"
+                                    alt="Travel notebook and camera"
+                                    width="400"
+                                    height="260"
+                                    loading="lazy"
+                                />
                             </div>
                             <h3>City breaks and new adventures</h3>
                         </div>
@@ -160,33 +152,30 @@
                             inert
                         >
                             <div class="inspiration-photos">
-                                <a href="hotel-detail.html?hotel=grand-palace"
-                                    ><img
-                                        src="image/placeholder.svg"
-                                        data-src="image/destination-7.jpg"
-                                        alt="Hotel exterior — view Grand Palace Hotel"
-                                        width="400"
-                                        height="260"
-                                        loading="lazy"
-                                /></a>
-                                <a href="hotel-detail.html?hotel=ocean-view"
-                                    ><img
-                                        src="image/placeholder.svg"
-                                        data-src="image/destination-8.jpg"
-                                        alt="Resort pool — view Ocean View Resort"
-                                        width="400"
-                                        height="260"
-                                        loading="lazy"
-                                /></a>
-                                <a href="hotel-detail.html?hotel=island-retreat"
-                                    ><img
-                                        src="image/placeholder.svg"
-                                        data-src="image/destination-9.jpg"
-                                        alt="Poolside terrace — view Island Retreat"
-                                        width="400"
-                                        height="260"
-                                        loading="lazy"
-                                /></a>
+                                <img
+                                    src="image/placeholder.svg"
+                                    data-src="image/destination-7.jpg"
+                                    alt="Hotel exterior"
+                                    width="400"
+                                    height="260"
+                                    loading="lazy"
+                                />
+                                <img
+                                    src="image/placeholder.svg"
+                                    data-src="image/destination-8.jpg"
+                                    alt="Resort pool"
+                                    width="400"
+                                    height="260"
+                                    loading="lazy"
+                                />
+                                <img
+                                    src="image/placeholder.svg"
+                                    data-src="image/destination-9.jpg"
+                                    alt="Poolside terrace"
+                                    width="400"
+                                    height="260"
+                                    loading="lazy"
+                                />
                             </div>
                             <h3>Hotels and relaxing resorts</h3>
                         </div>
@@ -492,7 +481,7 @@
                 </div>
                 <div class="footer-bottom">
                     <p>© 2026 Booking App · SE-2513</p>
-                    <p>Serikov Dias, Yerkenov Abylai, Allazhar Aldongarov</p>
+                    <p>Serikov Dias, Yerkenov Abylay, Allazhar Aldongarov</p>
                 </div>
             </div>
         </footer>

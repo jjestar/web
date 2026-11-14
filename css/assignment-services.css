@@ -1,17 +1,3 @@
-/* Earlier assignment interactions, fitted to the current travel interface. */
-.assignment-scroll-track {
-    position: fixed;
-    inset: 0 0 auto;
-    height: 3px;
-    z-index: 1200;
-    background: transparent;
-    pointer-events: none;
-}
-.assignment-scroll-fill {
-    width: 0;
-    height: 100%;
-    background: var(--primary);
-}
 .assignment-stats-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -21,6 +7,7 @@
 }
 .assignment-stat {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
     gap: 16px;
 }

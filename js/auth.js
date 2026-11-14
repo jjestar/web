@@ -10,14 +10,6 @@
             : [];
     }
 
-    function currentUser() {
-        try {
-            return App.getUser();
-        } catch (_) {
-            return null;
-        }
-    }
-
     function nameError(value) {
         if (!value) return 'Enter your name.';
         if (value.length < 2) return 'Use at least 2 characters for your name.';
@@ -38,11 +30,7 @@
     function mergeGuestFavorites(userId) {
         const guest = App.read('favorites.guest', []);
         if (!Array.isArray(guest) || guest.length === 0) return true;
-        const database = Array.isArray(window.hotelsDatabase)
-            ? window.hotelsDatabase
-            : typeof hotelsDatabase !== 'undefined' && Array.isArray(hotelsDatabase)
-              ? hotelsDatabase
-              : [];
+        const database = window.hotelsDatabase;
         const validIds = new Set(database.map((hotel) => hotel.id));
         const existing = App.read('favorites.' + userId, []);
         const merged = [...new Set((Array.isArray(existing) ? existing : []).concat(guest))].filter(
@@ -80,7 +68,7 @@
 
     async function passwordHash(password, salt) {
         requireCrypto();
-        // This browser-only student project stores a salted digest, never a plain-text password.
+
         const digest = await window.crypto.subtle.digest(
             'SHA-256',
             new TextEncoder().encode(salt + ':' + password)
@@ -91,7 +79,7 @@
     function signOut() {
         try {
             App.remove('session');
-            if (currentUser())
+            if (App.getUser())
                 throw new Error('We could not log you out. Allow browser storage and try again.');
             announceAuthChange();
             window.location.href = 'login.html?signedout=1';
@@ -133,7 +121,7 @@
         try {
             App.write('pendingBookingUrl', next);
         } catch (_) {
-            /* Auth forms report storage problems on submit. */
+
         }
         document.querySelectorAll('[data-auth-switch]').forEach((link) => {
             link.href = App.url(link.dataset.authSwitch, { next: next });
@@ -204,7 +192,7 @@
                 const salt = makeSalt();
                 const hash = await passwordHash(password, salt);
                 const latestAccounts = accounts();
-                // Recheck after the async digest in case another tab created this account.
+
                 if (latestAccounts.some((account) => String(account.email || '').toLowerCase() === email)) {
                     App.errors(form, {
                         'signup-email': 'An account with this email already exists. Log in instead.'
@@ -309,18 +297,8 @@
     function renderFavorites() {
         const container = document.getElementById('profile-favorites');
         if (!container) return;
-        let ids = [];
-        try {
-            ids = App.favoriteIds();
-        } catch (_) {
-            ids = [];
-        }
-        if (!Array.isArray(ids)) ids = [];
-        const database = Array.isArray(window.hotelsDatabase)
-            ? window.hotelsDatabase
-            : typeof hotelsDatabase !== 'undefined' && Array.isArray(hotelsDatabase)
-              ? hotelsDatabase
-              : [];
+        const ids = App.favoriteIds();
+        const database = window.hotelsDatabase;
         const hotels = database.filter((hotel) => ids.includes(hotel.id));
         document.getElementById('saved-count').textContent = String(hotels.length);
         if (!hotels.length) {
@@ -366,7 +344,7 @@
 
     function renderBookings() {
         const container = document.getElementById('profile-bookings');
-        const user = currentUser();
+        const user = App.getUser();
         if (!container || !user) return;
         const records = bookingRecords()
             .filter((booking) => booking.userId === user.id)
@@ -447,7 +425,7 @@
     function bindProfile() {
         const content = document.getElementById('profile-content');
         if (!content) return;
-        const user = currentUser();
+        const user = App.getUser();
         document.getElementById('profile-guest').hidden = Boolean(user);
         content.hidden = !user;
         if (!user) return;
@@ -485,7 +463,7 @@
                 return;
             }
             try {
-                const activeUser = currentUser();
+                const activeUser = App.getUser();
                 if (!activeUser || activeUser.id !== user.id)
                     throw new Error('Your session changed. Log in again to update your details.');
                 const latest = accounts();
@@ -510,7 +488,7 @@
             const button = event.target.closest('[data-remove-favorite]');
             if (!button) return;
             try {
-                if (currentUser()?.id !== user.id)
+                if (App.getUser()?.id !== user.id)
                     throw new Error('Your session changed. Log in again to update your saved stays.');
                 App.toggleFavorite(button.dataset.removeFavorite);
                 renderFavorites();
@@ -549,7 +527,7 @@
                 cancelButton.focus();
             } else if (button.hasAttribute('data-confirm-cancel')) {
                 try {
-                    const activeUser = currentUser();
+                    const activeUser = App.getUser();
                     if (!activeUser || activeUser.id !== user.id)
                         throw new Error('Log in again before changing this booking.');
                     const latest = bookingRecords();

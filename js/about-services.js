@@ -1,38 +1,7 @@
-/* About and Services page behavior. All data belongs to this browser-only student project. */
 (() => {
     'use strict';
 
     const tierNames = { standard: 'Standard', premium: 'Premium', vip: 'VIP' };
-
-    function initializeScrollProgress() {
-        const $ = window.jQuery;
-        if (!['about', 'services'].includes(document.body.dataset.page)) return;
-        const $track = $('<div>', {
-            class: 'assignment-scroll-track',
-            role: 'progressbar',
-            'aria-label': 'Page reading progress',
-            'aria-valuemin': '0',
-            'aria-valuemax': '100',
-            'aria-valuenow': '0'
-        })
-            .append($('<div>', { class: 'assignment-scroll-fill' }))
-            .prependTo('body');
-        let scheduled = false;
-        const update = () => {
-            scheduled = false;
-            const available = Math.max(0, $(document).height() - $(window).height());
-            const progress = available ? Math.min(100, Math.max(0, (window.scrollY / available) * 100)) : 100;
-            $track.children().css('width', progress + '%');
-            $track.attr('aria-valuenow', Math.round(progress));
-        };
-        $(window).on('scroll.assignmentProgress resize.assignmentProgress load.assignmentProgress', () => {
-            if (!scheduled) {
-                scheduled = true;
-                window.requestAnimationFrame(update);
-            }
-        });
-        update();
-    }
 
     function initializeCounters() {
         const $ = window.jQuery;
@@ -90,8 +59,6 @@
         });
     }
 
-    // Capture validated values before the demonstration delay. Reset cancels the
-    // pending completion, so an old submission cannot overwrite a cleared form.
     function attachSubmitSpinner(form, readValues, complete) {
         const $ = window.jQuery;
         const button = form.querySelector('button[type="submit"]');
@@ -117,7 +84,7 @@
             if (pending !== null || button.disabled) return;
             const values = readValues();
             if (!values) return;
-            const captured = Object.freeze({ ...values });
+            const captured = { ...values };
             button.innerHTML =
                 '<span class="assignment-submit-spinner" aria-hidden="true"></span>Please wait…';
             button.disabled = true;
@@ -362,14 +329,12 @@
             quantityField.hidden = party;
             quantity.disabled = party;
             if (party) quantity.value = '1';
-            document.getElementById('quantity-label').textContent =
-                choice.value === 'transfer'
-                    ? serviceTier === 'premium'
-                        ? 'Number of round trips'
-                        : 'Number of trips'
-                    : choice.value === 'tour'
-                      ? 'Number of people'
-                      : 'Number of days';
+            const quantityLabels = {
+                transfer: serviceTier === 'premium' ? 'Number of round trips' : 'Number of trips',
+                tour: 'Number of people',
+                car: 'Number of days'
+            };
+            document.getElementById('quantity-label').textContent = quantityLabels[choice.value];
             let rateText = 'Choose a service and pricing level.';
             if (service && hasTier(serviceTier)) {
                 const rate = App.money(service.rates[serviceTier]);
@@ -425,22 +390,12 @@
         }
 
         function showEstimate(estimate) {
-            let unit =
-                estimate.service === 'car'
-                    ? estimate.serviceQuantity === 1
-                        ? 'day'
-                        : 'days'
-                    : estimate.service === 'tour'
-                      ? estimate.serviceQuantity === 1
-                          ? 'person'
-                          : 'people'
-                      : estimate.serviceTier === 'premium'
-                        ? estimate.serviceQuantity === 1
-                            ? 'round trip'
-                            : 'round trips'
-                        : estimate.serviceQuantity === 1
-                          ? 'trip'
-                          : 'trips';
+            const units = {
+                car: ['day', 'days'],
+                tour: ['person', 'people'],
+                transfer: estimate.serviceTier === 'premium' ? ['round trip', 'round trips'] : ['trip', 'trips']
+            };
+            let unit = units[estimate.service][estimate.serviceQuantity === 1 ? 0 : 1];
             if (perParty(estimate.service, estimate.serviceTier)) unit = 'party';
             document.getElementById('estimate-description').textContent =
                 `${estimate.name} · ${tierNames[estimate.serviceTier]} · ${estimate.serviceQuantity} ${unit} × ${App.money(estimate.price)}`;
@@ -511,7 +466,6 @@
             });
             return;
         }
-        initializeScrollProgress();
         initializeCounters();
         initializeContact();
         initializeServices();

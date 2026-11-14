@@ -9,4 +9,4 @@ Source: https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.mi
 Copyright The Bootstrap Authors. MIT license: https://github.com/twbs/bootstrap/blob/v5.3.2/LICENSE
 Used for the destination carousel; project CSS preserves the BookingApp design.
 
-The original license headers in both library files are retained.
+Library notices are in ../../THIRD-PARTY-LICENSES.txt. Full licenses are in this folder.

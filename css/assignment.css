@@ -1,28 +1,3 @@
-/* Quiet, shared presentation for the restored coursework interactions. */
-:root[data-backdrop='1'] {
-    --bg: #e2e8f0;
-}
-:root[data-backdrop='2'] {
-    --bg: #fef3c7;
-}
-:root[data-backdrop='3'] {
-    --bg: #e0f2fe;
-}
-:root[data-backdrop='4'] {
-    --bg: #f3e8ff;
-}
-:root[data-theme='dark'][data-backdrop='1'] {
-    --bg: #20221f;
-}
-:root[data-theme='dark'][data-backdrop='2'] {
-    --bg: #25231f;
-}
-:root[data-theme='dark'][data-backdrop='3'] {
-    --bg: #202326;
-}
-:root[data-theme='dark'][data-backdrop='4'] {
-    --bg: #242321;
-}
 .utility-bar {
     display: flex;
     align-items: center;
@@ -41,23 +16,6 @@
 }
 .live-clock time {
     font-variant-numeric: tabular-nums;
-}
-.utility-actions {
-    display: flex;
-    gap: 8px 16px;
-    flex-wrap: wrap;
-}
-.utility-button {
-    border: 0;
-    border-bottom: 1px solid var(--control-line);
-    padding: 4px 0;
-    background: none;
-    color: var(--ink);
-    font-size: 12px;
-    min-height: 32px;
-}
-.utility-button:hover {
-    color: var(--primary);
 }
 .clipboard-input {
     position: fixed;
@@ -125,10 +83,5 @@
 @media (max-width: 600px) {
     .utility-bar {
         align-items: flex-start;
-    }
-    .utility-actions {
-        width: 100%;
-        justify-content: space-between;
-        gap: 8px;
     }
 }

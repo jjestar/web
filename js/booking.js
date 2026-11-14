@@ -172,15 +172,10 @@
         const roomPrice = roomPrices[fields.room.value] || 0;
         const service = fields.service.value;
         const serviceTier = fields.serviceTier.value || 'standard';
-        // Car rental follows stay length; private and special tours are priced per party.
-        const quantity =
-            service === 'car'
-                ? validNights
-                : service === 'tour'
-                  ? serviceTier === 'standard'
-                      ? guests
-                      : 1
-                  : Number(fields.serviceQuantity.value);
+
+        let quantity = Number(fields.serviceQuantity.value);
+        if (service === 'car') quantity = validNights;
+        if (service === 'tour') quantity = serviceTier === 'standard' ? guests : 1;
         const serviceQuantity = Number.isInteger(quantity) && quantity > 0 ? quantity : 0;
         const serviceRate = services[service]?.rates[serviceTier] ?? 0;
         const serviceTotal = service === 'none' ? 0 : serviceRate * serviceQuantity;
@@ -455,12 +450,12 @@
 
     function resetBooking(event) {
         event?.preventDefault();
-        // Reset only this unfinished plan. Saved profile bookings are never removed.
+
         ['bookingDraft', 'pendingBookingUrl', 'search', 'serviceEstimate'].forEach((key) => App.remove(key));
         try {
             sessionStorage.removeItem('bookingapp.guestReceipt');
         } catch (_) {
-            /* The visible form can still be cleared if storage is unavailable. */
+
         }
         history.replaceState(null, '', App.url('booking.html', { hotel: hotel.id, reset: 1 }));
         ['checkin', 'checkout', 'fullname', 'email', 'phone', 'notes'].forEach((id) => {
@@ -499,7 +494,7 @@
             if (validateStep(currentStep)) showStep(currentStep + 1);
             return;
         }
-        // Recheck all steps so changed dates and stale form state cannot bypass validation.
+
         for (let index = 0; index < steps.length; index++) {
             if (!validateStep(index)) return;
         }
@@ -542,17 +537,13 @@
                 const records = Array.isArray(saved) ? saved : [];
                 App.write('bookings', [...records, record]);
             } else {
-                // A guest receipt belongs to this tab and is kept apart from account records.
+
                 sessionStorage.setItem('bookingapp.guestReceipt', JSON.stringify(record));
             }
             submitted = true;
-            // Cleanup is best-effort after the booking has been saved successfully.
-            try {
-                App.remove('bookingDraft');
-                App.remove('pendingBookingUrl');
-            } catch (_) {
-                /* Saved booking remains valid. */
-            }
+
+            App.remove('bookingDraft');
+            App.remove('pendingBookingUrl');
             form.hidden = true;
             document.querySelector('.step-list').hidden = true;
             document.getElementById('booking-success-title').textContent = activeUser

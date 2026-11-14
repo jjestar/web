@@ -1,4 +1,3 @@
-/* Illustrative listings for this frontend project, not a live hotel inventory. */
 window.hotelsDatabase = [
     {
         id: 'grand-palace',
@@ -214,3 +213,9 @@ window.getSelectedHotel = function () {
     if (!hotelId) return window.hotelsDatabase[0];
     return window.hotelsDatabase.find((hotel) => hotel.id === hotelId) || null;
 };
+
+window.travelServices = Object.freeze({
+    transfer: { name: 'Airport transfer', unit: 'trip', rates: { standard: 25, premium: 45, vip: 0 } },
+    car: { name: 'Car rental', unit: 'day', rates: { standard: 35, premium: 70, vip: 120 } },
+    tour: { name: 'Guided city tour', unit: 'person', rates: { standard: 20, premium: 50, vip: 100 } }
+});

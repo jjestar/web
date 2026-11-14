@@ -1,6 +1,6 @@
 BookingApp — Final Project
 Group: SE-2513
-Team: Serikov Dias, Yerkenov Abylai, Allazhar Aldongarov
+Team: Serikov Dias, Yerkenov Abylay, Allazhar Aldongarov
 
 LIVE WEBSITE: https://jjestar.github.io/web/
 REPOSITORY: https://github.com/jjestar/web
@@ -67,10 +67,10 @@ Custom destination/search suggestions support mouse and keyboard selection.
 The Bootstrap destination carousel has previous/next, slide selectors and a
 pause/play control, with reduced-motion support. The newsletter popup remains
 a local simulation. Shared jQuery notification effects, copy buttons, live
-clock, page-background choices, optional click sound and arrow/Home/End menu
+clock and arrow/Home/End menu
 navigation are functional. Contact/service forms include clear actions and
 submit loading feedback. About includes animated counters; Services includes
-scroll progress and the original tiered price comparison. Hotel Read More/Read
+the original tiered price comparison. Hotel Read More/Read
 Less restores the additional description. Original sample guest reviews are
 explicitly labelled fictional; they are not presented as real customer reviews.
 The jQuery lazy loader retains data-src placeholders until photographs enter
@@ -115,16 +115,15 @@ css/site.css             Shared tokens, page components, responsive/dark modes
 css/assignment*.css      Restored controls, carousel, booking and service styles
 css/final-design.css     Shared blue, gray and white design across all nine pages
 js/theme-init.js         Appearance applied before first paint
-js/common.js             Shared helpers, storage, validation, nav, notifications
-js/assignment.js         jQuery lazy images, clock, page color, sound and copying
+js/common.js             Storage, validation, nav, notifications, images, clock, copying
 js/vendor/               Local jQuery 4.0.0 and Bootstrap 5.3.2 JavaScript files
-js/hotels.js             Six illustrative listings and selected-hotel lookup
-js/script.js             Home and dynamic search/filter behaviour
+js/data.js               Hotel listings and shared Standard/Premium/VIP service rates
+js/search.js             Home, carousel, newsletter and dynamic search/filter behaviour
 js/auth.js               Registration, login, profile, saved stays, cancellation
 js/booking.js            Hotel details, trip continuity, booking and pricing
 js/weather.js            Open-Meteo request and loading/error/success states
 js/about-services.js     Contact drafts and service estimator
-js/services-data.js      Shared Standard/Premium/VIP rates and quote helper
+THIRD-PARTY-LICENSES.txt  jQuery and Bootstrap notices and license terms
 image/                   Local photos, travel photography and illustrations
 archive/                 Previous assignment reports and explanation (historical)
 
@@ -167,7 +166,7 @@ work under /web/. Push completed changes to main to update the hosted website.
 TEAM
 The original project records these roles:
 Serikov Dias — UI Designer
-Yerkenov Abylai — Content and Testing
+Yerkenov Abylay — Content and Testing
 Allazhar Aldongarov — Frontend Developer
 The report describes final features as shared project work, without assigning
 unverified individual authorship of later changes.
