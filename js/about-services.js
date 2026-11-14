@@ -25,7 +25,7 @@
                 animation.animate(
                     { value: target },
                     {
-                        duration: 1400,
+                        duration: 3300,
                         easing: 'swing',
                         step(value) {
                             output.textContent = String(Math.floor(value));
