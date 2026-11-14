@@ -100,6 +100,7 @@
             '<p class="muted weather-loading"><span class="spinner" aria-hidden="true"></span> Loading the forecast for ' +
             App.escape(hotel.city) +
             '…</p>';
+        // Stop the weather request after 12 seconds.
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 12000);
         try {

@@ -74,6 +74,7 @@
             });
             lockedFields = [];
         }
+        // Cancel the pending save when the form is cleared.
         function cancel() {
             if (pending !== null) window.clearTimeout(pending);
             pending = null;

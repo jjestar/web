@@ -66,6 +66,7 @@
         ).join('');
     }
 
+    // Add a random salt before hashing the password.
     async function passwordHash(password, salt) {
         requireCrypto();
 

@@ -329,6 +329,7 @@ jQuery(function ($) {
         document.getElementById('search-trip-context').textContent =
             `Your dates: ${trip.checkin} — ${trip.checkout} · ${guests} ${Number(guests) === 1 ? 'guest' : 'guests'}. Dates carry through to your booking.`;
     }
+    // Escape the text before adding highlight tags.
     function highlight(text, keyword) {
         const value = String(text);
         if (!keyword) return App.escape(value);

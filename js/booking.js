@@ -173,6 +173,7 @@
         const service = fields.service.value;
         const serviceTier = fields.serviceTier.value || 'standard';
 
+        // Car rental is per night. Standard tours are per guest; other tours are per group.
         let quantity = Number(fields.serviceQuantity.value);
         if (service === 'car') quantity = validNights;
         if (service === 'tour') quantity = serviceTier === 'standard' ? guests : 1;

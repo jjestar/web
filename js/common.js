@@ -362,6 +362,7 @@
         }
         $(window).on('scroll.assignmentImages resize.assignmentImages', scheduleImages);
         document.addEventListener('slid.bs.carousel', scheduleImages);
+        // Check for lazy photos when search results change.
         new MutationObserver((mutations) => {
             if (
                 mutations.some((mutation) =>
